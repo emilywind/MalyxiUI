@@ -2,4 +2,5 @@
   <Include file="LibStub\LibStub.lua" />
   <Include file="LibSharedMedia-3.0\lib.xml" />
   <Include file="LibEditMode\embed.xml" />
+  <Include file="SpellNotifications\SpellNotifications.xml" />
 </Ui>

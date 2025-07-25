@@ -1,0 +1,10 @@
+## Interface: 110005
+## Title: SpellNotifications
+## Notes: Simple spell notifications. Original by Veev, maintained by LucyON & Oscarwizyo
+## Author: LucyON
+## Version: v2.4.7
+## X-Curse-Project-ID: 301888
+## X-Wago-ID: WYK9blGL
+## X-WoWI-ID: 26039
+
+SpellNotifications.xml
