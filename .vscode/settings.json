@@ -159,7 +159,8 @@
         "GetContainerNumSlots",
         "PickupContainerItem",
         "GetContainerItemInfo",
-        "LootSpecId"
+        "LootSpecId",
+        "SystemFont_Shadow_Outline_Huge2"
     ],
     "Lua.diagnostics.disable": [
         "cast-local-type",

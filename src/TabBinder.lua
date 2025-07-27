@@ -7,7 +7,6 @@ OnPlayerLogin(function()
 	local GetBindingKey = GetBindingKey
 	local GetCurrentBindingSet = GetCurrentBindingSet
 	local IsInInstance = IsInInstance
-	local GetZonePVPInfo = GetZonePVPInfo
 	local GetBindingAction = GetBindingAction
 
 	local TabBinder = CreateFrame("Frame")
@@ -18,9 +17,10 @@ OnPlayerLogin(function()
 	TabBinder:RegisterEvent("DUEL_FINISHED")
 	TabBinder:RegisterEvent("CHAT_MSG_SYSTEM")
 
-	local RTB_Fail, RTB_DefaultKey, RTB_LastTargetKey, RTB_TargetKey, RTB_CurrentBind, RTB_Success = false, true
+	local RTB_Fail, RTB_DefaultKey = false, true
+	local RTB_LastTargetKey, RTB_TargetKey, RTB_CurrentBind, RTB_Success
 
-	TabBinder:SetScript("OnEvent", function(self, event, ...)
+	TabBinder:SetScript("OnEvent", function(_, event, ...)
 		if event == "CHAT_MSG_SYSTEM" then
 			local RTBChatMessage = ...
 			if RTBChatMessage == ERR_DUEL_REQUESTED then
