@@ -4,4 +4,5 @@
   <Include file="LibEditMode\embed.xml" />
   <Include file="SpellNotifications\SpellNotifications.xml" />
   <Include file="LibFroznFunctions-1.0\lib.xml" />
+  <Script file="LibItemString.lua" />
 </Ui>
