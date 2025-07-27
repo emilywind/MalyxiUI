@@ -78,7 +78,7 @@ OnPlayerLogin(function()
 
       -- Class coloured name
 			local text = GameTooltipTextLeft1:GetText()
-			GameTooltipTextLeft1:SetFormattedText("|cff%02x%02x%02x%s|r", r * 255, g * 255, b * 255, text:match("|cff\x\x\x\x\x\x(.+)|r") or text)
+			GameTooltipTextLeft1:SetFormattedText("|cff%02x%02x%02x%s|r", r * 255, g * 255, b * 255, text:match("|cff%x%x%x%x%x%x(.+)|r") or text)
 
       local playerInfoLine = GameTooltipTextLeft2
 			local guildName, guildRank = GetGuildInfo(unit)
