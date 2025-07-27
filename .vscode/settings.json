@@ -145,7 +145,10 @@
         "ScenarioObjectiveTracker",
         "AchievementObjectiveTracker",
         "CampaignQuestObjectiveTracker",
-        "ProfessionsRecipeTracker"
+        "ProfessionsRecipeTracker",
+        "PlayerFrameAlternateManaBarBorder",
+        "PlayerFrameAlternateManaBarLeftBorder",
+        "PlayerFrameAlternateManaBarRightBorder"
     ],
     "Lua.diagnostics.disable": [
         "cast-local-type"
