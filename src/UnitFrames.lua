@@ -32,7 +32,7 @@ OnPlayerLogin(function()
     local unit = healthbar.unit
     healthbar:SetStatusBarDesaturated(1)
     if UnitIsPlayer(unit) and UnitIsConnected(unit) and UnitClass(unit) then
-      _, class = UnitClass(unit)
+      local _, class = UnitClass(unit)
       local color = RAID_CLASS_COLORS[class]
       healthbar:SetStatusBarColor(color.r, color.g, color.b)
     elseif UnitIsPlayer(unit) and (not UnitIsConnected(unit)) then
@@ -77,7 +77,7 @@ OnPlayerLogin(function()
   -----------------
   -- Boss Frames --
   -----------------
-  function skinBossFrames(self)
+  local function skinBossFrames(self)
     if not self then return end
 
     if self.healthbar then
