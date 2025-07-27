@@ -83,7 +83,7 @@ local function init()
 
     if bartender4 then --fix the normaltexture
       nt:SetTexCoord(0, 1, 0, 1)
-      nt.SetTexCoord = function() end
+      nt.SetTexCoord = function(x, y, z, r, n) end
       bu.SetNormalTexture = function() end
     end
   end
