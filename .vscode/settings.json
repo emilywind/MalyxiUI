@@ -155,7 +155,10 @@
         "ComboPointPlayerFrame",
         "BigDebuffs",
         "SpellbookMicroButton",
-        "TalentMicroButton"
+        "TalentMicroButton",
+        "GetContainerNumSlots",
+        "PickupContainerItem",
+        "GetContainerItemInfo"
     ],
     "Lua.diagnostics.disable": [
         "cast-local-type",

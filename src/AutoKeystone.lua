@@ -1,6 +1,6 @@
 -- Code via LazyKeystones - https://www.curseforge.com/wow/addons/lazy-keystones by thejustinist
 
-local InsertKeystone = function(self)
+local InsertKeystone = function()
 	for bag = 0, NUM_BAG_SLOTS do
          for bagSlot = 1, GetContainerNumSlots(bag) do
             local _,_,_,_,_,_,itemName = GetContainerItemInfo(bag, bagSlot);
