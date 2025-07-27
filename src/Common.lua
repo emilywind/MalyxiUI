@@ -1,9 +1,9 @@
 SQUARE_TEXTURE = "Interface\\BUTTONS\\WHITE8X8"
 TOOLTIP_BORDER = "Interface\\Tooltips\\UI-Tooltip-Border"
 DEFAULT_FRAME_COLOUR = {
-  0.2,
-  0.2,
-  0.2,
+  0.3,
+  0.3,
+  0.3,
 }
 
 AddonDir = "Interface\\AddOns\\EmsUI"
