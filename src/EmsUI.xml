@@ -29,4 +29,5 @@
   <Include file="TabBinder.lua" />
   <Include file="BigDebuffsSkin.lua" />
   <Include file="ObjectiveTracker.lua" />
+  <Include file="Vigor.lua" />
 </Ui>
