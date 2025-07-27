@@ -224,7 +224,7 @@ OnPlayerLogin(function()
     end
 
     if not hasArenaNumber and (EUIDB.nameplateHideServerNames or EUIDB.nameplateNameLength > 0) then
-      local name, realm = UnitName(frame.displayedUnit) or UNKNOWN
+      local name, realm = UnitName(frame.displayedUnit)
 
       if not EUIDB.nameplateHideServerNames and realm then
         name = name .. " - " .. realm
