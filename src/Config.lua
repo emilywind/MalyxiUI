@@ -101,20 +101,13 @@ local function tableToWowDropdown(table)
   return wowTable
 end
 
-local function flatTableToWowDropdown(table)
-  local wowTable = {}
-  for k, v in pairs(table) do
-    wowTable[v] = v
-  end
-
-  return wowTable
-end
-
 local makePanel = function(frameName, mainpanel, panelName)
   local panel = CreateFrame("Frame", frameName, mainpanel)
   panel.name, panel.parent = panelName, name
   local category = Settings.GetCategory("EmsUI")
   Settings.RegisterCanvasLayoutSubcategory(category, panel, panelName)
+
+  return panel
 end
 
 local function openEuiConfig()
@@ -359,7 +352,7 @@ local function setupEuiOptions()
   ------------
   -- Hiding --
   ------------
-  makePanel("EUI_Hiding", eui.panel, "Hiding")
+  EUI_Hiding = makePanel("EUI_Hiding", eui.panel, "Hiding")
 
   local hidingText = EUI_Hiding:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
   hidingText:SetText("Hiding")
@@ -458,7 +451,7 @@ local function setupEuiOptions()
   ----------------
   -- Nameplates --
   ----------------
-  makePanel("EUI_Nameplates", eui.panel, "Nameplates")
+  EUI_Nameplates = makePanel("EUI_Nameplates", eui.panel, "Nameplates")
 
   local nameplateText = EUI_Nameplates:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
   nameplateText:SetText("Nameplates")
