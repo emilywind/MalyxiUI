@@ -1,5 +1,5 @@
 {
-    "Lua.runtime.version": "Lua 5.1",
+    "Lua.runtime.version": "Lua 5.4",
     "Lua.runtime.builtin": {
         "basic": "disable",
         "debug": "disable",
@@ -148,7 +148,11 @@
         "ProfessionsRecipeTracker",
         "PlayerFrameAlternateManaBarBorder",
         "PlayerFrameAlternateManaBarLeftBorder",
-        "PlayerFrameAlternateManaBarRightBorder"
+        "PlayerFrameAlternateManaBarRightBorder",
+        "rABS_LeaveVehicleButton",
+        "UIWidgetPowerBarContainerFrame",
+        "PlayerFrameAlternateManaBar",
+        "ComboPointPlayerFrame"
     ],
     "Lua.diagnostics.disable": [
         "cast-local-type",
