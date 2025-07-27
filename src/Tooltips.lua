@@ -74,7 +74,6 @@ OnPlayerLogin(function()
 		local r, g, b = getUnitHealthColor(unit)
 
 		if UnitIsPlayer(unit) then
-      local level = UnitLevel(unit)
 			local race = UnitRace(unit)
 
       -- Class coloured name
