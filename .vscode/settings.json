@@ -135,7 +135,8 @@
         "ActionButton8",
         "ActionButton9",
         "ActionButton10",
-        "ActionButton11"
+        "ActionButton11",
+        "SpellFlyout"
     ],
     "Lua.diagnostics.disable": [
         "cast-local-type"

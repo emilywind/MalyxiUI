@@ -187,6 +187,38 @@ local function init()
       styleActionButton(_G["BT4PetButton" .. i])
     end
   end
+
+  local function applySkin(desaturation)
+    -- Main frame.
+    for _, texture in pairs({
+      SpellFlyout.Background.Start,
+      SpellFlyout.Background.VerticalMiddle,
+      SpellFlyout.Background.HorizontalMiddle,
+      SpellFlyout.Background.End,
+    }) do
+      texture:SetDesaturation(desaturation)
+      texture:SetVertexColor(getFrameColour())
+    end
+
+    -- Button borders.
+    local i = 1
+    while (true) do
+      local btnTexture = _G["SpellFlyoutPopupButton" .. i .. "NormalTexture"]
+
+      if not btnTexture then
+        break
+      end
+
+      btnTexture:SetDesaturation(desaturation)
+      btnTexture:SetVertexColor(getFrameColour())
+
+      i = i + 1
+    end
+  end
+
+  SpellFlyout:HookScript("OnSizeChanged", function()
+    applySkin(1)
+  end)
 end
 
 local a = CreateFrame("Frame")
