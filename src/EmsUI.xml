@@ -30,4 +30,5 @@
   <Include file="BigDebuffsSkin.lua" />
   <Include file="ObjectiveTracker.lua" />
   <Include file="Vigor.lua" />
+  <Include file="TooltipTalents.lua" />
 </Ui>

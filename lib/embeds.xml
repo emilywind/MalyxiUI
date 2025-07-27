@@ -3,4 +3,5 @@
   <Include file="LibSharedMedia-3.0\lib.xml" />
   <Include file="LibEditMode\embed.xml" />
   <Include file="SpellNotifications\SpellNotifications.xml" />
+  <Include file="LibFroznFunctions-1.0\lib.xml" />
 </Ui>
