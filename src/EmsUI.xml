@@ -28,5 +28,5 @@
   <Include file="DampeningDisplay.lua" />
   <Include file="TabBinder.lua" />
   <Include file="BigDebuffsSkin.lua" />
-  <Include file="ObjectiveTrackerHider.lua" />
+  <Include file="ObjectiveTracker.lua" />
 </Ui>
