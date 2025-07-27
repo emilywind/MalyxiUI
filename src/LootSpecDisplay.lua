@@ -4,14 +4,10 @@ OnPlayerLogin(function()
 	-----------------------
 	if EUIDB.lootSpecDisplay then
 		local lootSpecId = nil
-		local lootSpecName = ""
-		local lootIcon = nil
-		local defaultSpecName
-		local defaultIcon
 
 		local PlayerLootSpecFrame = CreateFrame("Frame", nil, PlayerFrame)
 
-		PlayerLootSpecFrame:SetPoint("BOTTOMRIGHT", PlayerFrame.portrait, "BOTTOMRIGHT", 0, yVal)
+		PlayerLootSpecFrame:SetPoint("BOTTOMRIGHT", PlayerFrame.portrait, "BOTTOMRIGHT", 0, 0)
 		PlayerLootSpecFrame:SetHeight(20)
 		PlayerLootSpecFrame:SetWidth(46)
 		PlayerLootSpecFrame.specname = PlayerLootSpecFrame:CreateFontString(nil)
@@ -24,15 +20,16 @@ OnPlayerLogin(function()
 		LootDisplaySetupFrame:RegisterEvent("PLAYER_TALENT_UPDATE")
 		LootDisplaySetupFrame:SetScript("OnEvent", function(self, event)
 			-- Loot Spec
-			newLootSpecId = GetLootSpecialization()
+			local newLootSpecId = GetLootSpecialization()
+			local lootIcon = ''
 
 			if (lootSpecId ~= newLootSpecId or (not LootSpecId and event == "PLAYER_TALENT_UPDATE")) then
 				lootSpecId = newLootSpecId
 
 				if lootSpecId ~= 0 then
-					_,lootSpecName,_,lootIcon = GetSpecializationInfoByID(lootSpecId)
+					_,_,_,lootIcon = GetSpecializationInfoByID(lootSpecId)
 				else
-					_,lootSpecName,_,lootIcon = GetSpecializationInfo(GetSpecialization())
+					_,_,_,lootIcon = GetSpecializationInfo(GetSpecialization())
 				end
 
 				if not lootIcon then return end

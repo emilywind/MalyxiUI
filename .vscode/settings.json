@@ -158,7 +158,8 @@
         "TalentMicroButton",
         "GetContainerNumSlots",
         "PickupContainerItem",
-        "GetContainerItemInfo"
+        "GetContainerItemInfo",
+        "LootSpecId"
     ],
     "Lua.diagnostics.disable": [
         "cast-local-type",
