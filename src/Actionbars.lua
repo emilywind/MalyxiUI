@@ -188,7 +188,7 @@ local function init()
     end
   end
 
-  local function applySkin(desaturation)
+  local function skinSpellFlyout(desaturation)
     -- Main frame.
     for _, texture in pairs({
       SpellFlyout.Background.Start,
@@ -217,7 +217,7 @@ local function init()
   end
 
   SpellFlyout:HookScript("OnSizeChanged", function()
-    applySkin(1)
+    skinSpellFlyout(1)
   end)
 end
 
