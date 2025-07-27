@@ -1,4 +1,4 @@
-local function applyEuiButtonSkin(bu, icon, isLeaveButton)
+local function applyEuiButtonSkin(bu, isLeaveButton)
   if not EUIDB.darkenUi then return end
 
   if not bu then return end
@@ -13,6 +13,8 @@ local function applyEuiButtonSkin(bu, icon, isLeaveButton)
   else
     nt:SetVertexColor(getFrameColour())
   end
+
+  bu.euiClean = true
 end
 
 local function init()
@@ -48,7 +50,7 @@ local function init()
     end
 
     --apply background
-    applyEuiButtonSkin(bu, icon)
+    applyEuiButtonSkin(bu)
   end
 
   --initial style func
@@ -57,33 +59,9 @@ local function init()
       return
     end
     local name = bu:GetName()
-    local ic = _G[name .. "Icon"]
-    local bo = _G[name .. "Border"]
     local ho = _G[name .. "HotKey"]
-    local cd = _G[name .. "Cooldown"]
     local na = _G[name .. "Name"]
     local nt = _G[name .. "NormalTexture"]
-    local fbg = _G[name .. "FloatingBG"]
-    local fob = _G[name .. "FlyoutBorder"]
-    local fobs = _G[name .. "FlyoutBorderShadow"]
-
-    if cd then
-      cd:SetPoint("TOPLEFT", bu, "TOPLEFT", 2, -2)
-      cd:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", -2, 2)
-    end
-
-    if fbg then
-      fbg:Hide()
-    end --floating background
-    --flyout border stuff
-    if fob then
-      fob:SetTexture(nil)
-    end
-    if fobs then
-      fobs:SetTexture(nil)
-    end
-
-    bo:SetTexture(nil) --hide the border (plain ugly, sry blizz)
 
     --hotkey
     ho:SetTextColor(1, 1, 1, 1)
@@ -101,7 +79,7 @@ local function init()
       nt = bu:GetNormalTexture()
     end
 
-    applyEuiButtonSkin(bu, ic)
+    applyEuiButtonSkin(bu)
 
     if bartender4 then --fix the normaltexture
       nt:SetTexCoord(0, 1, 0, 1)
@@ -116,7 +94,7 @@ local function init()
       return
     end
 
-    applyEuiButtonSkin(bu, nil, true)
+    applyEuiButtonSkin(bu, true)
   end
 
   -- Style stance buttons
@@ -130,11 +108,10 @@ local function init()
       return
     end
     local name = bu:GetName()
-    local ic = _G[name .. "Icon"]
     local nt = _G[name .. "NormalTexture"]
     nt:SetAllPoints(bu)
 
-    applyEuiButtonSkin(bu, ic)
+    applyEuiButtonSkin(bu)
   end
 
   --update hotkey func
