@@ -15,11 +15,10 @@ local LibFroznFunctions = LibStub:GetLibrary("LibFroznFunctions-1.0")
 -- text constants
 local TTT_TEXT = {
   talentsPrefix = (SPECIALIZATION or TALENTS), -- MoP: Could be changed from TALENTS (Talents) to SPECIALIZATION (Specialization)
-  ailAndGSPrefix = STAT_AVERAGE_ITEM_LEVEL,                                                                -- Item Level
-  loading = SEARCH_LOADING_TEXT,                                                                           -- Loading...
-  outOfRange = ERR_SPELL_OUT_OF_RANGE:sub(1, -2),                                                          -- Out of range.
-  none = NONE_KEY,                                                                                         -- None
-  -- na = NOT_APPLICABLE:lower() -- N/A
+  ailAndGSPrefix = STAT_AVERAGE_ITEM_LEVEL,
+  loading = SEARCH_LOADING_TEXT,
+  outOfRange = ERR_SPELL_OUT_OF_RANGE:sub(1, -2),
+  none = NONE_KEY,
 }
 
 -- colors
@@ -231,7 +230,12 @@ function TTT_UpdateTooltip(unitCacheRecord)
       -- average item level
       local averageItemLevel = (unitCacheRecord.averageItemLevel.value > 0) and unitCacheRecord.averageItemLevel.value or "-"
 
-      ailAndGSText:Push(unitCacheRecord.averageItemLevel.qualityColor:WrapTextInColorCode(averageItemLevel .. ' (' .. unitCacheRecord.averageItemLevel.pvpItemLevel .. ' PVP)'))
+      local pvpIlvlText = ''
+      if unitCacheRecord.averageItemLevel.pvpItemLevel then
+        pvpIlvlText = ' (' .. unitCacheRecord.averageItemLevel.pvpItemLevel .. ' PVP)'
+      end
+
+      ailAndGSText:Push(unitCacheRecord.averageItemLevel.qualityColor:WrapTextInColorCode(averageItemLevel .. pvpIlvlText))
     end
 
     -- show ail and GS text

@@ -243,7 +243,8 @@
         "WorldQuestTrackerAddon",
         "LibItemString",
         "ITEM_LEVEL",
-        "CompactArenaFrame"
+        "CompactArenaFrame",
+        "PVP"
     ],
     "Lua.diagnostics.disable": [
         "cast-local-type",
