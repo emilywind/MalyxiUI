@@ -8,6 +8,7 @@ EUIDBDefaults = {
   arenaNumbers = false,
   hideMicroMenu = false,
   hideBagBar = false,
+  hideArenaFrames = true,
 
   healthBarTex = EUI_TEXTURES.healthBar,
   powerBarTex = EUI_TEXTURES.powerBar,
@@ -129,7 +130,7 @@ local function setupEuiOptions()
       frame = eui.panel
     end
 
-    local check = CreateFrame("CheckButton", "EUICheck" .. label, frame, "InterfaceOptionsCheckButtonTemplate")
+    local check = CreateFrame("CheckButton", "EUICheck" .. label, frame, "ChatConfigCheckButtonTemplate")
     check:SetScript("OnClick", function(self)
       local tick = self:GetChecked()
       onChange(tick and true or false)
@@ -141,8 +142,7 @@ local function setupEuiOptions()
     end)
     check.label = _G[check:GetName() .. "Text"]
     check.label:SetText(label)
-    check.tooltipText = label
-    check.tooltipRequirement = description
+    check.tooltip = description
     check:SetChecked(initialValue)
     if (relativeEl) then
       check:SetPoint("TOPLEFT", relativeEl, "BOTTOMLEFT", 0, -8)
@@ -349,6 +349,27 @@ local function setupEuiOptions()
     dampeningDisplay
   )
 
+  local hideArenaFrames = newCheckbox(
+    "Hide Blizzard Arena Frames",
+    "Hides the default arena frames in arenas, in favour of Gladius, sArena, or etc",
+    EUIDB.hideArenaFrames,
+    function(value)
+      EUIDB.hideArenaFrames = value
+      HideArenaFrames()
+    end,
+    tabBinder
+  )
+
+  local hideObjectiveTracker = newCheckbox(
+    "Hide Objective Tracker in Battlegrounds",
+    "Hide Quest Objective Tracker in Battlegrounds to reduce clutter.",
+    EUIDB.hideObjectiveTracker,
+    function(value)
+      EUIDB.hideObjectiveTracker = value
+    end,
+    hideArenaFrames
+  )
+
   ------------
   -- Hiding --
   ------------
@@ -412,39 +433,6 @@ local function setupEuiOptions()
       SetBagBarVisibility()
     end,
     hideMicroMenu,
-    EUI_Hiding
-  )
-
-  local hideObjectiveTracker = newCheckbox(
-    "Hide Objective Tracker in Battlegrounds",
-    "",
-    EUIDB.hideObjectiveTracker,
-    function(value)
-      EUIDB.hideObjectiveTracker = value
-    end,
-    hideBagBar,
-    EUI_Hiding
-  )
-
-  local nameplateHideCastText = newCheckbox(
-    "Hide Nameplate Cast Text",
-    "Hide cast text from nameplate castbars.",
-    EUIDB.nameplateHideCastText,
-    function(value)
-      EUIDB.nameplateHideCastText = value
-    end,
-    hideObjectiveTracker,
-    EUI_Hiding
-  )
-
-  local nameplateHideFriendlyHealthbars = newCheckbox(
-    "Hide Friendly Nameplate Health Bars",
-    "Hide health bars for friendly players.",
-    EUIDB.nameplateHideFriendlyHealthbars,
-    function(value)
-      EUIDB.nameplateHideFriendlyHealthbars = value
-    end,
-    nameplateHideCastText,
     EUI_Hiding
   )
 
@@ -568,6 +556,28 @@ local function setupEuiOptions()
       EUIDB.arenaNumbers = value
     end,
     nameplateTotems,
+    EUI_Nameplates
+  )
+
+  local nameplateHideCastText = newCheckbox(
+    "Hide Nameplate Cast Text",
+    "Hide cast text from nameplate castbars.",
+    EUIDB.nameplateHideCastText,
+    function(value)
+      EUIDB.nameplateHideCastText = value
+    end,
+    arenaNumbers,
+    EUI_Nameplates
+  )
+
+  local nameplateHideFriendlyHealthbars = newCheckbox(
+    "Hide Friendly Nameplate Health Bars",
+    "Hide health bars for friendly players.",
+    EUIDB.nameplateHideFriendlyHealthbars,
+    function(value)
+      EUIDB.nameplateHideFriendlyHealthbars = value
+    end,
+    nameplateHideCastText,
     EUI_Nameplates
   )
 

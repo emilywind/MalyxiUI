@@ -242,7 +242,8 @@
         "StorylineQuestPinMixin",
         "WorldQuestTrackerAddon",
         "LibItemString",
-        "ITEM_LEVEL"
+        "ITEM_LEVEL",
+        "CompactArenaFrame"
     ],
     "Lua.diagnostics.disable": [
         "cast-local-type",

@@ -32,4 +32,5 @@
   <Include file="Vigor.lua" />
   <Include file="TooltipTalents.lua" />
   <Include file="TooltipItemLevel.lua" />
+  <Include file="HideArenaFrames.lua" />
 </Ui>
