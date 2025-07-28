@@ -132,7 +132,7 @@ local function setupEuiOptions()
     local check = CreateFrame("CheckButton", "EUICheck" .. label, frame, "InterfaceOptionsCheckButtonTemplate")
     check:SetScript("OnClick", function(self)
       local tick = self:GetChecked()
-      onChange(self, tick and true or false)
+      onChange(tick and true or false)
       if tick then
         PlaySound(856) -- SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
       else
@@ -257,7 +257,7 @@ local function setupEuiOptions()
     "Display Loot Spec Indicator",
     "Display loot spec icon in your player portrait.",
     EUIDB.lootSpecDisplay,
-    function(self, value)
+    function(value)
       EUIDB.lootSpecDisplay = value
     end,
     tooltipDropdown
@@ -267,7 +267,7 @@ local function setupEuiOptions()
     "Use Custom Fonts (Requires Reload)",
     "Use custom fonts with support for Cyrillic and other character sets",
     EUIDB.customFonts,
-    function(self, value)
+    function(value)
       EUIDB.customFonts = value
     end,
     lootSpecDisplay
@@ -288,7 +288,7 @@ local function setupEuiOptions()
     "Use Custom Damage Font",
     "Use custom damage font, Bangers.",
     EUIDB.damageFont,
-    function(self, value)
+    function(value)
       EUIDB.damageFont = value
     end,
     customFonts
@@ -309,7 +309,7 @@ local function setupEuiOptions()
     "Darken UI",
     "Make the UI darker",
     EUIDB.darkenUi,
-    function(self, value)
+    function(value)
       EUIDB.darkenUi = value
     end,
     damageFont
@@ -323,7 +323,7 @@ local function setupEuiOptions()
     "Safe Queue",
     "Hide Leave Queue button and show timer for Arena/RBG queues.",
     EUIDB.safeQueue,
-    function(self, value)
+    function(value)
       EUIDB.safeQueue = value
     end,
     pvpText
@@ -333,7 +333,7 @@ local function setupEuiOptions()
     "Dampening Display",
     "Display Dampening % under remaining time at the top of the screen in arenas.",
     EUIDB.dampeningDisplay,
-    function(self, value)
+    function(value)
       EUIDB.dampeningDisplay = value
     end,
     safeQueue
@@ -343,7 +343,7 @@ local function setupEuiOptions()
     "Tab Binder",
     "Tab-target only between players in Arenas and BGs.",
     EUIDB.tabBinder,
-    function(self, value)
+    function(value)
       EUIDB.tabBinder = value
     end,
     dampeningDisplay
@@ -352,7 +352,7 @@ local function setupEuiOptions()
   ------------
   -- Hiding --
   ------------
-  EUI_Hiding = makePanel("EUI_Hiding", eui.panel, "Hiding")
+  local EUI_Hiding = makePanel("EUI_Hiding", eui.panel, "Hiding")
 
   local hidingText = EUI_Hiding:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
   hidingText:SetText("Hiding")
@@ -362,7 +362,7 @@ local function setupEuiOptions()
     "Hide Hotkeys on Action Bars",
     "Hides keybinding text on your action bar buttons.",
     EUIDB.hideHotkeys,
-    function(self, value)
+    function(value)
       EUIDB.hideHotkeys = value
     end,
     hidingText,
@@ -373,7 +373,7 @@ local function setupEuiOptions()
     "Hide Macro Text on Action Bars",
     "Hides macro text on your action bar buttons.",
     EUIDB.hideMacroText,
-    function(self, value)
+    function(value)
       EUIDB.hideMacroText = value
     end,
     hideHotkeys,
@@ -384,7 +384,7 @@ local function setupEuiOptions()
     "Hide Alt Power (Holy Power, Combo Points, etc under Player frame)",
     "Hides alt power bars on character frame such as combo points or holy power to clean it up, when preferring WeakAura or etc.",
     EUIDB.hideAltPower,
-    function(self, value)
+    function(value)
       EUIDB.hideAltPower = value
     end,
     hideMacroText,
@@ -395,7 +395,7 @@ local function setupEuiOptions()
     'Hide Micro Menu',
     'Hides the micro menu, preserving the queue status icon',
     EUIDB.hideMicroMenu,
-    function(self, value)
+    function(value)
       EUIDB.hideMicroMenu = value
       SetMicroMenuVisibility()
     end,
@@ -407,7 +407,7 @@ local function setupEuiOptions()
     'Hide Bag Bar',
     'Hides the bag bar',
     EUIDB.hideBagBar,
-    function(self, value)
+    function(value)
       EUIDB.hideBagBar = value
       SetBagBarVisibility()
     end,
@@ -419,7 +419,7 @@ local function setupEuiOptions()
     "Hide Objective Tracker in Battlegrounds",
     "",
     EUIDB.hideObjectiveTracker,
-    function(self, value)
+    function(value)
       EUIDB.hideObjectiveTracker = value
     end,
     hideBagBar,
@@ -430,7 +430,7 @@ local function setupEuiOptions()
     "Hide Nameplate Cast Text",
     "Hide cast text from nameplate castbars.",
     EUIDB.nameplateHideCastText,
-    function(self, value)
+    function(value)
       EUIDB.nameplateHideCastText = value
     end,
     hideObjectiveTracker,
@@ -441,7 +441,7 @@ local function setupEuiOptions()
     "Hide Friendly Nameplate Health Bars",
     "Hide health bars for friendly players.",
     EUIDB.nameplateHideFriendlyHealthbars,
-    function(self, value)
+    function(value)
       EUIDB.nameplateHideFriendlyHealthbars = value
     end,
     nameplateHideCastText,
@@ -451,7 +451,7 @@ local function setupEuiOptions()
   ----------------
   -- Nameplates --
   ----------------
-  EUI_Nameplates = makePanel("EUI_Nameplates", eui.panel, "Nameplates")
+  local EUI_Nameplates = makePanel("EUI_Nameplates", eui.panel, "Nameplates")
 
   local nameplateText = EUI_Nameplates:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
   nameplateText:SetText("Nameplates")
@@ -461,7 +461,7 @@ local function setupEuiOptions()
     "Skin Nameplates",
     "Skin Nameplates",
     EUIDB.skinNameplates,
-    function(self, value)
+    function(value)
       EUIDB.skinNameplates = value
     end,
     nameplateText,
@@ -482,7 +482,7 @@ local function setupEuiOptions()
     "Abbreviate Unit Names",
     "Abbreviate long NPC names on nameplates.",
     EUIDB.nameplateNameLength > 0,
-    function(self, value)
+    function(value)
       if value == true then
         EUIDB.nameplateNameLength = 20
       else
@@ -497,7 +497,7 @@ local function setupEuiOptions()
     "Hide Server Names (Must rezone to see change).",
     "Hide server names for players from different servers to reduce clutter.",
     EUIDB.nameplateHideServerNames,
-    function(self, value)
+    function(value)
       EUIDB.nameplateHideServerNames = value
     end,
     nameplateNameLength,
@@ -508,7 +508,7 @@ local function setupEuiOptions()
     "Class Colour Friendly Names",
     "Colours friendly players' names on their nameplates.",
     EUIDB.nameplateFriendlyNamesClassColor,
-    function(self, value)
+    function(value)
       EUIDB.nameplateFriendlyNamesClassColor = value
     end,
     nameplateHideServerNames,
@@ -519,7 +519,7 @@ local function setupEuiOptions()
     "Smaller Friendly Nameplates",
     "Reduce size of friendly nameplates to more easily distinguish friend from foe",
     EUIDB.nameplateFriendlySmall,
-    function(self, value)
+    function(value)
       EUIDB.nameplateFriendlySmall = value
       SetFriendlyNameplateSize(true)
     end,
@@ -531,7 +531,7 @@ local function setupEuiOptions()
     "Show Level",
     "Show player/mob level on nameplate",
     EUIDB.nameplateShowLevel,
-    function(self, value)
+    function(value)
       EUIDB.nameplateShowLevel = value
     end,
     nameplateFriendlySmall,
@@ -542,7 +542,7 @@ local function setupEuiOptions()
     "Show Health Percentage",
     "Show percentages of health on nameplates",
     EUIDB.nameplateHealthPercent,
-    function(self, value)
+    function(value)
       EUIDB.nameplateHealthPercent = value
     end,
     nameplateShowLevel,
@@ -553,7 +553,7 @@ local function setupEuiOptions()
     "Show icon above Totems, Warbanner, Psyfied, and Demonic Tyrant",
     "Show icon above key NPCs",
     EUIDB.nameplateTotems,
-    function(self, value)
+    function(value)
       EUIDB.nameplateTotems = value
     end,
     nameplateShowHealth,
@@ -564,12 +564,13 @@ local function setupEuiOptions()
     "Show Arena Numbers on nameplates in arenas",
     "Show Arena number (i.e. 1, 2, 3 etc) on top of nameplates in arenas instead of player names to assist with macro use awareness",
     EUIDB.arenaNumbers,
-    function(self, value)
+    function(value)
       EUIDB.arenaNumbers = value
     end,
     nameplateTotems,
     EUI_Nameplates
   )
+
 
   -------------------
   --Reload Buttons --
