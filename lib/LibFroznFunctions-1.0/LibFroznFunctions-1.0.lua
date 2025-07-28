@@ -2,6 +2,7 @@
 -- LibFroznFunctions-1.0
 --
 -- Frozn's utility functions for WoW development
+-- Updated by Emily to expose PVP Item levels.
 --
 -- Example:
 -- /run DevTools_Dump(LibStub:GetLibrary("LibFroznFunctions-1.0", true).isWoWFlavor)

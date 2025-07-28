@@ -1,6 +1,7 @@
-----------------------------------
--- Credit goes to TipTacTalents --
-----------------------------------
+----------------------------------------------------------------------------
+--            Modified and Simplified version of TipTacTalents            --
+-- Includes a custom version of LibFroznFunctions to show PVP Item Levels --
+----------------------------------------------------------------------------
 local MOD_NAME = ...
 local tts = CreateFrame("Frame", MOD_NAME, nil, BackdropTemplateMixin and "BackdropTemplate")
 tts:Hide()
