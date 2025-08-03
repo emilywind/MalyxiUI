@@ -1,18 +1,40 @@
------------------------------
---- EmsUI Tooltips Module ---
+--------------------------------------------------------------------
+---                     EmsUI Tooltips Module                    ---
 --- Thanks to TipTac Reborn for mount code and LibFroznFunctions ---
------------------------------
+--------------------------------------------------------------------
 local LibFroznFunctions = LibStub:GetLibrary("LibFroznFunctions-1.0")
 
+function GetTooltipUnit()
+	local unit = select(2, GameTooltip:GetUnit())
+
+	if not unit then
+		unit = "mouseover"
+		local focus = GetMouseFoci()
+		if (focus and focus.unit) then
+			unit = focus.unit
+		end
+	end
+
+	return unit
+end
+
+local function skinGameTooltip()
+	GameTooltip.NineSlice:SetBorderColor(GetFrameColour())
+	GameTooltip.NineSlice:SetCenterColor(0.08, 0.08, 0.08)
+end
+
 local function getUnitRecord(unit)
+	local className, classFileName, classID = UnitClass(unit)
+
 	return {
 		id = unit,
 		guid = UnitGUID(unit),
 		isPlayer = UnitIsPlayer(unit),
 		level = UnitEffectiveLevel(unit),
 		isWildBattlePet = UnitIsWildBattlePet(unit),
-		classID = select(3, UnitClass(unit)),
-		className = select(1, UnitClass(unit)),
+		classID = classID,
+		className = className,
+		classFileName = classFileName,
 	}
 end
 
@@ -74,23 +96,43 @@ local function cleanupTooltip(tip)
 	end
 end
 
-function GetTooltipUnit()
-	local unit = select(2, GameTooltip:GetUnit())
+local function addMount(unitID)
+	local index = 0
 
-	if not unit then
-		unit = "mouseover"
-		local focus = GetMouseFoci()
-		if (focus and focus.unit) then
-			unit = focus.unit
+	LibFroznFunctions:ForEachAura(unitID, LFF_AURA_FILTERS.Helpful, nil, function(unitAuraInfo)
+		index = index + 1
+
+		local spellID = unitAuraInfo.spellId
+
+		if (spellID) then
+			local mountID = LibFroznFunctions:GetMountFromSpell(spellID)
+
+			if (mountID) then
+				local mountText = LibFroznFunctions:CreatePushArray()
+				local spacer
+
+				local isCollected = LibFroznFunctions:IsMountCollected(mountID)
+
+				if (isCollected) then
+					mountText:Push(CreateAtlasMarkup("common-icon-checkmark"))
+				else
+					mountText:Push(CreateAtlasMarkup("common-icon-redx"))
+				end
+
+				mountText:Push(CreateTextureMarkup(unitAuraInfo.icon, 64, 64, 0, 0, 0.07, 0.93, 0.07, 0.93))
+
+				if (unitAuraInfo.name) then
+					spacer = (mountText:GetCount() > 0) and " " or ""
+
+					mountText:Push(spacer .. HIGHLIGHT_FONT_COLOR:WrapTextInColorCode(unitAuraInfo.name))
+				end
+
+				GameTooltip:AddLine(("Mount: %s"):format(mountText:Concat()))
+
+				return true
+			end
 		end
-	end
-
-	return unit
-end
-
-local function skinGameTooltip()
-  GameTooltip.NineSlice:SetBorderColor(GetFrameColour())
-  GameTooltip.NineSlice:SetCenterColor(0.08, 0.08, 0.08)
+	end, true)
 end
 
 local colours = {
@@ -170,43 +212,7 @@ OnPlayerLogin(function()
 
 			-- Mount
 			if EUIDB.tooltipShowMount then
-				local unitID = unit
-				local index = 0
-
-				LibFroznFunctions:ForEachAura(unitID, LFF_AURA_FILTERS.Helpful, nil, function(unitAuraInfo)
-					index = index + 1
-
-					local spellID = unitAuraInfo.spellId
-
-					if (spellID) then
-						local mountID = LibFroznFunctions:GetMountFromSpell(spellID)
-
-						if (mountID) then
-							local mountText = LibFroznFunctions:CreatePushArray()
-							local spacer
-
-							local isCollected = LibFroznFunctions:IsMountCollected(mountID)
-
-							if (isCollected) then
-								mountText:Push(CreateAtlasMarkup("common-icon-checkmark"))
-							else
-								mountText:Push(CreateAtlasMarkup("common-icon-redx"))
-							end
-
-							mountText:Push(CreateTextureMarkup(unitAuraInfo.icon, 64, 64, 0, 0, 0.07, 0.93, 0.07, 0.93))
-
-							if (unitAuraInfo.name) then
-								spacer = (mountText:GetCount() > 0) and " " or ""
-
-								mountText:Push(spacer .. HIGHLIGHT_FONT_COLOR:WrapTextInColorCode(unitAuraInfo.name))
-							end
-
-							GameTooltip:AddLine(("Mount: %s"):format(mountText:Concat()))
-
-							return true
-						end
-					end
-				end, true)
+				addMount(unit)
 			end
 
 			-- recalculate size of tip to ensure that it has the correct dimensions
