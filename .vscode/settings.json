@@ -246,7 +246,8 @@
         "CompactArenaFrame",
         "PVP",
         "PVP_ENABLED",
-        "UNIT_POPUP_RIGHT_CLICK"
+        "UNIT_POPUP_RIGHT_CLICK",
+        "HIGH"
     ],
     "Lua.diagnostics.disable": [
         "cast-local-type",

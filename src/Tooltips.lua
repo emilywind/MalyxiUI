@@ -4,16 +4,35 @@
 -----------------------------
 local LibFroznFunctions = LibStub:GetLibrary("LibFroznFunctions-1.0")
 
-local function cleanupTooltip(tip)
-	local unit = GetTooltipUnit()
-	local unitRecord = {
+local function getUnitRecord(unit)
+	return {
 		id = unit,
 		guid = UnitGUID(unit),
 		isPlayer = UnitIsPlayer(unit),
+		level = UnitEffectiveLevel(unit),
 		isWildBattlePet = UnitIsWildBattlePet(unit),
 		classID = select(3, UnitClass(unit)),
-		className = select(2, UnitClass(unit)),
+		className = select(1, UnitClass(unit)),
 	}
+end
+
+local function getUnitHealthColor(unit)
+	local r, g, b
+
+	if (UnitIsPlayer(unit)) then
+		r, g, b = GetClassColor(select(2, UnitClass(unit)))
+	else
+		r, g, b = GameTooltip_UnitColor(unit)
+		if (g == 0.6) then g = 0.9 end
+		if (r == 1 and g == 1 and b == 1) then r, g, b = 0, 0.9, 0.1 end
+	end
+
+	return CreateColor(r, g, b)
+end
+
+local function cleanupTooltip(tip)
+	local unit = GetTooltipUnit()
+	local unitRecord = getUnitRecord(unit)
 	local creatureFamily = UnitCreatureFamily(unitRecord.id);
 	local creatureType = UnitCreatureType(unitRecord.id);
 
@@ -27,7 +46,7 @@ local function cleanupTooltip(tip)
 		local specCount = C_SpecializationInfo.GetNumSpecializationsForClassID(unitRecord.classID);
 
 		for i = 1, specCount do
-			local specID, specName = GetSpecializationInfoForClassID(unitRecord.classID, i, unitRecord.sex);
+			local _, specName = GetSpecializationInfoForClassID(unitRecord.classID, i, unitRecord.sex);
 
 			specNames:Push(specName);
 		end
@@ -68,20 +87,6 @@ function GetTooltipUnit()
 	end
 
 	return unit
-end
-
-local function getUnitHealthColor(unit)
-	local r, g, b
-
-	if (UnitIsPlayer(unit)) then
-		r, g, b = GetClassColor(select(2,UnitClass(unit)))
-	else
-		r, g, b = GameTooltip_UnitColor(unit)
-		if (g == 0.6) then g = 0.9 end
-		if (r==1 and g==1 and b==1) then r, g, b = 0, 0.9, 0.1 end
-	end
-
-	return r, g, b
 end
 
 local function skinGameTooltip()
@@ -132,24 +137,25 @@ OnPlayerLogin(function()
 	local function onTooltipSetUnit(self)
     if self ~= GameTooltip then return end
 
+		local unit = GetTooltipUnit()
+		local unitRecord = getUnitRecord(unit)
+
     skinGameTooltip()
 		cleanupTooltip(self)
 
-		local unit = GetTooltipUnit()
-
-		local level = UnitEffectiveLevel(unit)
+		local level = unitRecord.level
     if (level < 0) then
       level = "??"
     end
 
-		local r, g, b = getUnitHealthColor(unit)
+		local unitClassColor = getUnitHealthColor(unit)
 
 		if UnitIsPlayer(unit) then
 			local race = UnitRace(unit)
 
       -- Class coloured name
 			local text = GameTooltipTextLeft1:GetText()
-			GameTooltipTextLeft1:SetFormattedText("|cff%02x%02x%02x%s|r", r * 255, g * 255, b * 255, text:match("|cff%x%x%x%x%x%x(.+)|r") or text)
+			GameTooltipTextLeft1:SetText(unitClassColor:WrapTextInColorCode(text))
 
       local playerInfoLine = GameTooltipTextLeft2
 			local guildName, guildRank = GetGuildInfo(unit)
@@ -159,7 +165,7 @@ OnPlayerLogin(function()
 				guildLine:SetText('|cff' .. colours.guildName .. guildName .. '|r' .. '|cff' .. colours.guildRank .. ' (' .. guildRank .. ')|r')
 			end
 
-      playerInfoLine:SetText('Level ' .. level .. ' ' .. race)
+      playerInfoLine:SetText(level .. ' ' .. race .. ' ' .. unitClassColor:WrapTextInColorCode(unitRecord.className))
 
 			-- Mount
 			if EUIDB.showMount then
@@ -219,8 +225,9 @@ OnPlayerLogin(function()
 
 	GameTooltipStatusBar:HookScript("OnValueChanged", function(self, hp)
 		local unit = GetTooltipUnit()
+		local unitClassColor = getUnitHealthColor(unit)
 
-	  self:SetStatusBarColor(getUnitHealthColor(unit))
+	  self:SetStatusBarColor(unitClassColor:GetRGB())
 
 		local value = UnitHealth(unit)
 		local maxValue = UnitHealthMax(unit)
