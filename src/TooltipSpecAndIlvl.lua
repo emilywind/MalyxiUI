@@ -178,19 +178,6 @@ function TTT_UpdateTooltip(unitCacheRecord)
 
         specNameAdded = true
       end
-
-      if ((talentFormat == 1) or (talentFormat == 3)) and (unitCacheRecord.talents.pointsSpent) then
-        spacer = (specText:GetCount() > 0) and " " or ""
-
-        if (specNameAdded) then
-          specText:Push(spacer ..
-          TTT_COLOR.text.pointsSpent:WrapTextInColorCode("(" ..
-          table.concat(unitCacheRecord.talents.pointsSpent, "/") .. ")"))
-        else
-          specText:Push(spacer ..
-          TTT_COLOR.text.pointsSpent:WrapTextInColorCode(table.concat(unitCacheRecord.talents.pointsSpent, "/")))
-        end
-      end
     end
 
     -- show spec text
