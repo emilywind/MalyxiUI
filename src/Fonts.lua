@@ -7,15 +7,15 @@ local ECUI = CreateFrame("Frame")
 ECUI:RegisterEvent("ADDON_LOADED")
 ECUI:SetScript("OnEvent", function()
   if EUIDB.enableDamageFont then
-    DAMAGE_TEXT_FONT          = EUIDB.damageFont
+    DAMAGE_TEXT_FONT = EUIDB.damageFont
   end
 
-  if not EUIDB.customFonts then return end
+  if not EUIDB.enableFont then return end
 
-  STANDARD_TEXT_FONT          = EUIDB.font
-  UNIT_NAME_FONT              = EUIDB.font
-  NAMEPLATE_FONT              = EUIDB.font
-  NAMEPLATE_SPELLCAST_FONT    = EUIDB.font
+  STANDARD_TEXT_FONT = EUIDB.font
+  UNIT_NAME_FONT = EUIDB.font
+  NAMEPLATE_FONT = EUIDB.font
+  NAMEPLATE_SPELLCAST_FONT = EUIDB.font
 
   local ForcedFontSize = { 9, 9, 14, 14, 12, 64, 64 }
 
