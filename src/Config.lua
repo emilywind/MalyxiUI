@@ -319,6 +319,19 @@ local function setupEuiOptions()
   pvpText:SetText("PvP")
   pvpText:SetPoint("TOPLEFT", darkMode, "BOTTOMLEFT", 0, -16)
 
+  local statusBarChooser = newDropdown(
+    "Status Bar Texture (Raid Frames and Nameplates)",
+    LSM_STATUSBAR,
+    EUIDB.healthBarTex,
+    200,
+    function(value)
+      EUIDB.healthBarTex = value
+      EUIDB.powerBarTex = value -- Sync power bar texture with health bar texture
+    end,
+    darkMode
+  )
+  statusBarChooser:SetPoint("LEFT", pvpText, "RIGHT", 300, 0)
+
   local dampeningDisplay = newCheckbox(
     "Dampening Display",
     "Display Dampening % under remaining time at the top of the screen in arenas.",
