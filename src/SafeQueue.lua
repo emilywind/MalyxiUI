@@ -1,9 +1,9 @@
 -- Enhanced version of SafeQueue by Jordon
 
 local SafeQueue = CreateFrame("Frame")
-local queueTime
+local queueTime = {}
 local queue = 0
-SafeQueueDB = SafeQueueDB or { announce = "self" }
+local justPopped = true
 
 PVPReadyDialog.leaveButton:Hide()
 PVPReadyDialog.leaveButton.Show = function() end -- Prevent other mods from showing the button
@@ -11,13 +11,12 @@ PVPReadyDialog.enterButton:ClearAllPoints()
 PVPReadyDialog.enterButton:SetPoint("BOTTOM", PVPReadyDialog, "BOTTOM", 0, 25)
 
 local function Print(msg)
-	DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99SafeQueue|r: " .. msg)
+	DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99Em's UI|r: " .. msg)
 end
 
 local function PrintTime()
-	local announce = SafeQueueDB.announce
-	if announce == "off" then return end
-	local secs, str = floor(GetTime() - queueTime), "Queue popped "
+	print(queueTime[queue])
+	local secs, str = floor(GetTime() - queueTime[queue]), "Queue popped "
 	local mins = floor(secs/60)
 	if secs < 1 then
 		str = str .. "instantly!"
@@ -31,38 +30,36 @@ local function PrintTime()
 			str = str .. secs .. "s"
 		end
 	end
-	if announce == "self" or not IsInGroup() then
-		Print(str)
-	else
-		local group = IsInRaid() and "RAID" or "PARTY"
-		SendChatMessage(str, group)
-	end
+
+	Print(str)
 end
 
 SafeQueue:RegisterEvent("UPDATE_BATTLEFIELD_STATUS")
 SafeQueue:SetScript("OnEvent", function()
 	if not EUIDB.safeQueue then return end
 
-	local queued
-	for i=1, GetMaxBattlefieldID() do
+	local queued = false
+	for i = 1, GetMaxBattlefieldID() do
 		local status = GetBattlefieldStatus(i)
 		if status == "queued" then
 			queued = true
-			if not queueTime then queueTime = GetTime() end
+			if not queueTime[i] then
+				justPopped = true
+				queueTime[i] = GetTime()
+			end
 		elseif status == "confirm" then
-			if queueTime then
-				PrintTime()
-				queueTime = nil
-				remaining = 0
+			if queueTime[i] then
 				queue = i
+				PrintTime()
+				queueTime[i] = nil
 			end
 		end
-		break
 	end
-	if not queued and queueTime then queueTime = nil end
+
+	if not queued and queueTime[1] then queueTime = {} end
 end)
 
-SafeQueue:SetScript("OnUpdate", function(self)
+SafeQueue:SetScript("OnUpdate", function()
 	if not EUIDB.safeQueue then return end
 
 	local timerBar = PVPReadyDialog.timerBar
@@ -79,44 +76,27 @@ SafeQueue:SetScript("OnUpdate", function(self)
 		timerBar.Text = timerBar:CreateFontString(nil, "OVERLAY")
 		timerBar.Text:SetFontObject(GameFontHighlight)
 		timerBar.Text:SetPoint("CENTER", timerBar, "CENTER")
-
-		local timeout = GetBattlefieldPortExpiration(queue)
-		timerBar:SetMinMaxValues(0, timeout)
 	end
 
-	local function barUpdate(self, elapsed)
+	local function barUpdate(self)
 		local timeLeft = GetBattlefieldPortExpiration(queue)
-		if (timeLeft <= 0) then return self:Hide() end
+
+		if justPopped then
+			justPopped = false
+			timerBar:SetMinMaxValues(0, timeLeft)
+			print(timeLeft)
+			timerBar:Show()
+		end
+
+		if (timeLeft <= 0) then
+			justPopped = true
+			self:Hide()
+		end
 
 		self:SetValue(timeLeft)
 		self.Text:SetFormattedText("%.1f", timeLeft)
 	end
 	timerBar:SetScript("OnUpdate", barUpdate)
 
-	local function OnEvent(self, event, ...)
-		timerBar:Show()
-	end
-
 	PVPReadyDialog.timerBar = timerBar
 end)
-
-SlashCmdList.SafeQueue = function(msg)
-	msg = msg or ""
-	local cmd, arg = string.split(" ", msg, 2)
-	cmd = string.lower(cmd or "")
-	arg = string.lower(arg or "")
-	if cmd == "announce" then
-		if arg == "off" or arg == "self" or arg == "group" then
-			SafeQueueDB.announce = arg
-			Print("Announce set to " .. arg)
-		else
-			Print("Announce set to " .. SafeQueueDB.announce)
-			Print("Announce types are \"off\", \"self\", and \"group\"")
-		end
-	else
-		DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99SafeQueue v2.7|r")
-		Print("/sq announce : " .. SafeQueueDB.announce)
-	end
-end
-SLASH_SafeQueue1 = "/safequeue"
-SLASH_SafeQueue2 = "/sq"
