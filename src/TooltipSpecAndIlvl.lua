@@ -158,7 +158,6 @@ function TTT_UpdateTooltip(unitCacheRecord)
     else
       local spacer
       local talentFormat = 1
-      local specNameAdded = false
 
       if (unitCacheRecord.talents.role) then
         specText:Push(LibFroznFunctions:CreateMarkupForRoleIcon(unitCacheRecord.talents.role))
@@ -175,8 +174,6 @@ function TTT_UpdateTooltip(unitCacheRecord)
 
         local classColor = LibFroznFunctions:GetClassColor(unitCacheRecord.classID, 5, nil)
         specText:Push(spacer .. classColor:WrapTextInColorCode(unitCacheRecord.talents.name))
-
-        specNameAdded = true
       end
     end
 
