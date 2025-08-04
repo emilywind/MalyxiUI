@@ -247,7 +247,7 @@
         "PVP",
         "PVP_ENABLED",
         "UNIT_POPUP_RIGHT_CLICK",
-        "HIGH"
+        "BigWigsLoader"
     ],
     "Lua.diagnostics.disable": [
         "cast-local-type",

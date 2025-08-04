@@ -1,40 +1,43 @@
 -----------------------------------
 -- Adapted from LFG_ProposalTime --
 -----------------------------------
-function init()
-  local bigWigs = C_AddOns.IsAddOnLoaded("BigWigs")
-  local lfgProposalTime = C_AddOns.IsAddOnLoaded("LFG_ProposalTime")
+local _, addon = ...
 
+local function init()
   local TIMEOUT = 40
 
-  local timerBar = CreateFrame("StatusBar", nil, LFGDungeonReadyPopup)
+  if BigWigsLoader then -- If BigWigs is loaded, let's get rid of that ugly LFG status bar it makes
+  	BigWigsLoader.RegisterMessage(addon, "BigWigs_FrameCreated", function(event, frame, name)
+      if name == 'QueueTimer' then
+        frame:Hide()
+        frame:SetScript("OnUpdate", nil)
+      end
+    end)
+  end
+
+  local timerBar = CreateFrame("StatusBar", "EmsUILFGStatusBar", LFGDungeonReadyPopup)
+  timerBar:SetFrameLevel(10) -- Ensure it appears above the popup
   timerBar:SetPoint("TOP", LFGDungeonReadyPopup, "BOTTOM", 0, -5)
   timerBar:SetSize(194, 14)
 
   SkinProgressBar(timerBar)
 
-  if not bigWigs and not lfgProposalTime then
-    timerBar.Text = timerBar:CreateFontString(nil, "OVERLAY")
-    timerBar.Text:SetFontObject(GameFontHighlight)
-    timerBar.Text:SetPoint("CENTER", timerBar, "CENTER")
-  end
+  timerBar.Text = timerBar:CreateFontString(nil, "OVERLAY")
+  timerBar.Text:SetFontObject(GameFontHighlight)
+  timerBar.Text:SetPoint("CENTER", timerBar, "CENTER")
 
   local timeLeft = 0
   local function barUpdate(self, elapsed)
     timeLeft = (timeLeft or 0) - elapsed
-    if(timeLeft <= 0) then return self:Hide() end
 
     self:SetValue(timeLeft)
-    if not bigWigs and not lfgProposalTime then
-      self.Text:SetFormattedText("%.1f", timeLeft)
-    end
+    self.Text:SetFormattedText("%.1f", timeLeft)
   end
   timerBar:SetScript("OnUpdate", barUpdate)
 
-  local function OnEvent(self, event, ...)
+  local function OnEvent()
     timerBar:SetMinMaxValues(0, TIMEOUT)
     timeLeft = TIMEOUT
-    timerBar:Show()
   end
 
   local eventFrame = CreateFrame("Frame")
