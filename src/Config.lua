@@ -20,10 +20,10 @@ EUIDBDefaults = {
   hideAltPower = false,
   lootSpecDisplay = true, -- Display loot spec icon in the player frame
 
+  enableFont = true,       -- Update all fonts to something cooler
+  font = EUI_FONTS.Andika,
   enableDamageFont = true, -- Change damage font to something cooler
   damageFont = EUI_FONTS.Bangers,
-  customFonts = true, -- Update all fonts to something cooler
-  font = EUI_FONTS.Andika,
 
   -- Tooltip Settings
   enhanceTooltips = true, -- Enhance tooltips with additional information
@@ -163,6 +163,7 @@ local function setupEuiOptions()
     dropdownText:SetText(label)
 
     local dropdown = CreateFrame("Frame", "EUIDropdown" .. label, frame, "UIDropdownMenuTemplate")
+    dropdown.disabled = false
     _G[dropdown:GetName() .. "Middle"]:SetWidth(width)
     dropdown:SetPoint("TOPLEFT", dropdownText, "BOTTOMLEFT", 0, -8)
     local displayText = _G[dropdown:GetName() .. "Text"]
@@ -174,15 +175,12 @@ local function setupEuiOptions()
         displayText:SetText(v:GetText())
         onChange(v.value)
       end
-      for value, label in pairs(options) do
-        info.text = label
+      for value, key in pairs(options) do
+        info.text = key
         info.value = value
         info.checked = info.text == selected
-        if not EUIDB.enhanceTooltips then
-          info.disabled = true
-        else
-          info.disabled = false
-        end
+
+        info.disabled = dropdown.disabled
 
         UIDropDownMenu_AddButton(info)
       end
@@ -263,17 +261,18 @@ local function setupEuiOptions()
   )
   lootSpecDisplay:SetPoint("TOPLEFT", portraitDropdown, "BOTTOMLEFT", 0, -16)
 
-  local customFonts = newCheckbox(
+  local enableFont = newCheckbox(
     "Use Custom Fonts",
     "Use custom fonts. Can be set in the dropdown to the right.",
-    EUIDB.customFonts,
+    EUIDB.enableFont,
     function(value)
-      EUIDB.customFonts = value
+      EUIDB.enableFont = value
+      UpdateFontChooser()
     end,
     lootSpecDisplay
   )
 
-  local fontChooser = newDropdown(
+  local fontChooser, fontDropdown = newDropdown(
     "Font",
     LSM_FONTS,
     EUIDB.font,
@@ -284,17 +283,23 @@ local function setupEuiOptions()
   )
   fontChooser:SetPoint("LEFT", lootSpecDisplay, "RIGHT", 300, 0)
 
+  function UpdateFontChooser()
+    fontDropdown.disabled = not EUIDB.enableFont
+  end
+  UpdateFontChooser()
+
   local enableDamageFont = newCheckbox(
     "Use Custom Damage Font",
     "Use a custom font for damage numbers. Can be set in the dropdown to the right. Requires relogging.",
     EUIDB.enableDamageFont,
     function(value)
       EUIDB.enableDamageFont = value
+      UpdateDamageFontChooser()
     end,
-    customFonts
+    enableFont
   )
 
-  local damageFontChooser = newDropdown(
+  local damageFontChooser, damageFontDropdown = newDropdown(
     "Damage Font",
     LSM_FONTS,
     EUIDB.damageFont,
@@ -304,6 +309,11 @@ local function setupEuiOptions()
     end
   )
   damageFontChooser:SetPoint("LEFT", enableDamageFont, "RIGHT", 300, 0)
+
+  function UpdateDamageFontChooser()
+    damageFontDropdown.disabled = not EUIDB.enableDamageFont
+  end
+  UpdateDamageFontChooser()
 
   local darkMode = newCheckbox(
     "Dark Mode",
@@ -330,7 +340,7 @@ local function setupEuiOptions()
     end,
     darkMode
   )
-  statusBarChooser:SetPoint("LEFT", pvpText, "RIGHT", 300, 0)
+  statusBarChooser:SetPoint("LEFT", pvpText, "RIGHT", 295, 0)
 
   local dampeningDisplay = newCheckbox(
     "Dampening Display",
@@ -587,7 +597,7 @@ local function setupEuiOptions()
   )
   enhanceTooltips:SetPoint("TOPLEFT", tooltipText, "BOTTOMLEFT", 0, -16)
 
-  local tooltipAnchor, tooltipDropdown = newDropdown(
+  local tooltipAnchor, tooltipAnchorDropdown = newDropdown(
     "Cursor Anchor (anchor tooltips to cursor out of combat)",
     { ["ANCHOR_CURSOR_LEFT"] = "Bottom Right", ["ANCHOR_CURSOR_RIGHT"] = "Bottom Left", ['DEFAULT'] = 'Disabled' },
     EUIDB.tooltipAnchor,
@@ -606,7 +616,7 @@ local function setupEuiOptions()
     function(value)
       EUIDB.tooltipSpecAndIlvl = value
     end,
-    tooltipDropdown,
+    tooltipAnchorDropdown,
     EUI_Tooltips
   )
 
@@ -633,12 +643,14 @@ local function setupEuiOptions()
   )
 
   function DisableTooltipSettings()
+    tooltipAnchorDropdown.disabled = true
     tooltipSpecAndIlvl:Disable()
     showMount:Disable()
     classColoredName:Disable()
   end
 
   function EnableTooltipSettings()
+    tooltipAnchorDropdown.disabled = false
     tooltipSpecAndIlvl:Enable()
     showMount:Enable()
     classColoredName:Enable()
