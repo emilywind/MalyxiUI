@@ -31,11 +31,7 @@ local function applySkin(aura, isDebuff)
     SetEuiBorderColor(border, aura.Border:GetVertexColor())
     aura.Border:Hide()
   else
-    if EUIDB.uiStyle == "BetterBlizz" then
-      SetEuiBorderColor(border, GetFrameColour())
-    else
-      SetEuiBorderColor(border, 0, 0, 0)
-    end
+    SetEuiBorderColor(border, 0, 0, 0)
   end
 
   if isDebuff then

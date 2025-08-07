@@ -57,14 +57,14 @@ OnPlayerLogin(function()
   hooksecurefunc(TargetFrame, "OnEvent", function(self)
     -- Style Buffs & Debuffs
     for aura, _ in self.auraPools:EnumerateActive() do
-      applyAuraSkin(aura)
+      ApplyAuraSkin(aura)
     end
   end)
 
   hooksecurefunc(FocusFrame, "OnEvent", function(self)
     -- Style Buffs & Debuffs
     for aura, _ in self.auraPools:EnumerateActive() do
-      applyAuraSkin(aura)
+      ApplyAuraSkin(aura)
     end
   end)
 

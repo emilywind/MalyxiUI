@@ -165,20 +165,12 @@ function ApplyEuiBackdrop(b, frame)
   StyleIcon(icon)
 
   local border
-  if EUIDB.uiStyle == "BetterBlizz" then
-    border = CreateFrame('Frame', nil, frame, "BackdropTemplate")
-    border:SetPoint("TOPLEFT",icon,"TOPLEFT",-2,2)
-    border:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",2,-2)
-    border:SetBackdrop(EUI_BACKDROP)
-    border:SetBackdropBorderColor(GetFrameColour())
-  else
-    border = frame:CreateTexture()
-    border:SetDrawLayer("OVERLAY")
-    border:SetTexture(EUI_TEXTURES.roundedBorder)
-    border:SetPoint("TOPLEFT", icon, "TOPLEFT", -1, 1)
-    border:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT", 1, -1)
-    border:SetVertexColor(0.1, 0.1, 0.1)
-  end
+  border = frame:CreateTexture()
+  border:SetDrawLayer("OVERLAY")
+  border:SetTexture(EUI_TEXTURES.roundedBorder)
+  border:SetPoint("TOPLEFT", icon, "TOPLEFT", -1, 1)
+  border:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT", 1, -1)
+  border:SetVertexColor(0.1, 0.1, 0.1)
 
   b.euiClean = true
 

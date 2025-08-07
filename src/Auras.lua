@@ -1,7 +1,7 @@
 ----------------------------------
 -- Buffs/Debuffs on Unit Frames --
 ----------------------------------
-function applyAuraSkin(aura)
+function ApplyAuraSkin(aura)
   if aura.border and aura.Border then
     aura.Border:SetAlpha(1)
     SetEuiBorderColor(aura.border, aura.Border:GetVertexColor())
@@ -22,11 +22,7 @@ function applyAuraSkin(aura)
     SetEuiBorderColor(border, aura.Border:GetVertexColor())
     aura.Border:SetAlpha(0)
   else
-    if EUIDB.uiStyle == "BetterBlizz" then
-      SetEuiBorderColor(border, GetFrameColour())
-    else
-      SetEuiBorderColor(border, 0, 0, 0)
-    end
+    SetEuiBorderColor(border, 0, 0, 0)
   end
 
   aura.euiClean = true
