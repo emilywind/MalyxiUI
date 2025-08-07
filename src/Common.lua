@@ -157,7 +157,7 @@ EUI_BACKDROP = {
 function ApplyEuiBackdrop(b, frame)
   if (b.euiClean) then return end
 
-  local frame = frame or CreateFrame("Frame", nil, b)
+  frame = frame or CreateFrame("Frame", nil, b)
 
   -- Icon
   local name = b:GetName()
