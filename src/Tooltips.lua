@@ -20,7 +20,6 @@ end
 
 local function skinGameTooltip()
 	local ns = GameTooltip.NineSlice
-	ns:SetBorderColor(GetFrameColour())
 	local nsPoints = {
     "TopLeftCorner",
     "TopRightCorner",
