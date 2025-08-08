@@ -19,8 +19,36 @@ function GetTooltipUnit()
 end
 
 local function skinGameTooltip()
-	GameTooltip.NineSlice:SetBorderColor(GetFrameColour())
-	GameTooltip.NineSlice:SetCenterColor(0.08, 0.08, 0.08)
+	local ns = GameTooltip.NineSlice
+	ns:SetBorderColor(GetFrameColour())
+	local nsPoints = {
+    "TopLeftCorner",
+    "TopRightCorner",
+    "BottomLeftCorner",
+    "BottomRightCorner",
+    "TopEdge",
+    "BottomEdge",
+    "LeftEdge",
+    "RightEdge",
+    "Center"
+  }
+
+  for _, nsPoint in pairs(nsPoints) do
+    ns[nsPoint]:SetTexture(SQUARE_TEXTURE)
+  end
+
+	ns:SetCenterColor(0.08, 0.08, 0.08, 0.9)
+	ns:SetBorderColor(0, 0, 0, 0)
+
+	local border = GameTooltip.border
+	if not border then
+		border = CreateFrame('Frame', nil, GameTooltip, "BackdropTemplate")
+		border:SetPoint("TOPLEFT", GameTooltip, "TOPLEFT")
+		border:SetPoint("BOTTOMRIGHT", GameTooltip, "BOTTOMRIGHT")
+		border:SetBackdrop(EUI_BACKDROP)
+		border:SetBackdropBorderColor(0.08, 0.08, 0.08, 0.9)
+		GameTooltip.border = border
+	end
 end
 
 local function getUnitRecord(unit)

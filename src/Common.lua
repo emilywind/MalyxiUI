@@ -1,5 +1,4 @@
 SQUARE_TEXTURE = "Interface\\BUTTONS\\WHITE8X8"
-TOOLTIP_BORDER = "Interface\\Tooltips\\UI-Tooltip-Border"
 DEFAULT_FRAME_COLOUR = {
   0.3,
   0.3,
@@ -17,6 +16,8 @@ EUI_TEXTURES = {
     pushed = TextureDir.."\\buttons\\button-pressed.tga",
     checked = TextureDir.."\\buttons\\button-checked.tga",
   },
+
+  tooltipBorder = TextureDir.."\\tooltip-border.tga",
 
   roundedBorder = TextureDir.."\\rounded-border.tga",
 
@@ -149,7 +150,7 @@ function StyleIcon(ic)
 end
 
 EUI_BACKDROP = {
-  edgeFile = TOOLTIP_BORDER,
+  edgeFile = EUI_TEXTURES.tooltipBorder,
   tileEdge = true,
   edgeSize = 10,
 }
