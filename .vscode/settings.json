@@ -247,7 +247,8 @@
         "PVP",
         "PVP_ENABLED",
         "UNIT_POPUP_RIGHT_CLICK",
-        "BigWigsLoader"
+        "BigWigsLoader",
+        "CHALLENGE_COMPLETE_DUNGEON_SCORE"
     ],
     "Lua.diagnostics.disable": [
         "cast-local-type",
