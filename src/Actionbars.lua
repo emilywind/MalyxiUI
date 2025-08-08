@@ -184,7 +184,7 @@ local function init()
     end
   end
 
-  local function skinSpellFlyout(desaturation)
+  local function skinSpellFlyout()
     -- Main frame.
     for _, texture in pairs({
       SpellFlyout.Background.Start,
@@ -192,7 +192,7 @@ local function init()
       SpellFlyout.Background.HorizontalMiddle,
       SpellFlyout.Background.End,
     }) do
-      texture:SetDesaturation(desaturation)
+      texture:SetDesaturation(1)
       texture:SetVertexColor(GetFrameColour())
     end
 
@@ -205,7 +205,7 @@ local function init()
         break
       end
 
-      btnTexture:SetDesaturation(desaturation)
+      btnTexture:SetDesaturation(1)
       btnTexture:SetVertexColor(GetFrameColour())
 
       i = i + 1
@@ -213,7 +213,7 @@ local function init()
   end
 
   SpellFlyout:HookScript("OnSizeChanged", function()
-    skinSpellFlyout(1)
+    skinSpellFlyout()
   end)
 end
 
