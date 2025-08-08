@@ -1,4 +1,4 @@
-OnPlayerLogin(function(self, event, ...)
+OnPlayerLogin(function()
    -- Hide red shadow
   select(2,LossOfControlFrame:GetRegions()):SetAlpha(0)
   select(3,LossOfControlFrame:GetRegions()):SetAlpha(0)
