@@ -185,7 +185,6 @@ local function addMythicPlusScore(unitRecord)
 			end
 			if mythicPlusText:GetCount() > 0 then
 				local lineInfo = LibFroznFunctions:CreatePushArray()
-				lineInfo:Push("\n")
 				lineInfo:Push("|cffffd100")
 				lineInfo:Push(CHALLENGE_COMPLETE_DUNGEON_SCORE:format(mythicPlusText:Concat()))
 
