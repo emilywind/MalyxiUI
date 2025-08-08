@@ -23,7 +23,10 @@ local frame = CreateFrame("Frame")
 frame:RegisterEvent("PLAYER_MOUNT_DISPLAY_CHANGED")
 frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 frame:SetScript("OnEvent", function()
-  if not EUIDB.darkMode then return end
+  if not EUIDB.darkMode then
+    frame:UnregisterAllEvents()
+    return
+  end
 
   C_Timer.After(0.1, function() -- Delay to ensure UIWidgetPowerBarContainerFrame is fully loaded
     for _, child in ipairs({ UIWidgetPowerBarContainerFrame:GetChildren() }) do
