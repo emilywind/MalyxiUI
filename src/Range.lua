@@ -1,6 +1,6 @@
 -- Range plugin from SUI
 
-OnPlayerLogin(function(self)
+OnPlayerLogin(function()
   local Module = CreateFrame('Frame')
   local _G = _G
   local next = _G.next
