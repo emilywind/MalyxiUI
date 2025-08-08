@@ -25,7 +25,7 @@ frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 frame:SetScript("OnEvent", function()
   if not EUIDB.darkMode then return end
 
-  C_Timer.After(0.05, function() -- Delay to ensure UIWidgetPowerBarContainerFrame is fully loaded
+  C_Timer.After(0.1, function() -- Delay to ensure UIWidgetPowerBarContainerFrame is fully loaded
     for _, child in ipairs({ UIWidgetPowerBarContainerFrame:GetChildren() }) do
       if child.DecorLeft and child.DecorLeft.GetAtlas then
         local atlasName = child.DecorLeft:GetAtlas()
