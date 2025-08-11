@@ -1,4 +1,6 @@
-local function darkenTexture(texture)
+function DarkenTexture(texture)
+  if not EUIDB.darkMode then return end
+
   texture:SetDesaturated(true)
   texture:SetVertexColor(GetFrameColour())
 end
@@ -7,7 +9,7 @@ OnPlayerLogin(function()
   if not EUIDB.darkMode then return end
 
   -- Minimap
-  darkenTexture(MinimapCompassTexture)
+  DarkenTexture(MinimapCompassTexture)
 
   -- Alternate Power Bar
   for _, v in ipairs({
@@ -16,14 +18,14 @@ OnPlayerLogin(function()
       PlayerFrameAlternateManaBarRightBorder,
       PetFrameTexture
   }) do
-      darkenTexture(v)
+      DarkenTexture(v)
   end
 
   -- Player Frame
   PlayerFrame:HookScript("OnUpdate", function()
-    darkenTexture(PlayerFrame.PlayerFrameContainer.FrameTexture)
-    darkenTexture(PlayerFrame.PlayerFrameContent.PlayerFrameContentContextual.PlayerPortraitCornerIcon)
-    darkenTexture(PlayerFrame.PlayerFrameContainer.AlternatePowerFrameTexture)
+    DarkenTexture(PlayerFrame.PlayerFrameContainer.FrameTexture)
+    DarkenTexture(PlayerFrame.PlayerFrameContent.PlayerFrameContentContextual.PlayerPortraitCornerIcon)
+    DarkenTexture(PlayerFrame.PlayerFrameContainer.AlternatePowerFrameTexture)
   end)
 
   -- Pet Frame
@@ -34,27 +36,27 @@ OnPlayerLogin(function()
 
   -- Target Frame
   TargetFrame:HookScript("OnUpdate", function()
-    darkenTexture(TargetFrame.TargetFrameContainer.FrameTexture)
-    darkenTexture(TargetFrameToT.FrameTexture)
+    DarkenTexture(TargetFrame.TargetFrameContainer.FrameTexture)
+    DarkenTexture(TargetFrameToT.FrameTexture)
   end)
 
   -- Focus Frame
   FocusFrame:HookScript("OnUpdate", function()
-    darkenTexture(FocusFrame.TargetFrameContainer.FrameTexture)
-    darkenTexture(FocusFrameToT.FrameTexture)
+    DarkenTexture(FocusFrame.TargetFrameContainer.FrameTexture)
+    DarkenTexture(FocusFrameToT.FrameTexture)
   end)
 
   -- Totem Bar
   TotemFrame:HookScript("OnEvent", function(self)
     for totem, _ in self.totemPool:EnumerateActive() do
-      darkenTexture(totem.Border)
+      DarkenTexture(totem.Border)
     end
   end)
 
   for i = 1, 5 do
     local bossFrame = _G['Boss'..i..'TargetFrame']
     bossFrame:HookScript('OnEvent', function()
-      darkenTexture(bossFrame.TargetFrameContainer.FrameTexture)
+      DarkenTexture(bossFrame.TargetFrameContainer.FrameTexture)
     end)
   end
 
@@ -65,20 +67,20 @@ OnPlayerLogin(function()
     -- Rogue
     hooksecurefunc(RogueComboPointBarFrame, "UpdatePower", function()
       for bar, _ in RogueComboPointBarFrame.classResourceButtonPool:EnumerateActive() do
-        darkenTexture(bar.BGActive)
-        darkenTexture(bar.BGInactive)
-        darkenTexture(bar.BGShadow)
+        DarkenTexture(bar.BGActive)
+        DarkenTexture(bar.BGInactive)
+        DarkenTexture(bar.BGShadow)
         if (bar.isCharged) then
-          darkenTexture(bar.ChargedFrameActive)
+          DarkenTexture(bar.ChargedFrameActive)
         end
       end
 
       for bar, _ in ClassNameplateBarRogueFrame.classResourceButtonPool:EnumerateActive() do
-        darkenTexture(bar.BGActive)
-        darkenTexture(bar.BGInactive)
-        darkenTexture(bar.BGShadow)
+        DarkenTexture(bar.BGActive)
+        DarkenTexture(bar.BGInactive)
+        DarkenTexture(bar.BGShadow)
         if (bar.isCharged) then
-          darkenTexture(bar.ChargedFrameActive)
+          DarkenTexture(bar.ChargedFrameActive)
         end
       end
     end)
@@ -86,52 +88,52 @@ OnPlayerLogin(function()
     -- Mage
     hooksecurefunc(MagePowerBar, "UpdatePower", function()
       for bar, _ in MageArcaneChargesFrame.classResourceButtonPool:EnumerateActive() do
-        darkenTexture(bar.ArcaneBG)
-        darkenTexture(bar.ArcaneBGShadow)
+        DarkenTexture(bar.ArcaneBG)
+        DarkenTexture(bar.ArcaneBGShadow)
       end
 
       for bar, _ in ClassNameplateBarMageFrame.classResourceButtonPool:EnumerateActive() do
-        darkenTexture(bar.ArcaneBG)
-        darkenTexture(bar.ArcaneBGShadow)
+        DarkenTexture(bar.ArcaneBG)
+        DarkenTexture(bar.ArcaneBGShadow)
       end
     end)
   elseif (playerClass == 'WARLOCK') then
     -- Warlock
     hooksecurefunc(WarlockPowerFrame, "UpdatePower", function()
       for bar, _ in WarlockPowerFrame.classResourceButtonPool:EnumerateActive() do
-        darkenTexture(bar.Background)
+        DarkenTexture(bar.Background)
       end
 
       for bar, _ in ClassNameplateBarWarlockFrame.classResourceButtonPool:EnumerateActive() do
-        darkenTexture(bar.Background)
+        DarkenTexture(bar.Background)
       end
     end)
   elseif (playerClass == 'DRUID') then
     -- Druid
     hooksecurefunc(DruidComboPointBarFrame, "UpdatePower", function()
       for bar, _ in DruidComboPointBarFrame.classResourceButtonPool:EnumerateActive() do
-        darkenTexture(bar.BG_Active)
-        darkenTexture(bar.BG_Inactive)
-        darkenTexture(bar.BG_Shadow)
+        DarkenTexture(bar.BG_Active)
+        DarkenTexture(bar.BG_Inactive)
+        DarkenTexture(bar.BG_Shadow)
       end
 
       for bar, _ in ClassNameplateBarFeralDruidFrame.classResourceButtonPool:EnumerateActive() do
-        darkenTexture(bar.BG_Active)
-        darkenTexture(bar.BG_Inactive)
-        darkenTexture(bar.BG_Shadow)
+        DarkenTexture(bar.BG_Active)
+        DarkenTexture(bar.BG_Inactive)
+        DarkenTexture(bar.BG_Shadow)
       end
     end)
   elseif (playerClass == 'MONK') then
     -- Monk
     hooksecurefunc(MonkHarmonyBarFrame, "UpdatePower", function()
       for bar, _ in MonkHarmonyBarFrame.classResourceButtonPool:EnumerateActive() do
-        darkenTexture(bar.Chi_BG)
-        darkenTexture(bar.Chi_BG_Active)
+        DarkenTexture(bar.Chi_BG)
+        DarkenTexture(bar.Chi_BG_Active)
       end
 
       for bar, _ in ClassNameplateBarWindwalkerMonkFrame.classResourceButtonPool:EnumerateActive() do
-        darkenTexture(bar.Chi_BG)
-        darkenTexture(bar.Chi_BG_Active)
+        DarkenTexture(bar.Chi_BG)
+        DarkenTexture(bar.Chi_BG_Active)
       end
     end)
   elseif (playerClass == 'DEATHKNIGHT') then
@@ -175,28 +177,28 @@ OnPlayerLogin(function()
         DeathKnightResourceOverlayFrame.Rune6.BG_Inactive,
         DeathKnightResourceOverlayFrame.Rune6.BG_Shadow
       }) do
-        darkenTexture(bar)
+        DarkenTexture(bar)
       end
     end)
   elseif (playerClass == 'EVOKER') then
     -- Evoker
     hooksecurefunc(EssencePlayerFrame, "UpdatePower", function()
       for bar, _ in EssencePlayerFrame.classResourceButtonPool:EnumerateActive() do
-        darkenTexture(bar.EssenceFillDone.CircBG)
-        darkenTexture(bar.EssenceFillDone.CircBGActive)
+        DarkenTexture(bar.EssenceFillDone.CircBG)
+        DarkenTexture(bar.EssenceFillDone.CircBGActive)
       end
 
       for bar, _ in ClassNameplateBarDracthyrFrame.classResourceButtonPool:EnumerateActive() do
-        darkenTexture(bar.EssenceFillDone.CircBG)
-        darkenTexture(bar.EssenceFillDone.CircBGActive)
+        DarkenTexture(bar.EssenceFillDone.CircBG)
+        DarkenTexture(bar.EssenceFillDone.CircBGActive)
       end
     end)
   elseif (playerClass == 'PALADIN') then
     -- Paladin
     hooksecurefunc(PaladinPowerBar, "UpdatePower", function()
-      darkenTexture(PaladinPowerBarFrame.Background)
+      DarkenTexture(PaladinPowerBarFrame.Background)
       PaladinPowerBarFrame.ActiveTexture:Hide()
-      darkenTexture(ClassNameplateBarPaladinFrame.Background)
+      DarkenTexture(ClassNameplateBarPaladinFrame.Background)
       ClassNameplateBarPaladinFrame.ActiveTexture:Hide()
     end)
   end
