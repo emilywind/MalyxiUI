@@ -248,7 +248,8 @@
         "PVP_ENABLED",
         "UNIT_POPUP_RIGHT_CLICK",
         "BigWigsLoader",
-        "CHALLENGE_COMPLETE_DUNGEON_SCORE"
+        "CHALLENGE_COMPLETE_DUNGEON_SCORE",
+        "sArenaMixin"
     ],
     "Lua.diagnostics.disable": [
         "cast-local-type",
