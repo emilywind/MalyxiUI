@@ -191,14 +191,14 @@ function layout:Initialize(frame)
   f.BorderShield:ClearAllPoints()
   f.BorderShield:SetPoint("LEFT", f.Icon, -6, 0)
   f.BorderShield:SetScale(1.1)
-  if isDark then
-    castBarBorder:SetVertexColor(GetFrameColour())
-  end
   castBarBorder:SetParent(f)
   castBarBorder:SetDrawLayer("OVERLAY", 3)
   castBarBorder:SetAtlas("UI-CastingBar-Frame")
   castBarBorder:SetPoint("TOPLEFT", f, "TOPLEFT", -1, 2)
   castBarBorder:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", 1, -2)
+  if isDark then
+    castBarBorder:SetVertexColor(GetFrameColour())
+  end
   castBarBorder:Show()
   local typeInfoTexture = "ui-castingbar-tier4-empower-2x";
   f:SetStatusBarTexture(typeInfoTexture)
