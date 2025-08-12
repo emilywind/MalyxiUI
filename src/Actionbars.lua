@@ -8,7 +8,7 @@ local function applyEuiButtonSkin(bu)
 
   if not nt then return end
 
-  nt:SetVertexColor(GetFrameColour())
+  DarkenTexture(nt)
 
   bu.euiClean = true
 end
@@ -129,8 +129,7 @@ local function init()
       SpellFlyout.Background.HorizontalMiddle,
       SpellFlyout.Background.End,
     }) do
-      texture:SetDesaturation(1)
-      texture:SetVertexColor(GetFrameColour())
+      DarkenTexture(texture)
     end
 
     -- Button borders.
@@ -142,8 +141,7 @@ local function init()
         break
       end
 
-      btnTexture:SetDesaturation(1)
-      btnTexture:SetVertexColor(GetFrameColour())
+      DarkenTexture(btnTexture)
 
       i = i + 1
     end
