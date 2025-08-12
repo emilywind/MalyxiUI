@@ -10,7 +10,7 @@ local function hideObjectiveTracker()
   end
 end
 
-local function skinObjectiveTracker(desaturation)
+local function skinObjectiveTracker()
   -- Headers
   for _, objectiveTrackerFrame in pairs({
     AdventureObjectiveTracker,
@@ -24,8 +24,7 @@ local function skinObjectiveTracker(desaturation)
     CampaignQuestObjectiveTracker,
     ProfessionsRecipeTracker,
   }) do
-    objectiveTrackerFrame.Header.Background:SetDesaturation(desaturation)
-    objectiveTrackerFrame.Header.Background:SetVertexColor(GetFrameColour())
+    DarkenTexture(objectiveTrackerFrame.Header.Background)
   end
 end
 
@@ -38,6 +37,6 @@ frame:SetScript('OnEvent', function()
   end
 
   if EUIDB.darkMode then
-    skinObjectiveTracker(1)
+    skinObjectiveTracker()
   end
 end)
