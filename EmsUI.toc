@@ -1,6 +1,6 @@
 ## Interface: 110105, 110107, 110100, 110200
 ## Title: Em's UI
-## Notes: Simple skinnning modifications and quality of life features for the default interface to make it cleaner looking.
+## Notes: Simple skinnning modifications and quality of life features for the default interface to make it nicer looking.
 ## Author: Emily
 ## Version: 6.3.3
 ## SavedVariables: EUIDB
