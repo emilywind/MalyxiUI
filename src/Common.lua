@@ -204,7 +204,7 @@ function SkinProgressBar(bar)
     bar.BorderRight:SetAlpha(0)
   end
 
-  bar:SetStatusBarTexture(PlayerCastingBarFrame:GetStatusBarTexture())
+  bar:SetStatusBarTexture("ui-castingbar-tier4-empower-2x")
   bar:GetStatusBarTexture():SetVertexColor(0.8, 0, 0)
 
   if bar.BarBG then
