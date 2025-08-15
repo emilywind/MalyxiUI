@@ -155,15 +155,8 @@ OnPlayerLogin(function()
           else
             setNil(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar')
           end
-          -- This method doesnt seem to work for castbar, works fine for healthbar.
-          if EUIDB.nameplateHideFriendlyCastbars then
-            setTrue(DefaultCompactNamePlateFrameSetUpOptions, 'hideCastbar')
-          else
-            setNil(DefaultCompactNamePlateFrameSetUpOptions, 'hideCastbar')
-          end
         else
           setNil(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar')
-          setNil(DefaultCompactNamePlateFrameSetUpOptions, 'hideCastbar')
         end
       end
   end)
