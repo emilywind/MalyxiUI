@@ -46,7 +46,7 @@ OnPlayerLogin(function()
 
     if not frame.healthPercentage then
       frame.healthPercentage = frame.healthBar:CreateFontString(frame.healthPercentage, "OVERLAY", "GameFontNormalSmall")
-      SetDefaultFont(frame.healthPercentage, EUIDB.nameplateNameFontSize - 1)
+      SetDefaultFont(frame.healthPercentage, nil)
       frame.healthPercentage:SetTextColor( 1, 1, 1 )
       frame.healthPercentage:SetPoint("CENTER", frame.healthBar, "CENTER", 0, 0)
     end
@@ -179,8 +179,8 @@ OnPlayerLogin(function()
     if frame:IsForbidden() then return end
 
     local isPersonal = UnitIsUnit(frame.displayedUnit, "player")
-    if ( isPersonal ) then
-      if ( frame.levelText ) then
+    if isPersonal then
+      if frame.levelText then
         frame.levelText:SetText('')
       end
       return
