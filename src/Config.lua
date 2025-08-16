@@ -34,7 +34,7 @@ EUIDBDefaults = {
 
   -- Nameplate Settings
   skinNameplates = true,
-  nameplateNameFontSize = 9,
+  nameplateNameFontSize = 16,
   nameplateHideServerNames = true,
   nameplateNameLength = 20,
   nameplateFriendlyNamesClassColor = true,
@@ -44,7 +44,7 @@ EUIDBDefaults = {
   nameplateHealthPercent = true,
   nameplateTotems = true,
   nameplateHideClassificationIcon = true,
-  nameplateHideFriendlyHealthbars = false,
+  nameplateHideFriendlyHealthbars = true,
 
   portraitStyle = "3D", -- 3D, 2D, or class (for class icons)
   classPortraitPack = EUI_TEXTURES.classCircles,
