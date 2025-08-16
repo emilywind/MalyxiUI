@@ -146,7 +146,6 @@ OnPlayerLogin(function()
       local isPlayer = UnitIsPlayer(unit)
       if not isFriend then
         setNil(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar')
-        setNil(DefaultCompactNamePlateFrameSetUpOptions, 'hideCastbar')
       else
         if isPlayer then
           -- local role = UnitGroupRolesAssigned(unit)
@@ -164,12 +163,13 @@ OnPlayerLogin(function()
   hooksecurefunc("CompactUnitFrame_UpdateName", function(frame)
     if not frame.unit or not frame.isNameplate then return end
 
-    local isFriendlyPlayer = UnitIsPlayer(frame.unit) and UnitIsFriend("player", frame.unit)
-    if isFriendlyPlayer and EUIDB.nameplateHideFriendlyHealthbars then
-      setTrue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar')
-    end
-
     if frame:IsForbidden() then return end
+
+    if EUIDB.nameplateHideClassificationIcon then
+      frame.classificationIndicator:SetAlpha(0)
+    else
+      frame.classificationIndicator:SetAlpha(1)
+    end
 
     local isPersonal = UnitIsUnit(frame.displayedUnit, "player")
     if isPersonal then

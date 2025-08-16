@@ -43,6 +43,7 @@ EUIDBDefaults = {
   nameplateShowLevel = true,
   nameplateHealthPercent = true,
   nameplateTotems = true,
+  nameplateHideClassificationIcon = true,
   nameplateHideFriendlyHealthbars = false,
 
   portraitStyle = "3D", -- 3D, 2D, or class (for class icons)
@@ -606,6 +607,17 @@ local function setupEuiOptions()
     EUI_Nameplates
   )
 
+  local nameplateHideClassificationIcon = newCheckbox(
+    "Hide Nameplate Classification Icon",
+    "Hide the classification icon (e.g. elite, rare) on nameplates.",
+    EUIDB.nameplateHideClassificationIcon,
+    function(value)
+      EUIDB.nameplateHideClassificationIcon = value
+    end,
+    nameplateHideFriendlyHealthbars,
+    EUI_Nameplates
+  )
+
   function DisableNameplateSettings()
     nameplateFontSlider:Disable()
     nameplateNameLength:Disable()
@@ -618,6 +630,7 @@ local function setupEuiOptions()
     arenaNumbers:Disable()
     nameplateHideCastText:Disable()
     nameplateHideFriendlyHealthbars:Disable()
+    nameplateHideClassificationIcon:Disable()
   end
 
   function EnableNameplateSettings()
@@ -632,6 +645,7 @@ local function setupEuiOptions()
     arenaNumbers:Enable()
     nameplateHideCastText:Enable()
     nameplateHideFriendlyHealthbars:Enable()
+    nameplateHideClassificationIcon:Enable()
   end
 
   if C_AddOns.IsAddOnLoaded('BetterBlizzPlates') then
