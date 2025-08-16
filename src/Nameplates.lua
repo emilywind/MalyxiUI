@@ -173,6 +173,13 @@ OnPlayerLogin(function()
       frame.classificationIndicator:SetAlpha(1)
     end
 
+    if EUIDB.nameplateHideFriendlyHealthbars and not frame:IsForbidden() then
+      local _, isFriend = GetUnitReaction(frame.displayedUnit)
+      local alpha = isFriend and 0 or 1
+      frame.HealthBarsContainer:SetAlpha(alpha)
+      frame.selectionHighlight:SetAlpha(0)
+    end
+
     local isPersonal = UnitIsUnit(frame.displayedUnit, "player")
     if isPersonal then
       if frame.levelText then
