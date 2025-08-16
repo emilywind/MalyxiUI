@@ -17,7 +17,6 @@ EUIDBDefaults = {
 
   frameColor = DEFAULT_FRAME_COLOUR,
 
-  hideAltPower = false,
   lootSpecDisplay = true, -- Display loot spec icon in the player frame
 
   enableFont = true,       -- Update all fonts to something cooler
@@ -44,7 +43,7 @@ EUIDBDefaults = {
   nameplateShowLevel = true,
   nameplateHealthPercent = true,
   nameplateTotems = true,
-  nameplateHideFriendlyHealthbars = true,
+  nameplateHideFriendlyHealthbars = false,
 
   portraitStyle = "3D", -- 3D, 2D, or class (for class icons)
   classPortraitPack = EUI_TEXTURES.classCircles,
@@ -53,6 +52,9 @@ EUIDBDefaults = {
   tabBinder = true,
   dampeningDisplay = true,
   hideObjectiveTracker = true,
+
+  -- Castbar Settings
+  castBarScale = 1, -- Scale of the castbars for Target/Focus/Arena
 
   queueicon = {
     point = 'BOTTOMRIGHT',
@@ -190,25 +192,82 @@ local function setupEuiOptions()
     return dropdownText, dropdown
   end
 
-  local function newSlider(frameName, label, configVar, min, max, relativeEl, frame, onChanged)
+  local function newSlider(frameName, label, configVar, min, max, valueStep, tooltip, relativeEl, frame, onChanged)
+    if not frame then
+      frame = EUI.panel
+    end
+
+    local function onValueChanged(self, value)
+      self.Text:SetFormattedText(label, value)
+      EUIDB[configVar] = value
+      if onChanged ~= nil and type(onChanged) == "function" then
+        onChanged(value)
+      end
+    end
     local slider = CreateFrame("Slider", frameName, frame, "OptionsSliderTemplate")
     slider:SetMinMaxValues(min, max)
     slider:SetValue(EUIDB[configVar])
-    slider:SetValueStep(1)
+    slider:SetValueStep(valueStep)
+    slider:SetObeyStepOnDrag(true)
     slider:SetWidth(110)
-    local textFrame = (frameName .. 'Text')
-    slider:SetScript("OnValueChanged", function(_, v)
-      v = floor(v)
-      _G[textFrame]:SetFormattedText(label, v)
-      EUIDB[configVar] = v
-      if onChanged ~= nil and type(onChanged) == "function" then
-        onChanged(v)
+    slider:SetScript("OnValueChanged", onValueChanged)
+    slider.Low:SetText(min)
+    slider.High:SetText(max)
+    slider.Text:SetFormattedText(label, EUIDB[configVar])
+    slider:SetPoint("TOPLEFT", relativeEl, "BOTTOMLEFT", 0, -24)
+
+    slider:SetScript("OnEnter", function(self)
+      GameTooltip:ClearLines()
+      if GameTooltip:IsShown() then
+          GameTooltip:Hide()
+      end
+
+      GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+      GameTooltip:AddLine(tooltip, 1, 1, 1, true)
+      GameTooltip:Show()
+    end)
+    slider:SetScript("OnLeave", function(self)
+      GameTooltip:Hide()
+    end)
+
+    -- Create Input Box on Right Click
+    local editBox = CreateFrame("EditBox", nil, slider, "InputBoxTemplate")
+    editBox:SetAutoFocus(false)
+    editBox:SetWidth(50)
+    editBox:SetHeight(20)
+    editBox:SetMultiLine(false)
+    editBox:SetPoint("CENTER", slider, "CENTER", 0, 0)
+    editBox:SetFrameStrata("DIALOG")
+    editBox:Hide()
+
+    local function HandleEditBoxInput()
+      local inputValue = tonumber(editBox:GetText())
+      if inputValue then
+        local outputValue = inputValue
+        if inputValue < min then
+          outputValue = min
+        elseif inputValue > max then
+          outputValue = max
+        end
+
+        onValueChanged(slider, outputValue)
+      end
+      editBox:Hide()
+    end
+
+    editBox:SetScript("OnEscapePressed", function()
+      editBox:Hide()
+    end)
+
+    slider:SetScript("OnMouseDown", function(self, button)
+      if button == "RightButton" then
+        editBox:Show()
+        editBox:SetText(string.format("%.1f", self:GetValue()))
+        editBox:SetFocus()
       end
     end)
-    _G[(frameName .. 'Low')]:SetText(min)
-    _G[(frameName .. 'High')]:SetText(max)
-    _G[textFrame]:SetFormattedText(label, EUIDB[configVar])
-    slider:SetPoint("TOPLEFT", relativeEl, "BOTTOMLEFT", 0, -24)
+
+    editBox:SetScript("OnEnterPressed", HandleEditBoxInput)
 
     return slider
   end
@@ -384,6 +443,17 @@ local function setupEuiOptions()
     hideArenaFrames
   )
 
+  local castBarScale = newSlider(
+    "EUI_CastbarScaleSlider",
+    "Castbar Scale: %.1f",
+    "castBarScale",
+    0.5,
+    3,
+    0.1,
+    "Set scale for Target and Focus cast bars",
+    hideObjectiveTracker
+  )
+
   ----------------
   -- Nameplates --
   ----------------
@@ -414,7 +484,9 @@ local function setupEuiOptions()
     FONT_SIZE.." "..FONT_SIZE_TEMPLATE,
     "nameplateNameFontSize",
     6,
-    20,
+    24,
+    1,
+    "Font size for Nameplates",
     skinNameplates,
     EUI_Nameplates
   )
@@ -712,17 +784,6 @@ local function setupEuiOptions()
     EUI_Hiding
   )
 
-  local hideAltPower = newCheckbox(
-    "Hide Alt Power (Holy Power, Combo Points, etc under Player frame)",
-    "Hides alt power bars on character frame such as combo points or holy power to clean it up, when preferring WeakAura or etc.",
-    EUIDB.hideAltPower,
-    function(value)
-      EUIDB.hideAltPower = value
-    end,
-    hideMacroText,
-    EUI_Hiding
-  )
-
   local hideMicroMenu = newCheckbox(
     'Hide Micro Menu',
     'Hides the micro menu, preserving the queue status icon',
@@ -731,7 +792,7 @@ local function setupEuiOptions()
       EUIDB.hideMicroMenu = value
       SetMicroMenuVisibility()
     end,
-    hideAltPower,
+    hideMacroText,
     EUI_Hiding
   )
 

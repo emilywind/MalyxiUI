@@ -22,10 +22,10 @@ PlayerCastingBarFrame:HookScript("OnEvent", function()
   ApplyEuiBackdrop(castBar.Icon, castBar)
 end)
 
-----------------------
--- Target and Focus --
-----------------------
-local function skinCastBar(self)
+-------------------------------------
+-- Target, Focus, and Arena Frames --
+-------------------------------------
+local function skinCastBar(self, setScale)
   if self:IsForbidden() then return end
   if InCombatLockdown() then return end
 
@@ -41,6 +41,10 @@ local function skinCastBar(self)
   self.Text:SetPoint("CENTER", self, "CENTER")
   self.Text:SetFont(STANDARD_TEXT_FONT, 11, "OUTLINE")
 
+  if setScale then
+    self:SetScale(EUIDB.castBarScale, EUIDB.castBarScale)
+  end
+
   DarkenTexture(self.Border)
   DarkenTexture(self.Background)
 
@@ -54,15 +58,23 @@ local function skinCastBar(self)
 end
 
 for i = 1, 3 do
-  _G['CompactArenaFrameMember' .. i].CastingBarFrame:HookScript("OnEvent", skinCastBar)
+  _G['CompactArenaFrameMember' .. i].CastingBarFrame:HookScript("OnEvent", function(self)
+    skinCastBar(self, false)
+  end)
 end
 
 for i = 1, 5 do
-  _G['Boss' .. i .. 'TargetFrameSpellBar']:HookScript("OnEvent", skinCastBar)
+  _G['Boss' .. i .. 'TargetFrameSpellBar']:HookScript("OnEvent", function(self)
+    skinCastBar(self, false)
+  end)
 end
 
-TargetFrameSpellBar:HookScript("OnEvent", skinCastBar)
-FocusFrameSpellBar:HookScript("OnEvent", skinCastBar)
+TargetFrameSpellBar:HookScript("OnEvent", function(self)
+  skinCastBar(self, true)
+end)
+FocusFrameSpellBar:HookScript("OnEvent", function(self)
+  skinCastBar(self, true)
+end)
 
 ------------
 -- Timers --
