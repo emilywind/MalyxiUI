@@ -1,6 +1,6 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
   <Include file="Media.lua" />
-  <Include file="Common.lua" />
+  <Include file="Globals.lua" />
   <Include file="MoveQueueStatus.lua" />
   <Include file="Config.lua" />
   <Include file="Fonts.lua" />
