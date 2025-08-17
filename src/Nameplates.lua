@@ -177,9 +177,10 @@ OnPlayerLogin(function()
         local isFriend = select(2, GetUnitReaction(frame.displayedUnit))
         local alpha = isFriend and 0 or 1
         frame.HealthBarsContainer:SetAlpha(alpha)
-        frame.selectionHighlight:SetAlpha(0)
       end
     end
+
+    frame.selectionHighlight:SetAlpha(0)
 
     local isPersonal = UnitIsUnit(frame.displayedUnit, "player")
     if isPersonal then
