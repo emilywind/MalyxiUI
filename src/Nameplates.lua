@@ -176,7 +176,7 @@ OnPlayerLogin(function()
       end
     end
 
-    frame.selectionHighlight:SetAlpha(0) -- Hide the ugly selection background
+    frame.selectionHighlight:SetAlpha(0) -- Hide the ugly target background
 
     local isPersonal = UnitIsUnit(frame.displayedUnit, "player")
     if isPersonal then
