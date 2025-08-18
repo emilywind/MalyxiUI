@@ -449,8 +449,8 @@ local function setupEuiOptions()
     "EUI_CastbarScaleSlider",
     "Castbar Scale: %.1f",
     "castBarScale",
-    0.5,
-    3,
+    1,
+    2,
     0.1,
     "Set scale for Target and Focus cast bars",
     hideObjectiveTracker
