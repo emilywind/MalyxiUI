@@ -16,7 +16,7 @@
   <Include file="LootSpecDisplay.lua" />
   <Include file="UnitFrames.lua" />
   <Include file="HideMicroMenuAndBagBar.lua" />
-  <Include file="DarkMode.lua" />
+  <Include file="UIMode.lua" />
   <Include file="Portrait.lua" />
   <Include file="RaidFrames.lua" />
   <Include file="EasyDelete.lua" />
