@@ -1,6 +1,9 @@
 OnPlayerLogin(function()
   if not EUIDB.skinNameplates or C_AddOns.IsAddOnLoaded('BetterBlizzPlates') then return end
 
+  local healthTex = EUIDB.healthBarTex
+  local powerTex = EUIDB.powerBarTex
+
   C_NamePlate.SetNamePlateFriendlyClickThrough(EUIDB.nameplateFriendlyClickthrough)
 
   local defaultFriendlyWidth, defaultFriendlyHeight = C_NamePlate.GetNamePlateFriendlySize()
@@ -27,14 +30,11 @@ OnPlayerLogin(function()
       local _, className = UnitClass("player")
       local classR, classG, classB = GetClassColor(className)
       if not frame.emsUISkinned then
-        local healthTex = EUIDB.healthBarTex
-        local powerTex = EUIDB.powerBarTex
         frame.healthBar:SetStatusBarTexture(healthTex)
         ClassNameplateManaBarFrame:SetStatusBarTexture(powerTex)
         ClassNameplateManaBarFrame.FeedbackFrame.BarTexture:SetTexture(powerTex)
         ClassNameplateManaBarFrame.FeedbackFrame.LossGlowTexture:SetTexture(powerTex)
         frame.emsUISkinned = true
-        frame.healthBar.myHealPrediction:SetTexture(healthTex)
       end
       if frame.optionTable.colorNameBySelection and not frame:IsForbidden() then
         if healthPercentage <= 100 and healthPercentage >= 30 then
@@ -98,7 +98,8 @@ OnPlayerLogin(function()
     if ( frame:IsForbidden() ) then return end
 
     local healthBar = frame.healthBar
-    healthBar:SetStatusBarTexture(EUIDB.healthBarTex)
+    healthBar:SetStatusBarTexture(healthTex)
+    healthBar.myHealPrediction:SetTexture(healthTex)
 
     local castBar = frame.castBar
     if (castBar) then
@@ -121,25 +122,6 @@ OnPlayerLogin(function()
   end
 
   hooksecurefunc("DefaultCompactNamePlateFrameSetup", modifyNamePlates)
-
-  function GetUnitReaction(unit)
-    local reaction = UnitReaction(unit, "player")
-    local isEnemy = false
-    local isFriend = false
-    local isNeutral = false
-
-    if reaction then
-      if reaction < 4 then
-        isEnemy = true
-      elseif reaction == 4 then
-        isNeutral = true
-      else
-        isFriend = true
-      end
-    end
-
-    return isEnemy, isFriend, isNeutral
-  end
 
   hooksecurefunc(
     NamePlateDriverFrame,
