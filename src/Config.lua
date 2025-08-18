@@ -3,7 +3,7 @@ local LSM = LibStub("LibSharedMedia-3.0")
 -- This table defines the addon's default settings:
 local name, EUI = ...
 EUIDBDefaults = {
-  uiMode = 'dark', -- 'dark', 'light', or 'blizzard'
+  uiMode = 'dark', -- 'dark', 'light', 'black', or 'blizzard'
 
   hideHotkeys = false,
   hideMacroText = false,
@@ -292,7 +292,7 @@ local function setupEuiOptions()
 
   local uiModeChooser, uiModeDropdown = newDropdown(
     "UI Mode",
-    { ["blizzard"] = "Blizzard", ["dark"] = "Dark", ["light"] = "Light" },
+    { ["blizzard"] = "Blizzard", ["dark"] = "Dark", ["light"] = "Light", ["black"] = "Black" },
     EUIDB.uiMode,
     80,
     function(value)

@@ -122,8 +122,10 @@ for iconStyle, data in next, classInfo.styles do
 end
 
 function GetFrameColour()
-  if EUIDB.uiMode == 'dark' then
+  if EUIDB.uiMode == 'black' then
     return 0.2, 0.2, 0.2
+  elseif EUIDB.uiMode == 'dark' then
+    return 0.3, 0.3, 0.3
   else
     return 0.8, 0.8, 0.8
   end

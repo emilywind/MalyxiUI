@@ -10,8 +10,10 @@ function BlackenTexture(texture)
 
   texture:SetDesaturated(true)
 
-  if EUIDB.uiMode == 'dark' then
+  if EUIDB.uiMode == 'black' then
     texture:SetVertexColor(0, 0, 0)
+  elseif EUIDB.uiMode == 'dark' then
+    texture:SetVertexColor(0.3, 0.3, 0.3)
   else
     texture:SetVertexColor(0.8, 0.8, 0.8)
   end
