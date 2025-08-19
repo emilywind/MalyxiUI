@@ -128,7 +128,7 @@ OnPlayerLogin(function()
     NamePlateDriverFrame,
     'GetNamePlateTypeFromUnit',
     function(_, unit)
-      local _, isFriend, _ = GetUnitReaction(unit)
+      local isFriend = select(2, GetUnitReaction(unit))
       local isPlayer = UnitIsPlayer(unit)
       if not isFriend then
         setValue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar', false)
