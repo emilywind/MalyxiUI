@@ -21,34 +21,33 @@ OnPlayerLogin(function()
   -- Red color when below 30% on Personal Resource Bar --
   -------------------------------------------------------
   hooksecurefunc("CompactUnitFrame_UpdateHealth", function(frame)
-    if frame:IsForbidden() then return end
+    if frame:IsForbidden() or not frame.isNameplate then return end
 
+    local healthBar = frame.healthBar
     local healthPercentage = ceil((UnitHealth(frame.displayedUnit) / UnitHealthMax(frame.displayedUnit) * 100))
     local isPersonal = C_NamePlate.GetNamePlateForUnit(frame.unit) == C_NamePlate.GetNamePlateForUnit("player")
 
     if isPersonal then
-      local _, className = UnitClass("player")
+      local className = select(2, UnitClass("player"))
       local classR, classG, classB = GetClassColor(className)
       if not frame.emsUISkinned then
-        frame.healthBar:SetStatusBarTexture(healthTex)
+        healthBar:SetStatusBarTexture(healthTex)
         ClassNameplateManaBarFrame:SetStatusBarTexture(powerTex)
         ClassNameplateManaBarFrame.FeedbackFrame.BarTexture:SetTexture(powerTex)
         ClassNameplateManaBarFrame.FeedbackFrame.LossGlowTexture:SetTexture(powerTex)
-        if frame.healthBar.myHealPrediction then
-          frame.healthBar.myHealPrediction:SetTexture(healthTex)
+        if healthBar.myHealPrediction then
+          healthBar.myHealPrediction:SetTexture(healthTex)
         end
         frame.emsUISkinned = true
       end
-      if frame.optionTable.colorNameBySelection and not frame:IsForbidden() then
+      if frame.optionTable.colorNameBySelection then
         if healthPercentage <= 100 and healthPercentage >= 30 then
-          frame.healthBar:SetStatusBarColor(classR, classG, classB, 1)
+          healthBar:SetStatusBarColor(classR, classG, classB, 1)
         elseif healthPercentage < 30 then
-          frame.healthBar:SetStatusBarColor(1, 0, 0)
+          healthBar:SetStatusBarColor(1, 0, 0)
         end
       end
     end
-
-    if not frame.isNameplate then return end
 
     if not frame.healthPercentage then
       frame.healthPercentage = frame.healthBar:CreateFontString(frame.healthPercentage, "OVERLAY", "GameFontNormalSmall")
