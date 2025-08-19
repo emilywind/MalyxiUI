@@ -84,16 +84,16 @@ OnPlayerLogin(function()
     end
   end)
 
-  local function setTrue(table, member)
+  local function setValue(table, member, bool)
+    if bool then
     TextureLoadingGroupMixin.AddTexture(
       { textures = table }, member
     )
-  end
-
-  local function setNil(table, member)
-    TextureLoadingGroupMixin.RemoveTexture(
-      { textures = table }, member
-    )
+    else
+      TextureLoadingGroupMixin.RemoveTexture(
+        { textures = table }, member
+      )
+    end
   end
 
   local function modifyNamePlates(frame)
@@ -132,17 +132,17 @@ OnPlayerLogin(function()
       local _, isFriend, _ = GetUnitReaction(unit)
       local isPlayer = UnitIsPlayer(unit)
       if not isFriend then
-        setNil(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar')
+        setValue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar', false)
       else
         if isPlayer then
           -- local role = UnitGroupRolesAssigned(unit)
           if EUIDB.nameplateHideFriendlyHealthbars then
-            setTrue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar')
+            setValue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar', true)
           else
-            setNil(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar')
+            setValue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar', false)
           end
         else
-          setNil(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar')
+          setValue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar', false)
         end
       end
     end
