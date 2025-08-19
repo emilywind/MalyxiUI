@@ -111,35 +111,27 @@ end
 --                                         Main Functions                                         --
 ----------------------------------------------------------------------------------------------------
 
--- update tooltip with the unit cache record
 function TTT_UpdateTooltip(unitCacheRecord)
-  -- exit if "main switch" isn't enabled
-  if (not EUIDB.tooltipSpecAndIlvl) then
-    return
-  end
+  if not EUIDB.tooltipSpecAndIlvl then return end
 
   -- exit if unit from unit cache record doesn't match the current displaying unit
-  local _, unitID = LibFroznFunctions:GetUnitFromTooltip(GameTooltip)
+  local unitID = select(2, LibFroznFunctions:GetUnitFromTooltip(GameTooltip))
 
-  if (not unitID) then
-    return
-  end
+  if not unitID then return end
 
   local unitGUID = UnitGUID(unitID)
 
-  if (unitGUID ~= unitCacheRecord.guid) then
-    return
-  end
+  if unitGUID ~= unitCacheRecord.guid then return end
 
   -- update tooltip with the unit cache record
 
   -- talents
-  if (unitCacheRecord.talents) then
+  if unitCacheRecord.talents then
     local specText = LibFroznFunctions:CreatePushArray()
 
     -- talents available but no inspect data
-    if (unitCacheRecord.talents == LFF_TALENTS.available) then
-      if (unitCacheRecord.canInspect) then
+    if unitCacheRecord.talents == LFF_TALENTS.available then
+      if unitCacheRecord.canInspect then
         specText:Push(TTT_TEXT.loading)
       else
         -- check if talents/AIL for people out of range shouldn't be shown
@@ -147,11 +139,11 @@ function TTT_UpdateTooltip(unitCacheRecord)
       end
 
       -- no talents available
-    elseif (unitCacheRecord.talents == LFF_TALENTS.na) then
+    elseif unitCacheRecord.talents == LFF_TALENTS.na then
       specText:Clear()
 
       -- no talents found
-    elseif (unitCacheRecord.talents == LFF_TALENTS.none) then
+    elseif unitCacheRecord.talents == LFF_TALENTS.none then
       specText:Push(TTT_TEXT.none)
 
       -- talents found
@@ -159,11 +151,11 @@ function TTT_UpdateTooltip(unitCacheRecord)
       local spacer
       local talentFormat = 1
 
-      if (unitCacheRecord.talents.role) then
+      if unitCacheRecord.talents.role then
         specText:Push(LibFroznFunctions:CreateMarkupForRoleIcon(unitCacheRecord.talents.role))
       end
 
-      if (unitCacheRecord.talents.iconFileID) then
+      if unitCacheRecord.talents.iconFileID then
         spacer = (specText:GetCount() > 0) and " " or ""
 
         specText:Push(spacer .. LibFroznFunctions:CreateMarkupForClassIcon(unitCacheRecord.talents.iconFileID))
