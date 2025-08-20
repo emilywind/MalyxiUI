@@ -7,6 +7,7 @@ OnPlayerLogin(function()
 
   local function setUnitColour(healthbar)
     local unit = healthbar.unit
+    if not unit then return end
     local _, _, _, isPlayer, reaction = GetUnitCharacteristics(unit)
     local isConnected = UnitIsConnected(unit)
 
