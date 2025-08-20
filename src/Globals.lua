@@ -247,7 +247,7 @@ function GetUnitCharacteristics(unit)
     end
   end
 
-  return isEnemy, isFriend, isNeutral, isPlayer
+  return isEnemy, isFriend, isNeutral, isPlayer, reaction
 end
 
 function GetUnitClassColor(unit)
