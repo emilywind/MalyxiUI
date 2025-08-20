@@ -252,5 +252,7 @@ end
 
 function GetUnitClassColor(unit)
   local class = select(2, UnitClass(unit))
+  if not class then return end
+
   return RAID_CLASS_COLORS[class]
 end
