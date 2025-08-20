@@ -128,7 +128,7 @@ OnPlayerLogin(function()
     NamePlateDriverFrame,
     'GetNamePlateTypeFromUnit',
     function(_, unit)
-      local isFriend = select(2, GetUnitReaction(unit))
+      local isFriend = select(2, GetUnitCharacteristics(unit))
       if not isFriend then
         setValue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar', false)
       else
@@ -148,6 +148,8 @@ OnPlayerLogin(function()
     frame.classificationIndicator:SetAlpha(EUIDB.nameplateHideClassificationIcon and 0 or 1)
     frame.selectionHighlight:SetAlpha(0) -- Hide the ugly target background
 
+    local isEnemy, isFriend, _, isPlayer = GetUnitCharacteristics(frame.displayedUnit)
+
     local isPersonal = UnitIsUnit(frame.displayedUnit, "player")
     if isPersonal then
       if frame.levelText then
@@ -158,7 +160,7 @@ OnPlayerLogin(function()
 
     SetDefaultFont(frame.name, EUIDB.nameplateNameFontSize)
 
-    if EUIDB.arenaNumbers and IsActiveBattlefieldArena() and UnitIsPlayer(frame.unit) and UnitIsEnemy("player", frame.unit) then -- Check to see if unit is a player to avoid needless checks on pets
+    if EUIDB.arenaNumbers and IsActiveBattlefieldArena() and isPlayer and isEnemy then -- Check to see if unit is a player to avoid needless checks on pets
       for i = 1, 5 do
         if UnitIsUnit(frame.unit, "arena" .. i) then
           frame.name:SetText(i)
@@ -168,7 +170,7 @@ OnPlayerLogin(function()
       end
     end
 
-    if EUIDB.nameplateFriendlyNamesClassColor and UnitIsPlayer(frame.unit) and UnitIsFriend("player", frame.displayedUnit) then
+    if EUIDB.nameplateFriendlyNamesClassColor and isPlayer and isFriend then
       local classColor = GetUnitClassColor(frame.displayedUnit)
 
       frame.name:SetTextColor(classColor.r, classColor.g, classColor.b, 1)

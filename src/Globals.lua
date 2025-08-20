@@ -230,11 +230,12 @@ function SkinProgressBar(bar)
   bar.euiClean = true
 end
 
-function GetUnitReaction(unit)
+function GetUnitCharacteristics(unit)
   local reaction = UnitReaction(unit, "player")
   local isEnemy = false
   local isFriend = false
   local isNeutral = false
+  local isPlayer = UnitIsPlayer(unit)
 
   if reaction then
     if reaction < 4 then
@@ -246,7 +247,7 @@ function GetUnitReaction(unit)
     end
   end
 
-  return isEnemy, isFriend, isNeutral
+  return isEnemy, isFriend, isNeutral, isPlayer
 end
 
 function GetUnitClassColor(unit)
