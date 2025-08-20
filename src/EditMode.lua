@@ -40,4 +40,12 @@ OnPlayerLogin(function()
     QueueStatusButton:ClearAllPoints()
     QueueStatusButton:SetPoint(db.queueicon.point, UIParent, db.queueicon.point, db.queueicon.x, db.queueicon.y)
   end)
+
+  local function statsFramePos(frame, layoutName, point, x, y)
+    db.statsframe.point = point
+    db.statsframe.x = x
+    db.statsframe.y = y
+  end
+
+  LEM:AddFrame(StatsFrame, statsFramePos)
 end)

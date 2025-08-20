@@ -249,7 +249,8 @@
         "UNIT_POPUP_RIGHT_CLICK",
         "BigWigsLoader",
         "CHALLENGE_COMPLETE_DUNGEON_SCORE",
-        "sArenaMixin"
+        "sArenaMixin",
+        "BASE_MOVEMENT_SPEED"
     ],
     "Lua.diagnostics.disable": [
         "cast-local-type",

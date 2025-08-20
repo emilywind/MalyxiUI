@@ -63,6 +63,13 @@ EUIDBDefaults = {
     x = -330,
     y = 5,
   },
+
+  enableStatsFrame = false,
+  statsframe = {
+    point = 'BOTTOMLEFT',
+    x = 5,
+    y = 3
+  },
 }
 
 -- This function copies values from one table into another
@@ -445,6 +452,10 @@ local function setupEuiOptions()
     hideArenaFrames
   )
 
+  local miscText = EUI.panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+  miscText:SetText("Misc")
+  miscText:SetPoint("TOPLEFT", hideObjectiveTracker, "BOTTOMLEFT", 0, -16)
+
   local castBarScale = newSlider(
     "EUI_CastbarScaleSlider",
     "Castbar Scale: %.1f",
@@ -453,7 +464,17 @@ local function setupEuiOptions()
     2,
     0.1,
     "Set scale for Target and Focus cast bars",
-    hideObjectiveTracker
+    miscText
+  )
+
+  local enableStatsFrame = newCheckbox(
+    "Enable Stats Frame",
+    "Enable the stats frame that shows FPS, latency, and movement speed.",
+    EUIDB.enableStatsFrame,
+    function(value)
+      EUIDB.enableStatsFrame = value
+    end,
+    castBarScale
   )
 
   ----------------
