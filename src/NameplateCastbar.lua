@@ -87,7 +87,7 @@ function SkinCastbar(frame, unitToken)
 
   if EUIDB.nameplateCastbarColorInterrupt then
     if spellName or spellID then
-      local isFriend = false -- select(2, GetUnitCharacteristics(unitToken))
+      local isFriend = select(2, GetUnitCharacteristics(unitToken))
       if isFriend then return end
 
       local knownInterruptSpellID = GetInterruptSpell()
