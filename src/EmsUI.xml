@@ -13,6 +13,7 @@
   <Include file="Auras.lua" />
   <Include file="Nameplates.lua" />
   <Include file="NameplateTotems.lua" />
+  <Include file="NameplateCastbar.lua" />
   <Include file="Tooltips.lua" />
   <Include file="LootSpecDisplay.lua" />
   <Include file="UnitFrames.lua" />

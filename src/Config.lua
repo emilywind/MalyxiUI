@@ -46,6 +46,7 @@ EUIDBDefaults = {
   nameplateHideClassificationIcon = true,
   nameplateHideFriendlyHealthbars = true,
   nameplateFriendlyClickthrough = true,
+  nameplateCastbarColorInterrupt = true,
 
   portraitStyle = "3D", -- 3D, 2D, or class (for class icons)
   classPortraitPack = EUI_TEXTURES.classCircles,
@@ -680,6 +681,17 @@ local function setupEuiOptions()
     EUI_Nameplates
   )
 
+  local nameplateColorInterrupt = newCheckbox(
+    "Color Castbars by interrupt availability",
+    "Color castbars red when no interrupt is available, yellow when it will be, and green when it is ready.",
+    EUIDB.nameplateCastbarColorInterrupt,
+    function(value)
+      EUIDB.nameplateCastbarColorInterrupt = value
+    end,
+    nameplateFriendlyClickthrough,
+    EUI_Nameplates
+  )
+
   function DisableNameplateSettings()
     nameplateFontSlider:Disable()
     nameplateNameLength:Disable()
@@ -694,6 +706,7 @@ local function setupEuiOptions()
     nameplateHideFriendlyHealthbars:Disable()
     nameplateHideClassificationIcon:Disable()
     nameplateFriendlyClickthrough:Disable()
+    nameplateColorInterrupt:Disable()
   end
 
   function EnableNameplateSettings()
@@ -710,6 +723,7 @@ local function setupEuiOptions()
     nameplateHideFriendlyHealthbars:Enable()
     nameplateHideClassificationIcon:Enable()
     nameplateFriendlyClickthrough:Enable()
+    nameplateColorInterrupt:Enable()
   end
 
   if C_AddOns.IsAddOnLoaded('BetterBlizzPlates') then
