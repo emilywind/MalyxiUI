@@ -47,3 +47,20 @@ local function updateTextures(self)
 end
 
 hooksecurefunc("CompactUnitFrame_UpdateAll", updateTextures)
+
+local function skinAura(self)
+  local border = self.border
+  if border then
+    border:GetVertexColor()
+  end
+
+  local euiBorder = ApplyEuiBackdrop(self)
+  if border then
+    border:SetAlpha(1)
+    SetEuiBorderColor(euiBorder, border:GetVertexColor())
+    border:SetAlpha(0)
+  end
+end
+
+hooksecurefunc("CompactUnitFrame_UtilSetBuff", skinAura)
+hooksecurefunc("CompactUnitFrame_UtilSetDebuff", skinAura)
