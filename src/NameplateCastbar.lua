@@ -74,106 +74,102 @@ function SkinCastbar(frame, unitToken)
   if castBar:IsForbidden() then return end
 
   local castBarTexture = castBar:GetStatusBarTexture()
-  local spellName, spellID, notInterruptible, endTime, casting, channeling, castStart, empoweredCast
+  local spellName, spellID, notInterruptible, endTime, channeling, castStart, empoweredCast
 
   if UnitCastingInfo(unitToken) then
-    casting = true
     spellName, _, _, castStart, endTime, _, _, notInterruptible, spellID = UnitCastingInfo(unitToken)
   elseif UnitChannelInfo(unitToken) then
     spellName, _, _, castStart, endTime, _, notInterruptible, spellID, empoweredCast = UnitChannelInfo(unitToken)
     if empoweredCast then
-      casting = true
       channeling = false
     else
-      casting = false
       channeling = true
     end
   end
 
   if EUIDB.nameplateCastbarColorInterrupt then
     if spellName or spellID then
-        local isFriend = select(2, GetUnitCharacteristics(unitToken))
-        if not isFriend then
-            --for _, interruptSpellIDx in ipairs(interruptSpellIDs) do
-            if not knownInterruptSpellID then
-                GetInterruptSpell()
-            end
-            if knownInterruptSpellID then
-              local start, duration = TWWGetSpellCooldown(knownInterruptSpellID)
-              local cooldownRemaining = start + duration - GetTime()
-              local castRemaining = (endTime / 1000) - GetTime()
-              local totalCastTime = (endTime / 1000) - (castStart / 1000)
+      local isFriend = select(2, GetUnitCharacteristics(unitToken))
+      if not isFriend then
+        if not knownInterruptSpellID then
+          GetInterruptSpell()
+        end
+        if knownInterruptSpellID then
+          local start, duration = TWWGetSpellCooldown(knownInterruptSpellID)
+          local cooldownRemaining = start + duration - GetTime()
+          local castRemaining = (endTime / 1000) - GetTime()
+          local totalCastTime = (endTime / 1000) - (castStart / 1000)
 
-              if not notInterruptible then
-                if castBar.spark and castBar.spark:IsShown() then
+          if not notInterruptible then
+            if castBar.spark and castBar.spark:IsShown() then
+              castBar.spark:Hide()
+            end
+            if cooldownRemaining > 0 and cooldownRemaining > castRemaining then
+              if castBarTexture then
+                castBarTexture:SetDesaturated(true)
+              end
+              castBar:SetStatusBarColor(unpack(CASTBAR_NO_INTERRUPT_COLOR))
+            elseif cooldownRemaining > 0 and cooldownRemaining <= castRemaining then
+              if castBarTexture then
+                castBarTexture:SetDesaturated(true)
+              end
+              castBar:SetStatusBarColor(unpack(CASTBAR_DELAYED_INTERRUPT_COLOR))
+
+              if cooldownRemaining < castRemaining then
+                if not castBar.spark then
+                  castBar.spark = castBar:CreateTexture(nil, "OVERLAY")
+                  castBar.spark:SetColorTexture(0, 1, 0, 1) -- Solid green color with full opacity
+                  castBar.spark:SetSize(2, castBar:GetHeight())
+                end
+
+                local interruptPercent = (totalCastTime - castRemaining + cooldownRemaining) / totalCastTime
+
+                -- Adjust the spark position based on the percentage, reverse if channeling
+                local sparkPosition
+                if channeling then
+                    -- Channeling: reverse the direction, starting from the right
+                    sparkPosition = (1 - interruptPercent) * castBar:GetWidth()
+                else
+                    -- Casting: normal direction, from left to right
+                    sparkPosition = interruptPercent * castBar:GetWidth()
+                    if empoweredCast then
+                        sparkPosition = sparkPosition * 0.7 -- ? idk why but on empowered casts it needs to be roughly 30% to the left compared to cast/channel
+                    end
+                end
+
+                castBar.spark:SetPoint("CENTER", castBar, "LEFT", sparkPosition, 0)
+                castBar.spark:Show()
+
+                -- Schedule the color update for when the interrupt will be ready
+                C_Timer.After(cooldownRemaining, function()
+                  if castBar then
+                    if castBarTexture then
+                      castBarTexture:SetDesaturated(false)
+                    end
+                    if castBar.spark then
+                      castBar.spark:Hide()
+                    end
+                  end
+                end)
+              else
+                if castBar.spark then
                   castBar.spark:Hide()
                 end
-                if cooldownRemaining > 0 and cooldownRemaining > castRemaining then
-                  if castBarTexture then
-                      castBarTexture:SetDesaturated(true)
-                  end
-                  castBar:SetStatusBarColor(unpack(CASTBAR_NO_INTERRUPT_COLOR))
-                elseif cooldownRemaining > 0 and cooldownRemaining <= castRemaining then
-                  if castBarTexture then
-                      castBarTexture:SetDesaturated(true)
-                  end
-                  castBar:SetStatusBarColor(unpack(CASTBAR_DELAYED_INTERRUPT_COLOR))
-
-                  if cooldownRemaining < castRemaining then
-                      if not castBar.spark then
-                          castBar.spark = castBar:CreateTexture(nil, "OVERLAY")
-                          castBar.spark:SetColorTexture(0, 1, 0, 1) -- Solid green color with full opacity
-                          castBar.spark:SetSize(2, castBar:GetHeight())
-                      end
-
-                      local interruptPercent = (totalCastTime - castRemaining + cooldownRemaining) / totalCastTime
-
-                      -- Adjust the spark position based on the percentage, reverse if channeling
-                      local sparkPosition
-                      if channeling then
-                          -- Channeling: reverse the direction, starting from the right
-                          sparkPosition = (1 - interruptPercent) * castBar:GetWidth()
-                      else
-                          -- Casting: normal direction, from left to right
-                          sparkPosition = interruptPercent * castBar:GetWidth()
-                          if empoweredCast then
-                              sparkPosition = sparkPosition * 0.7 -- ? idk why but on empowered casts it needs to be roughly 30% to the left compared to cast/channel
-                          end
-                      end
-
-                      castBar.spark:SetPoint("CENTER", castBar, "LEFT", sparkPosition, 0)
-                      castBar.spark:Show()
-
-                      -- Schedule the color update for when the interrupt will be ready
-                      C_Timer.After(cooldownRemaining, function()
-                          if castBar then
-                            if castBarTexture then
-                              castBarTexture:SetDesaturated(false)
-                            end
-                            if castBar.spark then
-                              castBar.spark:Hide()
-                            end
-                          end
-                      end)
-                  else
-                      if castBar.spark then
-                        castBar.spark:Hide()
-                      end
-                  end
-                else
-                  if castBarTexture then
-                    castBarTexture:SetDesaturated(false)
-                  end
-                  if castBar.spark then
-                    castBar.spark:Hide()
-                  end
-                end
+              end
+            else
+              if castBarTexture then
+                castBarTexture:SetDesaturated(false)
+              end
+              if castBar.spark then
+                castBar.spark:Hide()
+              end
             end
           end
         end
       end
     end
   end
+end
 
 function TWWGetSpellCooldown(spellID)
   local spellCooldownInfo = C_Spell.GetSpellCooldown(spellID)
