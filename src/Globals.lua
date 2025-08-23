@@ -158,17 +158,15 @@ EUI_BACKDROP = {
 }
 
 function ApplyEuiBackdrop(b, frame)
-  if b.euiClean then return end
-
   frame = frame or CreateFrame("Frame", nil, b)
 
-  -- Icon
   local name = b:GetName()
   local icon = b.icon or b.Icon or (name and _G[name.."Icon"]) or b
   StyleIcon(icon)
 
-  local border
-  border = frame:CreateTexture()
+  local border = frame:CreateTexture()
+  if b.euiClean then return border end
+
   border:SetDrawLayer("OVERLAY")
   border:SetTexture(EUI_TEXTURES.roundedBorder)
   border:SetPoint("TOPLEFT", icon, "TOPLEFT", -1, 1)
@@ -187,6 +185,9 @@ function SetEuiBorderColor(border, r, g, b)
   if border.SetVertexColor then
     border:SetVertexColor(r, g, b)
   else
+    for k, v in pairs(border) do
+      print(k)
+    end
     border:SetBackdropBorderColor(r, g, b)
   end
 end
