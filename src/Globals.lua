@@ -295,7 +295,6 @@ end
 local SpecCache = {}
 function GetSpecID(frame)
   local unit = frame.unit
-  -- Check if the unit is a player
   if not UnitIsPlayer(unit) then
     return nil
   end
@@ -303,7 +302,6 @@ function GetSpecID(frame)
   local guid = UnitGUID(frame.unit)
   local instanceData = GetInstanceData()
 
-  -- Return cached specID if already found
   if SpecCache[guid] and instanceData.isInPvP then
     return SpecCache[guid]
   end
@@ -316,18 +314,17 @@ function GetSpecID(frame)
   local tooltipGUID = tooltipData.guid
   if not tooltipGUID then return nil end
 
-  -- Iterate through tooltip lines to find the spec name
   for _, line in ipairs(tooltipData.lines) do
     if line and line.type == Enum.TooltipDataLineType.None and line.leftText and line.leftText ~= "" then
       local specID = ALL_SPECS[line.leftText]
       if specID then
-        SpecCache[tooltipGUID] = specID         -- Cache result
+        SpecCache[tooltipGUID] = specID
         return specID
       end
     end
   end
 
-  return nil   -- Return nil if no spec ID was found
+  return nil
 end
 
 function GetInstanceData()
