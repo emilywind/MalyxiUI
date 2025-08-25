@@ -9,7 +9,8 @@ OnPlayerLogin(function()
     nameplateMinScale = 1,
     nameplateMaxScale = 1,
     nameplateSelectedScale = 1.2,
-    NamePlateVerticalScale = 2.7,
+    namePlateVerticalScale = 2.7,
+    nameplateHorizontalScale = 1.4,
   }
 
   for cVar, value in pairs(cVars) do
