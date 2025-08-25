@@ -152,8 +152,8 @@ OnPlayerLogin(function()
     NamePlateDriverFrame,
     'GetNamePlateTypeFromUnit',
     function(_, unit)
-      local isEnemy = GetUnitCharacteristics(unit)
-      if isEnemy then
+      local isFriend = select(2, GetUnitCharacteristics(unit))
+      if not isFriend then
         setValue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar', false)
       else
         -- local role = UnitGroupRolesAssigned(unit)
