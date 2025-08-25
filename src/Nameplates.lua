@@ -17,7 +17,7 @@ OnPlayerLogin(function()
     C_CVar.SetCVar(cVar, value)
   end
 
-  C_CVar.SetCVar("nameplateResourceOnTarget", EUIDB.nameplateResourceOnTarget and 1 or 0)
+  C_CVar.SetCVar("nameplateResourceOnTarget", EUIDB.nameplateResourceOnTarget and '1' or '0')
 
   C_NamePlate.SetNamePlateFriendlyClickThrough(EUIDB.nameplateFriendlyClickthrough)
 
@@ -141,10 +141,6 @@ OnPlayerLogin(function()
       castBar.euiClean = true
     end
 
-    if EUIDB.partyPointer then
-      PartyPointer(frame)
-    end
-
     if (frame.ClassificationFrame) then
       frame.ClassificationFrame:SetPoint('CENTER', frame.healthBar, 'LEFT', 0, 0)
     end
@@ -178,6 +174,8 @@ OnPlayerLogin(function()
 
     frame.classificationIndicator:SetAlpha(EUIDB.nameplateHideClassificationIcon and 0 or 1)
     frame.selectionHighlight:SetAlpha(0) -- Hide the ugly target background
+
+    PartyPointer(frame)
 
     local isEnemy, isFriend, _, isPlayer = GetUnitCharacteristics(frame.displayedUnit)
 
