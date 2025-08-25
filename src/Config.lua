@@ -983,9 +983,9 @@ local function setupEuiOptions()
     EUI_Misc
   )
 
-  -------------------
-  --Reload Buttons --
-  -------------------
+  --------------------
+  -- Reload Buttons --
+  --------------------
   local resetDefaults = CreateFrame("Button", "resettodefaults", EUI.panel, "UIPanelButtonTemplate")
   resetDefaults:SetPoint("BOTTOMLEFT", EUI.panel, "BOTTOMLEFT", 10, 10)
   resetDefaults:SetSize(120,22)
