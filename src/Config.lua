@@ -537,7 +537,7 @@ local function setupEuiOptions()
     end,
     EUI_Nameplates
   )
-  nameplateFont:SetPoint("TOPLEFT", skinNameplates, "BOTTOMLEFT", 0, -16)
+  nameplateFont:SetPoint("TOPLEFT", skinNameplates, "BOTTOMLEFT", 0, -4)
 
   local nameplateFontSlider = newSlider(
     "EUI_NameplateFontSlider",
@@ -547,10 +547,11 @@ local function setupEuiOptions()
     24,
     1,
     "Font size for Nameplates",
-    nameplateFont,
+    nameplateFontDropdown,
     EUI_Nameplates
   )
-  nameplateFontSlider:SetPoint("LEFT", nameplateFontDropdown, "RIGHT", 0, 0)
+  nameplateFontSlider:ClearAllPoints()
+  nameplateFontSlider:SetPoint("LEFT", nameplateFontDropdown, "RIGHT", 220, 0)
 
   local nameplateNameLength = newCheckbox(
     "Abbreviate Unit Names",
@@ -563,9 +564,10 @@ local function setupEuiOptions()
         EUIDB.nameplateNameLength = 0
       end
     end,
-    nameplateFontSlider,
+    nameplateFont,
     EUI_Nameplates
   )
+  nameplateNameLength:SetPoint("TOPLEFT", nameplateFont, "BOTTOMLEFT", 0, -50)
 
   local nameplateHideServerNames = newCheckbox(
     "Hide Server Names (Must rezone to see change).",
