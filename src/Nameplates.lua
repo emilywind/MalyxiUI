@@ -4,6 +4,18 @@ OnPlayerLogin(function()
   local healthTex = EUIDB.healthBarTex
   local powerTex = EUIDB.powerBarTex
 
+  local cVars = {
+    nameplateGlobalScale = 1,
+    nameplateMinScale = 1,
+    nameplateMaxScale = 1,
+    nameplateSelectedScale = 1.2,
+    NamePlateVerticalScale = 2.7,
+  }
+
+  for cVar, value in pairs(cVars) do
+    SetCVar(cVar, value)
+  end
+
   C_NamePlate.SetNamePlateFriendlyClickThrough(EUIDB.nameplateFriendlyClickthrough)
 
   local defaultFriendlyWidth, defaultFriendlyHeight = C_NamePlate.GetNamePlateFriendlySize()
@@ -57,7 +69,7 @@ OnPlayerLogin(function()
 
     if not frame.healthPercentage then
       frame.healthPercentage = frame.healthBar:CreateFontString(frame.healthPercentage, "OVERLAY", "GameFontNormalSmall")
-      SetDefaultFont(frame.healthPercentage, nil)
+      ModifyFont(frame.healthPercentage, EUIDB.nameplateFont)
       frame.healthPercentage:SetTextColor( 1, 1, 1 )
       frame.healthPercentage:SetPoint("CENTER", frame.healthBar, "CENTER", 0, 0)
     end
