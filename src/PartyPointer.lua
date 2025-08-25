@@ -112,17 +112,18 @@ function PartyPointer(frame)
     end
   end
 
-  local specID = GetSpecID(frame)
-
-  if specID and EUIDB.partyPointerHealer then
-    if HealerSpecs[specID] then
-      frame.partyPointer.healerIcon:Show()
-      frame.partyPointer.healerIcon:ClearAllPoints()
-      frame.partyPointer.healerIcon:SetPoint("CENTER", frame.partyPointer.icon, "CENTER", 0, 0)
-      frame.partyPointer.icon:Hide()
-    else
-      frame.partyPointer.healerIcon:Hide()
-      frame.partyPointer.icon:Show()
+  if EUIDB.partyPointerHealer then
+    local specID = GetSpecID(frame)
+    if specID then
+      if HealerSpecs[specID] then
+        frame.partyPointer.healerIcon:Show()
+        frame.partyPointer.healerIcon:ClearAllPoints()
+        frame.partyPointer.healerIcon:SetPoint("CENTER", frame.partyPointer.icon, "CENTER", 0, 0)
+        frame.partyPointer.icon:Hide()
+      else
+        frame.partyPointer.healerIcon:Hide()
+        frame.partyPointer.icon:Show()
+      end
     end
   else
     frame.partyPointer.healerIcon:Hide()

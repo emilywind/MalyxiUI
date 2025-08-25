@@ -14,7 +14,7 @@
   <Include file="Nameplates.lua" />
   <Include file="NameplateTotems.lua" />
   <Include file="NameplateCastbar.lua" />
-  <Include file="NameplatePartyPointer.lua" />
+  <Include file="PartyPointer.lua" />
   <Include file="Tooltips.lua" />
   <Include file="LootSpecDisplay.lua" />
   <Include file="UnitFrames.lua" />
