@@ -96,12 +96,7 @@ function PartyPointer(frame)
   frame.partyPointer.highlight:SetHeight(120 + 26)
   frame.partyPointer.healerIcon:SetScale(EUIDB.partyPointerScale)
 
-  local resourceAnchor = nil
-  if EUIDB.nameplateResourceOnTarget then
-    resourceAnchor = frame:GetParent().driverFrame.classNamePlateMechanicFrame
-  end
-
-  frame.partyPointer:SetPoint("BOTTOM", resourceAnchor or frame.name, "TOP", 0, 0)
+  frame.partyPointer:SetPoint("BOTTOM", frame.name, "TOP", 0, -26)
 
   local classColor = GetUnitClassColor(frame.displayedUnit)
   local r, g, b = classColor.r, classColor.g, classColor.b
@@ -150,7 +145,7 @@ local function UpdateNpWidthShuffle(_, event)
   local instanceInfo = GetInstanceData()
   if event == "ARENA_OPPONENT_UPDATE" or event == "GROUP_ROSTER_UPDATE" then
     if not instanceInfo.isInArena then return end
-    local aura = C_UnitAuras.GetPlayerAuraBySpellID(32727)     -- Arena Preparation
+    local aura = C_UnitAuras.GetPlayerAuraBySpellID(32727) -- Arena Preparation
     if not aura then return end
 
     if InCombatLockdown() then
