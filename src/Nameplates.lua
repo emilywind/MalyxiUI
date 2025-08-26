@@ -159,7 +159,6 @@ OnPlayerLogin(function()
         if not isFriend then
           setValue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar', false)
         else
-          -- local role = UnitGroupRolesAssigned(unit)
           if EUIDB.nameplateHideFriendlyHealthbars then
             setValue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar', true)
           else
@@ -169,9 +168,6 @@ OnPlayerLogin(function()
       end
     )
   end
-
-  -- local duelEventFrame = CreateFrame("Frame")
-  -- duelEventFrame:RegisterEvent("DUEL_STARTED")
 
   hooksecurefunc("CompactUnitFrame_UpdateName", function(frame)
     local unit = frame.displayedUnit or frame.unit
