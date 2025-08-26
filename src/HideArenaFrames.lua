@@ -1,12 +1,16 @@
 function HideArenaFrames()
   if InCombatLockdown() then return end
 
-  if not EUIDB.hideArenaFrames then
+  local instanceData = GetInstanceData()
+
+  if EUIDB.hideArenaFrames and instanceData.isInArena then
+    CompactArenaFrame:SetAlpha(0)
+    RegisterStateDriver(CompactArenaFrame, 'visibility', 'hide')
+  elseif not EUIDB.hideArenaFrames and instanceData.isInArena then
     CompactArenaFrame:SetAlpha(1)
     RegisterStateDriver(CompactArenaFrame, 'visibility', 'show')
   else
-    CompactArenaFrame:SetAlpha(0)
-    RegisterStateDriver(CompactArenaFrame, 'visibility', 'hide')
+    CompactArenaFrame:SetAlpha(1)
   end
 end
 
