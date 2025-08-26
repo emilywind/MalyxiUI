@@ -30,6 +30,7 @@ EUIDBDefaults = {
   tooltipSpecAndIlvl = true, -- Show spec and item level in player tooltips
   tooltipShowMount = true, -- Show mount information in tooltips
   tooltipShowMythicPlus = true, -- Show Mythic+ information in tooltips
+  tooltipHideHealthBar = false, -- Hide the health bar in tooltips
 
   -- Nameplate Settings
   skinNameplates = true,
@@ -852,20 +853,33 @@ local function setupEuiOptions()
     EUI_Tooltips
   )
 
+  local tooltipHideHealthBar = newCheckbox(
+    "Hide Health Bar",
+    "Hide the health bar in tooltips.",
+    EUIDB.tooltipHideHealthBar,
+    function(value)
+      EUIDB.tooltipHideHealthBar = value
+    end,
+    showMythicPlus,
+    EUI_Tooltips
+  )
+
   function DisableTooltipSettings()
-    tooltipAnchorDropdown.disabled = true
+    tooltipAnchorDropdown:Disable()
     tooltipSpecAndIlvl:Disable()
     showMount:Disable()
     classColoredName:Disable()
     showMythicPlus:Disable()
+    tooltipHideHealthBar:Disable()
   end
 
   function EnableTooltipSettings()
-    tooltipAnchorDropdown.disabled = false
+    tooltipAnchorDropdown:Enable()
     tooltipSpecAndIlvl:Enable()
     showMount:Enable()
     classColoredName:Enable()
     showMythicPlus:Enable()
+    tooltipHideHealthBar:Enable()
   end
 
   if

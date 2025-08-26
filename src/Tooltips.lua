@@ -286,7 +286,9 @@ OnPlayerLogin(function()
 		end
 
     -- Add room for the health bar
-    GameTooltip:AddLine(' ')
+		if not EUIDB.tooltipHideHealthBar then
+			GameTooltip:AddLine(' ')
+		end
 	end
 
   TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, onTooltipSetUnit)
@@ -294,6 +296,11 @@ OnPlayerLogin(function()
 
 	GameTooltipStatusBar:HookScript("OnValueChanged", function(self)
 		local unit = GetTooltipUnit()
+
+		if EUIDB.tooltipHideHealthBar then
+			self:Hide()
+			return
+		end
 		local unitClassColor = getUnitHealthColor(unit)
 
 	  self:SetStatusBarColor(unitClassColor:GetRGB())
