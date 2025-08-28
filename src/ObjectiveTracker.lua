@@ -1,9 +1,13 @@
 local function hideObjectiveTracker()
   local instanceData = GetInstanceData()
 
-  if instanceData.isInPvP then
+  if instanceData.isInPvP or instanceData.isInPvE then
     ObjectiveTrackerFrame:SetAlpha(0)
-    RegisterStateDriver(ObjectiveTrackerFrame, 'visibility', 'hide')
+  else
+    local alpha = ObjectiveTrackerFrame:GetAlpha()
+    if alpha ~= 1 then
+      ObjectiveTrackerFrame:SetAlpha(1)
+    end
   end
 end
 
