@@ -20,15 +20,9 @@ function SetBagBarVisibility()
     for i = 0, 3 do
       local bagButton =_G['CharacterBag' .. i .. 'Slot']
       -- Bag buttons have a strange interaction that causes them to show when hovering over NPCs unless done this way
-      if not bagsVisible then
-        bagButton:SetAlpha(0)
-        bagButton:GetParent():SetAlpha(0)
-        RegisterStateDriver(bagButton, "visibility", "hide")
-      else
-        bagButton:GetParent():SetAlpha(1)
-        bagButton:SetAlpha(1)
-        RegisterStateDriver(bagButton, "visibility", "show")
-      end
+      bagButton:SetAlpha(bagsVisible and 1 or 0)
+      bagButton:GetParent():SetAlpha(bagsVisible and 1 or 0)
+      RegisterStateDriver(bagButton, "visibility", bagsVisible and "show" or "hide")
     end
     CharacterReagentBag0Slot:SetShown(bagsVisible)
 end
