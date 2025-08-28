@@ -21,8 +21,6 @@ local function applySkin(aura, isDebuff)
   local icon = aura.Icon
   StyleIcon(icon)
 
-  if not icon.SetTexCoord then return end
-
   local border = ApplyEuiBackdrop(icon, aura)
 
   aura.border = border
