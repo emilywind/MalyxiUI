@@ -1,8 +1,10 @@
 local function applySkin(aura, isDebuff)
+  local debuffBorder = aura.DebuffBorder -- This exists on buffs too, so we need to pass isDebuff
+
   if isDebuff and aura.border then
-    aura.DebuffBorder:SetAlpha(1)
-    SetEuiBorderColor(aura.border, aura.DebuffBorder:GetVertexColor())
-    aura.DebuffBorder:SetAlpha(0)
+    debuffBorder:SetAlpha(1)
+    SetEuiBorderColor(aura.border, debuffBorder:GetVertexColor())
+    debuffBorder:SetAlpha(0)
   end
 
   local duration = aura.Duration
@@ -33,8 +35,8 @@ local function applySkin(aura, isDebuff)
   end
 
   if isDebuff then
-    SetEuiBorderColor(border, aura.DebuffBorder:GetVertexColor())
-    aura.DebuffBorder:SetAlpha(0)
+    SetEuiBorderColor(border, debuffBorder:GetVertexColor())
+    debuffBorder:SetAlpha(0)
   end
 
   aura.euiClean = true
