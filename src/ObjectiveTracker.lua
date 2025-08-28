@@ -31,10 +31,10 @@ local function skinObjectiveTracker()
   end
 end
 
-local frame = CreateFrame('Frame')
-frame:RegisterEvent('PLAYER_ENTERING_WORLD')
-frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-frame:SetScript('OnEvent', function()
+OnEvents({
+  "PLAYER_ENTERING_WORLD",
+  "ZONE_CHANGED_NEW_AREA"
+}, function()
   if EUIDB.hideObjectiveTracker then
     hideObjectiveTracker()
   end

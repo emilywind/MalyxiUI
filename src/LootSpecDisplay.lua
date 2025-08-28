@@ -1,7 +1,4 @@
 OnPlayerLogin(function()
-	-----------------------
-	-- Loot Spec Display --
-	-----------------------
 	if EUIDB.lootSpecDisplay then
 		local lootSpecId = nil
 
@@ -14,12 +11,11 @@ OnPlayerLogin(function()
 		SetDefaultFont(PlayerLootSpecFrame.specname, 11)
 		PlayerLootSpecFrame.specname:SetPoint("LEFT", PlayerLootSpecFrame, "LEFT", 0, 0)
 
-		local LootDisplaySetupFrame = CreateFrame("FRAME")
-		LootDisplaySetupFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-		LootDisplaySetupFrame:RegisterEvent("PLAYER_LOOT_SPEC_UPDATED")
-		LootDisplaySetupFrame:RegisterEvent("PLAYER_TALENT_UPDATE")
-		LootDisplaySetupFrame:SetScript("OnEvent", function(self, event)
-			-- Loot Spec
+		OnEvents({
+			"PLAYER_ENTERING_WORLD",
+			"PLAYER_LOOT_SPEC_UPDATED",
+			"PLAYER_TALENT_UPDATE"
+		}, function(_, event)
 			local newLootSpecId = GetLootSpecialization()
 			local lootIcon = ''
 

@@ -131,10 +131,21 @@ function GetFrameColour()
   end
 end
 
-function OnPlayerLogin(callback)
+function OnEvents(events, callback)
   local frame = CreateFrame("Frame")
-  frame:RegisterEvent("PLAYER_LOGIN")
+  for _, event in ipairs(events) do
+    frame:RegisterEvent(event)
+  end
   frame:SetScript("OnEvent", callback)
+  return frame
+end
+
+function OnEvent(event, callback)
+  return OnEvents({ event }, callback)
+end
+
+function OnPlayerLogin(callback)
+  return OnEvent("PLAYER_LOGIN", callback)
 end
 
 EUI_FONTS = {

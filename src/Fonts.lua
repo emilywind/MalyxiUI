@@ -3,9 +3,7 @@ local function updateFontObject(FontObject, font, forcedFontSize)
   FontObject:SetFont(font, forcedFontSize or oldSize, oldStyle)
 end
 
-local ECUI = CreateFrame("Frame")
-ECUI:RegisterEvent("ADDON_LOADED")
-ECUI:SetScript("OnEvent", function()
+OnEvent("ADDON_LOADED", function()
   if EUIDB.enableDamageFont then
     DAMAGE_TEXT_FONT = EUIDB.damageFont
   end

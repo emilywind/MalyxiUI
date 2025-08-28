@@ -1,7 +1,6 @@
 --------------------------------
 --- Em's UI SafeQueue Module ---
 --------------------------------
-local SafeQueue = CreateFrame("Frame")
 local queueTime = {} -- Use an array so we can store the time for each queue
 local queue = 0 -- Current queue index of popped queue
 local justPopped = true -- Flag to indicate if the queue just popped
@@ -34,8 +33,7 @@ local function PrintTime()
 	Print(str)
 end
 
-SafeQueue:RegisterEvent("UPDATE_BATTLEFIELD_STATUS")
-SafeQueue:SetScript("OnEvent", function()
+local SafeQueue = OnEvent("UPDATE_BATTLEFIELD_STATUS", function()
 	local queued = false
 	for i = 1, GetMaxBattlefieldID() do
 		local status = GetBattlefieldStatus(i)

@@ -3,9 +3,6 @@
 -- Includes a custom version of LibFroznFunctions to show PVP Item Levels --
 ----------------------------------------------------------------------------
 local MOD_NAME = ...
-local tts = CreateFrame("Frame", MOD_NAME, nil, BackdropTemplateMixin and "BackdropTemplate")
-tts:Hide()
-
 local LibFroznFunctions = LibStub:GetLibrary("LibFroznFunctions-1.0")
 
 ----------------------------------------------------------------------------------------------------
@@ -31,32 +28,6 @@ local TTT_COLOR = {
     inlineGSPrefix = LIGHTYELLOW_FONT_COLOR
   }
 }
-
-----------------------------------------------------------------------------------------------------
---                                          Setup Addon                                           --
-----------------------------------------------------------------------------------------------------
-
--- EVENT: addon loaded (one-time-event)
-function tts:ADDON_LOADED(event, addOnName)
-  -- not this addon
-  if (addOnName ~= MOD_NAME) then
-    return
-  end
-
-  -- apply hooks for inspecting
-  self:ApplyHooksForInspecting()
-
-  -- remove this event handler as it's not needed anymore
-  self:UnregisterEvent(event)
-  self[event] = nil
-end
-
--- register events
-tts:SetScript("OnEvent", function(self, event, ...)
-  self[event](self, event, ...)
-end)
-
-tts:RegisterEvent("ADDON_LOADED")
 
 ----------------------------------------------------------------------------------------------------
 --                                           Inspecting                                           --
@@ -93,18 +64,6 @@ local function TTS_OnTooltipSetUnit()
   if (unitCacheRecord) then
     TTT_UpdateTooltip(unitCacheRecord)
   end
-end
-
--- apply hooks for inspecting during event ADDON_LOADED (one-time-function)
-function tts:ApplyHooksForInspecting()
-  -- hooks needs to be applied as late as possible during load, as we want to try and be the
-  -- last addon to hook GameTooltip's OnTooltipSetUnit so we always have a "completed" tip to work on.
-
-  -- HOOK: GameTooltip's OnTooltipSetUnit -- will schedule a delayed inspect request
-  LibFroznFunctions:HookScriptOnTooltipSetUnit(GameTooltip, TTS_OnTooltipSetUnit)
-
-  -- remove this function as it's not needed anymore
-  self.ApplyHooksForInspecting = nil
 end
 
 ----------------------------------------------------------------------------------------------------
@@ -237,4 +196,25 @@ function TTT_UpdateTooltip(unitCacheRecord)
 
   -- recalculate size of tip to ensure that it has the correct dimensions
   LibFroznFunctions:RecalculateSizeOfGameTooltip(GameTooltip)
+end
+
+----------------------------------------------------------------------------------------------------
+--                                          Setup Addon                                           --
+----------------------------------------------------------------------------------------------------
+
+local tts = OnEvent("ADDON_LOADED", function(self, event, ...)
+  self[event](self, event, ...)
+end)
+
+function tts:ADDON_LOADED(event, addOnName)
+  -- not this addon
+  if (addOnName ~= MOD_NAME) then
+    return
+  end
+
+  LibFroznFunctions:HookScriptOnTooltipSetUnit(GameTooltip, TTS_OnTooltipSetUnit)
+
+  -- remove this event handler as it's not needed anymore
+  self:UnregisterEvent(event)
+  self[event] = nil
 end

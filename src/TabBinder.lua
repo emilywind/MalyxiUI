@@ -1,26 +1,17 @@
---[[SUI TABBINDER v1.0]]
-
 OnPlayerLogin(function()
 	if not EUIDB.tabBinder then return end
-
-	local CreateFrame = CreateFrame
-	local GetBindingKey = GetBindingKey
-	local GetCurrentBindingSet = GetCurrentBindingSet
-	local IsInInstance = IsInInstance
-	local GetBindingAction = GetBindingAction
-
-	local TabBinder = CreateFrame("Frame")
-	TabBinder:RegisterEvent("PLAYER_ENTERING_WORLD")
-	TabBinder:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-	TabBinder:RegisterEvent("PLAYER_REGEN_ENABLED")
-	TabBinder:RegisterEvent("DUEL_REQUESTED")
-	TabBinder:RegisterEvent("DUEL_FINISHED")
-	TabBinder:RegisterEvent("CHAT_MSG_SYSTEM")
 
 	local RTB_Fail, RTB_DefaultKey = false, true
 	local RTB_LastTargetKey, RTB_TargetKey, RTB_CurrentBind, RTB_Success
 
-	TabBinder:SetScript("OnEvent", function(_, event, ...)
+	OnEvents({
+	"PLAYER_ENTERING_WORLD",
+	"ZONE_CHANGED_NEW_AREA",
+	"PLAYER_REGEN_ENABLED",
+	"DUEL_REQUESTED",
+	"DUEL_FINISHED",
+	"CHAT_MSG_SYSTEM"
+	}, function(_, event, ...)
 		if event == "CHAT_MSG_SYSTEM" then
 			local RTBChatMessage = ...
 			if RTBChatMessage == ERR_DUEL_REQUESTED then

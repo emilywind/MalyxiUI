@@ -18,12 +18,12 @@ local function skinVigorBar(frame)
   end
 end
 
-local frame = CreateFrame("Frame")
-frame:RegisterEvent("PLAYER_MOUNT_DISPLAY_CHANGED")
-frame:RegisterEvent("PLAYER_ENTERING_WORLD")
-frame:SetScript("OnEvent", function()
+OnEvents({
+  "PLAYER_MOUNT_DISPLAY_CHANGED",
+  "PLAYER_ENTERING_WORLD"
+}, function(self)
   if EUIDB.uiMode == 'blizzard' then
-    frame:UnregisterAllEvents()
+    self:UnregisterAllEvents()
     return
   end
 

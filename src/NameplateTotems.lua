@@ -7,12 +7,11 @@ OnPlayerLogin(function()
     return
   end
 
-  local f = CreateFrame("Frame", nil, UIParent)
-  f:RegisterEvent("NAME_PLATE_UNIT_ADDED")
-  f:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
-  f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-
-  f:SetScript("OnEvent", function(self, event, ...)
+  local f = OnEvents({
+    "NAME_PLATE_UNIT_ADDED",
+    "NAME_PLATE_UNIT_REMOVED",
+    "COMBAT_LOG_EVENT_UNFILTERED"
+  }, function(self, event, ...)
     return self[event](self, event, ...)
   end)
 

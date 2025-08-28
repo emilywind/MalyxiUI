@@ -36,14 +36,10 @@ local function init()
   end
   timerBar:SetScript("OnUpdate", barUpdate)
 
-  local function OnEvent()
+  OnEvent("LFG_PROPOSAL_SHOW", function()
     timerBar:SetMinMaxValues(0, TIMEOUT)
     timeLeft = TIMEOUT
-  end
-
-  local eventFrame = CreateFrame("Frame")
-  eventFrame:RegisterEvent("LFG_PROPOSAL_SHOW")
-  eventFrame:SetScript("OnEvent", OnEvent)
+  end)
 end
 
 OnPlayerLogin(init)

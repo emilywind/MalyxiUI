@@ -33,10 +33,10 @@ function SetBagBarVisibility()
     CharacterReagentBag0Slot:SetShown(bagsVisible)
 end
 
-local frame = CreateFrame("Frame")
-frame:RegisterEvent("PLAYER_LOGIN")
-frame:RegisterEvent('EDIT_MODE_LAYOUTS_UPDATED')
-frame:SetScript("OnEvent", function()
+OnEvents({
+  "PLAYER_LOGIN",
+  "EDIT_MODE_LAYOUTS_UPDATED"
+}, function()
   SetMicroMenuVisibility()
   SetBagBarVisibility()
 end)

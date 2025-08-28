@@ -1,8 +1,6 @@
 OnPlayerLogin(function()
   if EUIDB.autoRepair ~= 'Off' then
-    local g = CreateFrame("Frame")
-    g:RegisterEvent("MERCHANT_SHOW")
-    g:SetScript("OnEvent", function()
+    OnEvent("MERCHANT_SHOW", function()
       if (CanMerchantRepair()) then
         local cost, canRepair = GetRepairAllCost()
         if not canRepair then return end
@@ -34,9 +32,7 @@ OnPlayerLogin(function()
   end
 
   if EUIDB.autoSellGrey then
-    local g = CreateFrame("Frame")
-    g:RegisterEvent("MERCHANT_SHOW")
-    g:SetScript("OnEvent", function()
+    OnEvent("MERCHANT_SHOW", function()
       for bag = 0, 4 do
         for slot = 0, C_Container.GetContainerNumSlots(bag) do
           local link = C_Container.GetContainerItemLink(bag, slot)

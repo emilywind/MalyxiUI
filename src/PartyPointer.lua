@@ -140,19 +140,20 @@ local function RefreshAllNameplates()
   end
 end
 
-local updateFrame = CreateFrame("Frame")
-
-local function UpdateNpWidthShuffle(_, event)
+OnEvents({
+  "ARENA_OPPONENT_UPDATE",
+  "GROUP_ROSTER_UPDATE"
+}, function(self, event)
   local instanceInfo = GetInstanceData()
+  if not instanceInfo.isInArena then return end
   if event == "ARENA_OPPONENT_UPDATE" or event == "GROUP_ROSTER_UPDATE" then
-    if not instanceInfo.isInArena then return end
     local aura = C_UnitAuras.GetPlayerAuraBySpellID(32727) -- Arena Preparation
     if not aura then return end
 
     if InCombatLockdown() then
-      if not updateFrame.eventRegistered then
-        updateFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
-        updateFrame.eventRegistered = true
+      if not self.eventRegistered then
+        self:RegisterEvent("PLAYER_REGEN_ENABLED")
+        self.eventRegistered = true
       end
     else
       RefreshAllNameplates()
@@ -163,11 +164,8 @@ local function UpdateNpWidthShuffle(_, event)
       end)
     end
   elseif event == "PLAYER_REGEN_ENABLED" then
-    updateFrame:UnregisterEvent("PLAYER_REGEN_ENABLED")
-    updateFrame.eventRegistered = false
+    self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+    self.eventRegistered = false
     RefreshAllNameplates()
   end
-end
-updateFrame:SetScript("OnEvent", UpdateNpWidthShuffle)
-updateFrame:RegisterEvent("ARENA_OPPONENT_UPDATE")
-updateFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
+end)

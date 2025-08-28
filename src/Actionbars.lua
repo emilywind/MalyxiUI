@@ -75,10 +75,10 @@ local function init()
   end
 
   if EUIDB.hideHotkeys then
-    local frame = CreateFrame("Frame")
-    frame:RegisterEvent("UPDATE_BINDINGS")
-    frame:RegisterEvent("PLAYER_LOGIN")
-    frame:SetScript("OnEvent", function()
+    OnEvents({
+      "UPDATE_BINDINGS",
+      "PLAYER_LOGIN"
+    }, function()
       for i = 1, 12 do
         updateHotkey(_G["ActionButton"..i])
         updateHotkey(_G["MultiBarBottomLeftButton"..i])
@@ -152,8 +152,8 @@ local function init()
   end)
 end
 
-local a = CreateFrame("Frame")
-a:RegisterEvent("PLAYER_LOGIN")
-a:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
-a:RegisterEvent("EDIT_MODE_LAYOUTS_UPDATED")
-a:SetScript("OnEvent", init)
+OnEvents({
+  "PLAYER_LOGIN",
+  "PLAYER_SPECIALIZATION_CHANGED",
+  "EDIT_MODE_LAYOUTS_UPDATED"
+}, init)

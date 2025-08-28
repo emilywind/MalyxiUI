@@ -49,7 +49,10 @@ local function GetInterruptSpell()
   return nil
 end
 
-local function OnEvent(_, event, _, _, spellID)
+local interruptSpellUpdate = OnEvents({
+  "TRAIT_CONFIG_UPDATED",
+  "PLAYER_TALENT_UPDATE"
+}, function(_, event, _, _, spellID)
   if event == "UNIT_SPELLCAST_SUCCEEDED" then
     if not petSummonSpells[spellID] then return end
   end
@@ -62,13 +65,8 @@ local function OnEvent(_, event, _, _, spellID)
       end
     end)
   end
-end
-
-local interruptSpellUpdate = CreateFrame("Frame")
+end)
 interruptSpellUpdate:RegisterUnitEvent("UNIT_SPELLCAST_SUCCEEDED", "player")
-interruptSpellUpdate:RegisterEvent("TRAIT_CONFIG_UPDATED")
-interruptSpellUpdate:RegisterEvent("PLAYER_TALENT_UPDATE")
-interruptSpellUpdate:SetScript("OnEvent", OnEvent)
 
 function SkinCastbar(frame, unitToken)
   local castBar = frame.castBar
@@ -214,9 +212,7 @@ hooksecurefunc(CastingBarMixin, "OnEvent", function(self, event, ...)
     SkinCastbar(frame, self.unit)
 
     if not UnitTargetCastbarUpdate then
-      UnitTargetCastbarUpdate = CreateFrame("Frame")
-      UnitTargetCastbarUpdate:RegisterEvent("UNIT_TARGET")
-      UnitTargetCastbarUpdate:SetScript("OnEvent", function(_, _, unit)
+      UnitTargetCastbarUpdate = OnEvent("UNIT_TARGET", function(_, _, unit)
         local npFrame = select(2, GetSafeNameplate(unit))
         if npFrame and not UnitIsPlayer(unit) then
           SkinCastbar(npFrame, unit)

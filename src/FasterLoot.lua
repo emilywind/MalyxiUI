@@ -16,7 +16,4 @@ local function FastLoot()
   end
 end
 
--- Event frame
-local faster = CreateFrame("Frame")
-faster:RegisterEvent("LOOT_READY")
-faster:SetScript("OnEvent", FastLoot)
+OnEvent("LOOT_READY", FastLoot)
