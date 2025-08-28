@@ -133,7 +133,6 @@ end
 
 function OnEvents(events, callback)
   local frame = CreateFrame("Frame")
-  frame:Hide()
   for _, event in ipairs(events) do
     frame:RegisterEvent(event)
   end
