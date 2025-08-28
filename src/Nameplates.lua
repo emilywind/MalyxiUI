@@ -150,24 +150,22 @@ OnPlayerLogin(function()
 
   local instanceInfo = GetInstanceData()
 
-  if instanceInfo.isInPvE then
-    hooksecurefunc(
-      NamePlateDriverFrame,
-      'GetNamePlateTypeFromUnit',
-      function(_, unit)
-        local isFriend = select(2, GetUnitCharacteristics(unit))
-        if not isFriend then
-          setValue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar', false)
+  hooksecurefunc(
+    NamePlateDriverFrame,
+    'GetNamePlateTypeFromUnit',
+    function(_, unit)
+      local isFriend = select(2, GetUnitCharacteristics(unit))
+      if not isFriend or not instanceInfo.isInPvE then
+        setValue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar', false)
+      else
+        if EUIDB.nameplateHideFriendlyHealthbars then
+          setValue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar', true)
         else
-          if EUIDB.nameplateHideFriendlyHealthbars then
-            setValue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar', true)
-          else
-            setValue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar', false)
-          end
+          setValue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar', false)
         end
       end
-    )
-  end
+    end
+  )
 
   hooksecurefunc("CompactUnitFrame_UpdateName", function(frame)
     local unit = frame.displayedUnit or frame.unit
