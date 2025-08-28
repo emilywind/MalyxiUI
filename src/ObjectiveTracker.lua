@@ -34,6 +34,7 @@ local frame = CreateFrame('Frame')
 frame:RegisterEvent('PLAYER_ENTERING_WORLD')
 frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 frame:RegisterEvent("QUEST_WATCH_LIST_CHANGED")
+frame:RegisterEvent("TRACKED_RECIPE_UPDATE")
 frame:SetScript('OnEvent', function()
   if EUIDB.hideObjectiveTracker then
     hideObjectiveTracker()
