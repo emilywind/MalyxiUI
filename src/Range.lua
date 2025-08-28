@@ -1,15 +1,5 @@
--- Range plugin from SUI
-
 OnPlayerLogin(function()
   local Module = CreateFrame('Frame')
-  local _G = _G
-  local next = _G.next
-  local pairs = _G.pairs
-  local unpack = _G.unpack
-
-  local HasAction = _G.HasAction
-  local IsActionInRange = _G.IsActionInRange
-  local IsUsableAction = _G.IsUsableAction
 
   local UPDATE_DELAY = .2
   local buttonColors, buttonsToUpdate = {}, {}
