@@ -1,5 +1,5 @@
 OnPlayerLogin(function()
-  if ( not C_AddOns.IsAddOnLoaded('BigDebuffs') ) then return end
+  if not C_AddOns.IsAddOnLoaded('BigDebuffs') then return end
 
   -- Nameplates
   hooksecurefunc(BigDebuffs, 'NAME_PLATE_UNIT_ADDED', function(self, _, unit)
