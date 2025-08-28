@@ -191,14 +191,12 @@ end
 
 function SetEuiBorderColor(border, r, g, b)
   if not r or not g or not b then
-    border:SetVertexColor(unpack(GetFrameColour()))
+    r, g, b = GetFrameColour()
   end
+
   if border.SetVertexColor then
     border:SetVertexColor(r, g, b)
   else
-    for k, v in pairs(border) do
-      print(k)
-    end
     border:SetBackdropBorderColor(r, g, b)
   end
 end
