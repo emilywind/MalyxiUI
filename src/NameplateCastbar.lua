@@ -73,6 +73,16 @@ function SkinCastbar(frame, unitToken)
   if not castBar then return end
   if castBar:IsForbidden() then return end
 
+  if EUIDB.nameplateHideCastText then
+    castBar.Text:Hide()
+  end
+
+  if not castBar.euiClean then
+    ModifyFont(castBar.Text, EUIDB.nameplateFont, EUIDB.nameplateNameFontSize - 1)
+    ApplyEuiBackdrop(castBar.Icon, castBar)
+    castBar.euiClean = true
+  end
+
   local castBarTexture = castBar:GetStatusBarTexture()
   local spellName, spellID, notInterruptible, endTime, channeling, castStart, empoweredCast
 

@@ -114,21 +114,6 @@ OnPlayerLogin(function()
 
     ModifyFont(frame.name, EUIDB.nameplateFont, EUIDB.nameplateNameFontSize)
 
-    local castBar = frame.castBar
-    if castBar then
-      if EUIDB.nameplateHideCastText then
-        castBar.Text:Hide()
-      end
-
-      if castBar.euiClean then return end
-
-      ModifyFont(castBar.Text, EUIDB.nameplateFont, EUIDB.nameplateNameFontSize - 1)
-
-      ApplyEuiBackdrop(castBar.Icon, castBar)
-
-      castBar.euiClean = true
-    end
-
     if frame.ClassificationFrame then
       frame.ClassificationFrame:SetPoint('CENTER', frame.healthBar, 'LEFT', 0, 0)
     end
