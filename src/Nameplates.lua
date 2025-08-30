@@ -1,6 +1,11 @@
 local SetCVar = C_CVar.SetCVar
 
-function SetLargerNameplates()
+OnPlayerLogin(function()
+  if not EUIDB.skinNameplates or C_AddOns.IsAddOnLoaded('BetterBlizzPlates') then return end
+
+  local healthTex = EUIDB.healthBarTex
+  local powerTex = EUIDB.powerBarTex
+
   local cVars = {
     nameplateGlobalScale = 1,
     nameplateMinScale = 1,
@@ -12,17 +17,6 @@ function SetLargerNameplates()
 
   for cVar, value in pairs(cVars) do
     SetCVar(cVar, value)
-  end
-end
-
-OnPlayerLogin(function()
-  if not EUIDB.skinNameplates or C_AddOns.IsAddOnLoaded('BetterBlizzPlates') then return end
-
-  local healthTex = EUIDB.healthBarTex
-  local powerTex = EUIDB.powerBarTex
-
-  if EUIDB.largerNameplates then
-    SetLargerNameplates()
   end
 
   SetCVar("nameplateResourceOnTarget", EUIDB.nameplateResourceOnTarget and 1 or 0)

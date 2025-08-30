@@ -55,7 +55,6 @@ EUIDBDefaults = {
   nameplateFriendlyClickthrough = true,
   nameplateCastbarColorInterrupt = true,
   nameplateResourceOnTarget = true,
-  largerNameplates = true,
   showAllNameplates = true,
   nameplateShowFriends = true,
   nameplateShowEnemyMinions = true,
@@ -1113,20 +1112,6 @@ local function setupEuiOptions()
     CUFPowerBarsHealerOnly:Disable()
   end
 
-  local largerNameplates = newCheckbox(
-    "Larger Nameplates",
-    "Enable larger nameplates for better visibility.",
-    EUIDB.largerNameplates,
-    function(value)
-      EUIDB.largerNameplates = value
-      if value then
-        SetLargerNameplates()
-      end
-    end,
-    cUFDisplayPowerBars,
-    EUI_CVars
-  )
-
   local showAllNameplates = newCheckbox(
     "Always Show Nameplates",
     "Show nameplates for all units, not just ones in combat.",
@@ -1135,7 +1120,7 @@ local function setupEuiOptions()
       EUIDB.showAllNameplates = value
       C_CVar.SetCVar("nameplateShowAll", value and 1 or 0)
     end,
-    largerNameplates,
+    cUFDisplayPowerBars,
     EUI_CVars
   )
 
