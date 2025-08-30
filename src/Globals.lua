@@ -297,6 +297,7 @@ function GetUnitRecord(unit)
   info.exists = UnitExists(unit)
   info.tapDenied = UnitIsTapDenied(unit)
   info.playerControlled = UnitPlayerControlled(unit)
+  info.classification = UnitClassification(unit) -- elite, rare, rareelite, worldboss
 
   return info
 end
@@ -309,14 +310,9 @@ function GetUnitHealthColor(unit)
     return classColor
   else
     if ur.exists then
-      local unitIsTapDenied = ur.tapDenied
-      if unitIsTapDenied and not ur.playerControlled then
-        return CreateColor(0.5, 0.5, 0.5)
-      elseif not unitIsTapDenied then
-        local reactionColor = FACTION_BAR_COLORS[ur.reaction]
-        if reactionColor then
-          return CreateColor(reactionColor.r, reactionColor.g, reactionColor.b)
-        end
+      local reactionColor = FACTION_BAR_COLORS[ur.reaction]
+      if reactionColor then
+        return CreateColor(reactionColor.r, reactionColor.g, reactionColor.b)
       end
     end
 
