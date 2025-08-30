@@ -53,9 +53,12 @@ OnPlayerLogin(function()
   hooksecurefunc("CompactUnitFrame_UpdateHealth", function(frame)
     if frame:IsForbidden() or not frame.isNameplate then return end
 
+    local unit = frame.displayedUnit or frame.unit
+
     local healthBar = frame.healthBar
-    local healthPercentage = ceil((UnitHealth(frame.displayedUnit) / UnitHealthMax(frame.displayedUnit) * 100))
-    local isPersonal = C_NamePlate.GetNamePlateForUnit(frame.unit) == C_NamePlate.GetNamePlateForUnit("player")
+    local healthPercentage = ceil((UnitHealth(unit) / UnitHealthMax(unit) * 100))
+    local isPersonal = C_NamePlate.GetNamePlateForUnit(unit) == C_NamePlate.GetNamePlateForUnit("player")
+    local healthColor = GetUnitHealthColor(unit)
 
     if isPersonal then
       healthBar:SetStatusBarTexture(healthTex)
@@ -66,8 +69,6 @@ OnPlayerLogin(function()
         healthBar.myHealPrediction:SetTexture(healthTex)
       end
 
-      local healthColor = GetUnitHealthColor("player")
-
       if frame.optionTable.colorNameBySelection then
         if healthPercentage <= 100 and healthPercentage >= 30 then
           healthBar:SetStatusBarColor(healthColor.r, healthColor.g, healthColor.b, 1)
@@ -75,6 +76,8 @@ OnPlayerLogin(function()
           healthBar:SetStatusBarColor(1, 0, 0)
         end
       end
+    else
+      healthBar:SetStatusBarColor(healthColor.r, healthColor.g, healthColor.b, 1)
     end
 
     local hPercFrame = frame.healthPercentage
@@ -188,9 +191,7 @@ OnPlayerLogin(function()
     end
 
     local healthColor = GetUnitHealthColor(frame.displayedUnit)
-    if EUIDB.nameplateFriendlyNamesClassColor and ur.isFriend then
-      frame.name:SetTextColor(healthColor.r, healthColor.g, healthColor.b, 1)
-    end
+    frame.name:SetTextColor(healthColor.r, healthColor.g, healthColor.b, 1)
 
     if EUIDB.nameplateShowLevel then
       if not frame.levelText then
