@@ -8,6 +8,8 @@ local HealerSpecs = {
   [1468] = true,   --> preservation evoker
 }
 
+PARTY_MARKER = "plunderstorm-glues-logoarrow"
+
 function PartyMarker(frame)
   if (not EUIDB.partyMarker and not EUIDB.partyMarkerHealer) or frame:IsForbidden() then return end
 
@@ -15,7 +17,6 @@ function PartyMarker(frame)
   if not info then return end
 
   local markerMode =  EUIDB.partyMarkerTexture
-  local normalTexture = "plunderstorm-glues-logoarrow"
   local partyMarker = frame.partyMarker
 
   if not UnitInParty(frame.displayedUnit) or info.isEnemy or not info.isPlayer or info.isSelf or info.isNpc then
@@ -37,13 +38,13 @@ function PartyMarker(frame)
     partyMarker:SetFrameLevel(0)
     partyMarker:SetSize(24, 24)
     partyMarker.icon = partyMarker:CreateTexture(nil, "BACKGROUND", nil, 1)
-    partyMarker.icon:SetAtlas(normalTexture)
+    partyMarker.icon:SetAtlas(PARTY_MARKER)
     partyMarker.icon:SetSize(34, 48)
     partyMarker.icon:SetPoint("BOTTOM", partyMarker, "BOTTOM", 0, 5)
     partyMarker.icon:SetDesaturated(true)
 
     partyMarker.highlight = partyMarker:CreateTexture(nil, "BACKGROUND")
-    partyMarker.highlight:SetAtlas(normalTexture)
+    partyMarker.highlight:SetAtlas(PARTY_MARKER)
     partyMarker.highlight:SetSize(55, 69)
     partyMarker.highlight:SetPoint("CENTER", partyMarker.icon, "CENTER", 0, -1)
     partyMarker.highlight:SetDesaturated(true)
@@ -63,7 +64,7 @@ function PartyMarker(frame)
     partyMarker:SetFrameStrata("LOW")
     frame.partyMarker = partyMarker
   end
-  partyMarker.icon:SetAtlas(normalTexture)
+  partyMarker.icon:SetAtlas(PARTY_MARKER)
   partyMarker:SetAlpha(1)
 
   if markerMode == 2 or markerMode == 3 then
