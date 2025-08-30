@@ -7,8 +7,11 @@ function HideArenaFrames()
     CompactArenaFrame:SetAlpha(0)
     RegisterStateDriver(CompactArenaFrame, 'visibility', 'hide')
   elseif not EUIDB.hideArenaFrames and instanceData.isInArena then
-    CompactArenaFrame:SetAlpha(1)
-    RegisterStateDriver(CompactArenaFrame, 'visibility', 'auto')
+    local alpha = CompactArenaFrame:GetAlpha()
+    if alpha == 0 then
+      CompactArenaFrame:SetAlpha(1)
+      RegisterStateDriver(CompactArenaFrame, 'visibility', 'auto')
+    end
   else
     CompactArenaFrame:SetAlpha(1)
   end

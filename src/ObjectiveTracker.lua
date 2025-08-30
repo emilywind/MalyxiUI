@@ -6,7 +6,7 @@ local function hideObjectiveTracker()
     RegisterStateDriver(ObjectiveTrackerFrame, 'visibility', 'hide')
   else
     local alpha = ObjectiveTrackerFrame:GetAlpha()
-    if alpha ~= 1 then
+    if alpha == 0 then
       ObjectiveTrackerFrame:SetAlpha(1)
       RegisterStateDriver(ObjectiveTrackerFrame, 'visibility', 'auto')
     end
