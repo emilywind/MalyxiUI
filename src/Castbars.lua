@@ -46,10 +46,6 @@ local function skinCastBar(self, setScale)
     self:SetScale(EUIDB.castBarScale, EUIDB.castBarScale)
   end
 
-  -- for k, v in pairs(self) do
-  --   print(k)
-  -- end
-
   DarkenTexture(self.Border, unit)
   DarkenTexture(self.Background, unit)
 
