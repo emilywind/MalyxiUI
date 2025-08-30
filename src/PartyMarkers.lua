@@ -9,7 +9,7 @@ local HealerSpecs = {
 }
 
 function PartyMarker(frame)
-  if not EUIDB.partyMarker or frame:IsForbidden() then return end
+  if (not EUIDB.partyMarker and not EUIDB.partyMarkerHealer) or frame:IsForbidden() then return end
 
   local info = GetNameplateUnitInfo(frame)
   if not info then return end
@@ -18,7 +18,7 @@ function PartyMarker(frame)
   local normalTexture = "plunderstorm-glues-logoarrow"
   local partyMarker = frame.partyMarker
 
-  if info.isEnemy or not UnitInParty(frame.displayedUnit) or not info.isPlayer or info.isSelf or info.isNpc then
+  if not UnitInParty(frame.displayedUnit) or info.isEnemy or not info.isPlayer or info.isSelf or info.isNpc then
     if EUIDB.partyMarkerHideRaidmarker then
       frame.RaidTargetFrame.RaidTargetIcon:SetAlpha(1)
     end
@@ -105,7 +105,11 @@ function PartyMarker(frame)
         partyMarker.icon:Hide()
       else
         partyMarker.healerIcon:Hide()
-        partyMarker.icon:Show()
+        if EUIDB.partyMarker then
+          partyMarker.icon:Show()
+        else
+          partyMarker.icon:Hide()
+        end
       end
     end
   else

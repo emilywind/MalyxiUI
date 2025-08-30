@@ -1017,7 +1017,7 @@ local function setupEuiOptions()
   partyMarkerText:SetPoint("TOPLEFT", chatFont, "BOTTOMLEFT", 0, -48)
 
   local partyMarker = newCheckbox(
-    "Enable Party Markers",
+    "Show Party Markers",
     "Show markers for your party members on their nameplates.",
     EUIDB.partyMarker,
     function(value)
