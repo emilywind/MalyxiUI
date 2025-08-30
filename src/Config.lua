@@ -87,6 +87,7 @@ EUIDBDefaults = {
 
   chatTop = false, -- Move chat edit box to top of chat frame
   chatFont = EUI_FONTS.Andika,
+  chatFontSize = 14,
 }
 
 local function copyTable(src, dst)
@@ -997,6 +998,20 @@ local function setupEuiOptions()
     chatOnTop
   )
   chatFont:SetPoint("TOPLEFT", chatOnTop, "BOTTOMLEFT", 0, -6)
+
+  local chatFontSize = newSlider(
+    "EUI_ChatFontSizeSlider",
+    FONT_SIZE.." "..FONT_SIZE_TEMPLATE,
+    "chatFontSize",
+    8,
+    24,
+    1,
+    "Font size for Chat",
+    chatFontDropdown,
+    EUI_Misc
+  )
+  chatFontSize:ClearAllPoints()
+  chatFontSize:SetPoint("LEFT", chatFontDropdown, "RIGHT", 220, 0)
 
   local partyPointerText = EUI_Misc:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
   partyPointerText:SetText("Party Pointers")

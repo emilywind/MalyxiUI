@@ -171,7 +171,7 @@ OnPlayerLogin(function()
     for i = 1, NUM_CHAT_WINDOWS do
       local chat = _G[format("ChatFrame%s", i)]
       local id = chat:GetID()
-      local _, fontSize = FCF_GetChatWindowInfo(id)
+      local fontSize = EUIDB.chatFontSize
 
       -- Min. size for chat font
       if fontSize < 11 then
@@ -180,7 +180,6 @@ OnPlayerLogin(function()
         FCF_SetChatWindowFontSize(nil, chat, fontSize)
       end
 
-      -- Font and font style for chat
       chat:SetFont(EUIDB.chatFont, fontSize, "")
     end
   end
