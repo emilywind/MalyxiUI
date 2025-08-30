@@ -1,4 +1,4 @@
--- Thanks to NugTotemIcon
+-- Simplified and enhanced version of NugTotemIcon
 OnPlayerLogin(function()
   if
     C_AddOns.IsAddOnLoaded('BetterBlizzPlates')
