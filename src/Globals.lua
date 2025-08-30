@@ -294,6 +294,9 @@ function GetUnitRecord(unit)
   info.isFriend = (info.reaction and info.reaction >= 5) and not info.isSelf
   info.playerClass = select(2, UnitClass("player"))
   info.sex = UnitSex(unit)
+  info.exists = UnitExists(unit)
+  info.tapDenied = UnitIsTapDenied(unit)
+  info.playerControlled = UnitPlayerControlled(unit)
 
   return info
 end
@@ -305,9 +308,9 @@ function GetUnitHealthColor(unit)
   if classColor then
     return classColor
   else
-    if UnitExists(unit) then
-      local unitIsTapDenied = UnitIsTapDenied(unit)
-      if unitIsTapDenied and not UnitPlayerControlled(unit) then
+    if ur.exists then
+      local unitIsTapDenied = ur.tapDenied
+      if unitIsTapDenied and not ur.playerControlled then
         return CreateColor(0.5, 0.5, 0.5)
       elseif not unitIsTapDenied then
         local reactionColor = FACTION_BAR_COLORS[ur.reaction]
