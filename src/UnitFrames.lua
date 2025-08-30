@@ -40,6 +40,8 @@ OnPlayerLogin(function()
   hooksecurefunc("PlayerFrame_UpdateStatus", function(self)
     if IsResting() then
       PlayerFrame.PlayerFrameContent.PlayerFrameContentMain.StatusTexture:Hide()
+    else
+      PlayerFrame.PlayerFrameContent.PlayerFrameContentMain.StatusTexture:Show()
     end
   end)
 
