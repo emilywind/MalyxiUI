@@ -49,7 +49,9 @@ OnPlayerLogin(function()
     StatsFrame.text:SetShadowOffset(1, -1)
     StatsFrame.text:SetShadowColor(0, 0, 0)
   end
-  StatsFrame.text:SetTextColor(color.r, color.g, color.b)
+  if color then
+    StatsFrame.text:SetTextColor(color.r, color.g, color.b)
+  end
 
   local lastUpdate = 0
 

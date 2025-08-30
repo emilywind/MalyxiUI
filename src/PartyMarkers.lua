@@ -82,9 +82,10 @@ function PartyMarker(frame)
   partyMarker:SetPoint("BOTTOM", frame.name, "TOP", 0, -26)
 
   local classColor = GetUnitClassColor(frame.displayedUnit)
-  local r, g, b = classColor.r, classColor.g, classColor.b
 
-  partyMarker.icon:SetVertexColor(r, g, b)
+  if classColor then
+    partyMarker.icon:SetVertexColor(classColor.r, classColor.g, classColor.b)
+  end
 
   if EUIDB.partyMarkerHighlight then
     partyMarker.highlight:SetScale(EUIDB.partyMarkerScale)

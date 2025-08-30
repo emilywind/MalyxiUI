@@ -38,7 +38,7 @@ OnPlayerLogin(function()
     local classColor = GetUnitClassColor("player")
 
     if frame.optionTable.colorNameBySelection then
-      if healthPercentage <= 100 and healthPercentage >= 30 then
+      if classColor and healthPercentage <= 100 and healthPercentage >= 30 then
         healthBar:SetStatusBarColor(classColor.r, classColor.g, classColor.b, 1)
       elseif healthPercentage < 30 then
         healthBar:SetStatusBarColor(1, 0, 0)
@@ -182,9 +182,8 @@ OnPlayerLogin(function()
       end
     end
 
-    if EUIDB.nameplateFriendlyNamesClassColor and isPlayer and isFriend then
-      local classColor = GetUnitClassColor(frame.displayedUnit)
-
+    local classColor = GetUnitClassColor(frame.displayedUnit)
+    if EUIDB.nameplateFriendlyNamesClassColor and isFriend and classColor then
       frame.name:SetTextColor(classColor.r, classColor.g, classColor.b, 1)
     end
 

@@ -10,11 +10,7 @@ local function updateTextures(self)
       local powerTex = EUIDB.powerBarTex
 
       local unit = self.unit
-      local classColor
-
-      if unit and UnitIsPlayer(unit) then
-        classColor = GetUnitClassColor(unit)
-      end
+      local classColor = GetUnitClassColor(unit)
 
       local healthbar = self.healthBar
       healthbar:SetStatusBarTexture(healthTex)

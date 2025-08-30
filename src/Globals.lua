@@ -122,8 +122,8 @@ for iconStyle, data in next, classInfo.styles do
 end
 
 function GetFrameColour(unit)
-  if EUIDB.classColoredUnitFrames and unit and UnitIsPlayer(unit) then
-    local classColor = GetUnitClassColor(unit)
+  local classColor = GetUnitClassColor(unit)
+  if EUIDB.classColoredUnitFrames and classColor then
     return classColor.r, classColor.g, classColor.b
   elseif EUIDB.uiMode == 'black' then
     return 0.2, 0.2, 0.2
@@ -268,6 +268,8 @@ function GetUnitCharacteristics(unit)
 end
 
 function GetUnitClassColor(unit)
+  if not unit or not UnitIsPlayer(unit) then return end
+
   local class = select(2, UnitClass(unit))
 
   return RAID_CLASS_COLORS[class]
