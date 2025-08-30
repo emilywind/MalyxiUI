@@ -1,3 +1,5 @@
+local SetCVar = C_CVar.SetCVar
+
 OnPlayerLogin(function()
   if not EUIDB.skinNameplates or C_AddOns.IsAddOnLoaded('BetterBlizzPlates') then return end
 
@@ -14,10 +16,17 @@ OnPlayerLogin(function()
   }
 
   for cVar, value in pairs(cVars) do
-    C_CVar.SetCVar(cVar, value)
+    SetCVar(cVar, value)
   end
 
-  C_CVar.SetCVar("nameplateResourceOnTarget", EUIDB.nameplateResourceOnTarget and 1 or 0)
+  SetCVar("nameplateResourceOnTarget", EUIDB.nameplateResourceOnTarget and 1 or 0)
+  SetCVar("nameplateShowAll", 1)
+  SetCVar("nameplateShowFriends", 1)
+  SetCVar("nameplateShowEnemyMinions", 1)
+
+  -- Keep nameplates on screen
+  SetCVar("nameplateOtherBottomInset", 0.1)
+  SetCVar("nameplateOtherTopInset", 0.08)
 
   C_NamePlate.SetNamePlateFriendlyClickThrough(EUIDB.nameplateFriendlyClickthrough)
 
@@ -83,10 +92,6 @@ OnPlayerLogin(function()
       frame.healthPercentage:SetText('')
     end
   end)
-
-  -- Keep nameplates on screen
-  SetCVar("nameplateOtherBottomInset", 0.1)
-  SetCVar("nameplateOtherTopInset", 0.08)
 
   local function abbrev(str, length)
     if ( not str ) then
