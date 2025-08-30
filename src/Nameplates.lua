@@ -50,11 +50,11 @@ OnPlayerLogin(function()
   local function colorPersonalNameplate(frame)
     local healthBar = frame.healthBar
     local healthPercentage = ceil((UnitHealth(frame.displayedUnit) / UnitHealthMax(frame.displayedUnit) * 100))
-    local classColor = GetUnitClassColor("player")
+    local healthColor = GetUnitHealthColor("player")
 
     if frame.optionTable.colorNameBySelection then
-      if classColor and healthPercentage <= 100 and healthPercentage >= 30 then
-        healthBar:SetStatusBarColor(classColor.r, classColor.g, classColor.b, 1)
+      if healthPercentage <= 100 and healthPercentage >= 30 then
+        healthBar:SetStatusBarColor(healthColor.r, healthColor.g, healthColor.b, 1)
       elseif healthPercentage < 30 then
         healthBar:SetStatusBarColor(1, 0, 0)
       end
