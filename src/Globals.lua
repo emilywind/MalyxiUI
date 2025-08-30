@@ -297,11 +297,24 @@ function GetUnitCharacteristics(unit)
 end
 
 function GetUnitHealthColor(unit)
+  local uc = GetUnitCharacteristics(unit)
   local classColor = GetUnitClassColor(unit)
 
   if classColor then
     return classColor
   else
+    if UnitExists(unit) then
+      local unitIsTapDenied = UnitIsTapDenied(unit)
+      if unitIsTapDenied and not UnitPlayerControlled(unit) then
+        return CreateColor(0.5, 0.5, 0.5)
+      elseif not unitIsTapDenied then
+        local reactionColor = FACTION_BAR_COLORS[uc.reaction]
+        if reactionColor then
+          return CreateColor(reactionColor.r, reactionColor.g, reactionColor.b)
+        end
+      end
+    end
+
     local r, g, b = GameTooltip_UnitColor(unit)
     if (g == 0.6) then g = 0.9 end
     if (r == 1 and g == 1 and b == 1) then r, g, b = 0, 0.9, 0.1 end
