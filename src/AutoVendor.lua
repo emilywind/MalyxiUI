@@ -7,8 +7,9 @@ local function autoRepair()
     local money = GetMoney()
     if IsInGuild() and EUIDB.autoRepair == 'Guild' then
       local guildMoney = GetGuildBankWithdrawMoney()
-      if guildMoney > GetGuildBankMoney() then
-        guildMoney = GetGuildBankMoney()
+      local totalGuildMoney = GetGuildBankMoney()
+      if guildMoney > totalGuildMoney then
+        guildMoney = totalGuildMoney
       end
 
       if guildMoney > cost and CanGuildBankRepair() then
