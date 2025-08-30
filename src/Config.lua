@@ -52,7 +52,6 @@ EUIDBDefaults = {
 
   partyMarker = true,
   partyMarkerScale = 1,
-  partyMarkerTexture = 14,
   partyMarkerHealer = true,
   partyMarkerHideRaidmarker = true,
 
@@ -1014,7 +1013,7 @@ local function setupEuiOptions()
   chatFontSize:SetPoint("LEFT", chatFontDropdown, "RIGHT", 220, 0)
 
   local partyMarkerText = EUI_Misc:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-  partyMarkerText:SetText("Party Pointers")
+  partyMarkerText:SetText("Party Markers")
   partyMarkerText:SetPoint("TOPLEFT", chatFont, "BOTTOMLEFT", 0, -48)
 
   local partyMarker = newCheckbox(

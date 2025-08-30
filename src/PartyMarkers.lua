@@ -8,36 +8,17 @@ local HealerSpecs = {
   [1468] = true,   --> preservation evoker
 }
 
-local pmTextures = {
-  [1] = "UI-QuestPoiImportant-QuestNumber-SuperTracked",
-  [2] = "CreditsScreen-Assets-Buttons-Rewind",           --rotate
-  [3] = "CovenantSanctum-Renown-DoubleArrow-Disabled",   -- rotate
-  [4] = "Crosshair_Quest_128",
-  [5] = "Crosshair_Wrapper_128",
-  [6] = "honorsystem-icon-prestige-2",
-  [7] = "plunderstorm-glues-queueselector-solo-selected",
-  [8] = "plunderstorm-glues-queueselector-solo",
-  [9] = "AutoQuest-Badge-Campaign",
-  [10] = "Ping_Marker_Icon_OnMyWay",
-  [11] = "Ping_Marker_Icon_NonThreat",
-  [12] = "charactercreate-icon-customize-body-selected",
-  [13] = "128-RedButton-Delete",
-  [14] = 'plunderstorm-glues-logoarrow',
-}
-
 function PartyMarker(frame)
   if not EUIDB.partyMarker or frame:IsForbidden() then return end
 
   local info = GetNameplateUnitInfo(frame)
   if not info then return end
 
-  local isInParty = UnitInParty(frame.displayedUnit)
-
   local markerMode =  EUIDB.partyMarkerTexture
-  local normalTexture = pmTextures[markerMode]
+  local normalTexture = "plunderstorm-glues-logoarrow"
   local partyMarker = frame.partyMarker
 
-  if info.isEnemy or not isInParty or not info.isPlayer or info.isSelf or info.isNpc then
+  if info.isEnemy or not UnitInParty(frame.displayedUnit) or not info.isPlayer or info.isSelf or info.isNpc then
     if EUIDB.partyMarkerHideRaidmarker then
       frame.RaidTargetFrame.RaidTargetIcon:SetAlpha(1)
     end
