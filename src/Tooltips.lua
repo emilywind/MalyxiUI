@@ -53,21 +53,21 @@ end
 
 local function cleanupTooltip(tip)
 	local unit = GetTooltipUnit()
-	local unitRecord = GetUnitRecord(unit)
-	if not unitRecord then return end
-	local creatureFamily = UnitCreatureFamily(unitRecord.id)
-	local creatureType = UnitCreatureType(unitRecord.id)
+	local unitInfo = GetUnitInfo(unit)
+	if not unitInfo then return end
+	local creatureFamily = UnitCreatureFamily(unitInfo.id)
+	local creatureType = UnitCreatureType(unitInfo.id)
 
-	local hideCreatureTypeIfNoCreatureFamily = ((not unitRecord.isPlayer) or (unitRecord.isWildBattlePet)) and (not creatureFamily) and (creatureType)
-	local hideSpecializationAndClassText = (unitRecord.isPlayer) and (LibFroznFunctions.hasWoWFlavor.specializationAndClassTextInPlayerUnitTip) and (unitRecord.className)
+	local hideCreatureTypeIfNoCreatureFamily = ((not unitInfo.isPlayer) or (unitInfo.isWildBattlePet)) and (not creatureFamily) and (creatureType)
+	local hideSpecializationAndClassText = (unitInfo.isPlayer) and (LibFroznFunctions.hasWoWFlavor.specializationAndClassTextInPlayerUnitTip) and (unitInfo.className)
 
 	local specNames = LibFroznFunctions:CreatePushArray()
 
 	if (hideSpecializationAndClassText) then
-		local specCount = C_SpecializationInfo.GetNumSpecializationsForClassID(unitRecord.classID)
+		local specCount = C_SpecializationInfo.GetNumSpecializationsForClassID(unitInfo.classID)
 
 		for i = 1, specCount do
-			local _, specName = GetSpecializationInfoForClassID(unitRecord.classID, i, unitRecord.sex)
+			local _, specName = GetSpecializationInfoForClassID(unitInfo.classID, i, unitInfo.sex)
 
 			specNames:Push(specName)
 		end
@@ -79,13 +79,13 @@ local function cleanupTooltip(tip)
 
 		if (type(gttLineText) == "string") then
 			local isGttLineTextUnitPopupRightClick = (gttLineText == UNIT_POPUP_RIGHT_CLICK)
-			local isSpecLine = unitRecord.className and (specNames:Contains(gttLineText:match("^(.+) " .. unitRecord.className .. "$")))
+			local isSpecLine = unitInfo.className and (specNames:Contains(gttLineText:match("^(.+) " .. unitInfo.className .. "$")))
 
 			if (isGttLineTextUnitPopupRightClick) or
 					((gttLineText == FACTION_ALLIANCE) or (gttLineText == FACTION_HORDE) or (gttLineText == FACTION_NEUTRAL)) or
 					(gttLineText == PVP_ENABLED) or
 					(hideCreatureTypeIfNoCreatureFamily) and (gttLineText == creatureType) or
-					(hideSpecializationAndClassText) and ((gttLineText == unitRecord.className) or isSpecLine) then
+					(hideSpecializationAndClassText) and ((gttLineText == unitInfo.className) or isSpecLine) then
 
 					gttLine:SetText(nil)
 
@@ -218,12 +218,12 @@ OnPlayerLogin(function()
     if self ~= GameTooltip then return end
 
 		local unit = GetTooltipUnit()
-		local unitRecord = GetUnitRecord(unit)
+		local unitInfo = GetUnitInfo(unit)
 
     skinGameTooltip()
 		cleanupTooltip(self)
 
-		local level = unitRecord.level
+		local level = unitInfo.level
     if (level < 0) then
       level = "??"
     end
@@ -254,7 +254,7 @@ OnPlayerLogin(function()
 				guildLine:SetText(trimmedGuild .. ' (' .. trimmedRank .. ')')
 			end
 
-      playerInfoLine:SetText(level .. ' ' .. race .. ' ' .. unitClassColor:WrapTextInColorCode(unitRecord.className))
+      playerInfoLine:SetText(level .. ' ' .. race .. ' ' .. unitClassColor:WrapTextInColorCode(unitInfo.className))
 
 			-- Mount
 			if EUIDB.tooltipShowMount then
@@ -262,7 +262,7 @@ OnPlayerLogin(function()
 			end
 
 			if EUIDB.tooltipShowMythicPlus then
-				addMythicPlusScore(unitRecord)
+				addMythicPlusScore(unitInfo)
 			end
 
 			-- recalculate size of tip to ensure that it has the correct dimensions

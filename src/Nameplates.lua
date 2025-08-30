@@ -143,9 +143,9 @@ OnPlayerLogin(function()
     NamePlateDriverFrame,
     'GetNamePlateTypeFromUnit',
     function(_, unit)
-      local ur = GetUnitRecord(unit)
+      local unitInfo = GetUnitInfo(unit)
       local instanceInfo = GetInstanceData()
-      if not ur.isFriend or not instanceInfo.isInPvE then
+      if not unitInfo.isFriend or not instanceInfo.isInPvE then
         setValue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar', false)
       else
         if EUIDB.nameplateHideFriendlyHealthbars then
@@ -168,9 +168,9 @@ OnPlayerLogin(function()
 
     PartyMarker(frame)
 
-    local ur = GetUnitRecord(unit)
+    local unitInfo = GetUnitInfo(unit)
 
-    if EUIDB.nameplateHideFriendlyHealthbars and ur.isFriend and not ur.isSelf then
+    if EUIDB.nameplateHideFriendlyHealthbars and unitInfo.isFriend and not unitInfo.isSelf then
       frame.HealthBarsContainer:Hide()
       frame.HealthBarsContainer:SetAlpha(0)
     else
@@ -178,7 +178,7 @@ OnPlayerLogin(function()
       frame.HealthBarsContainer:SetAlpha(1)
     end
 
-    if EUIDB.arenaNumbers and instanceData.isInArena and ur.isPlayer and ur.isEnemy then -- Check to see if unit is a player to avoid needless checks on pets
+    if EUIDB.arenaNumbers and instanceData.isInArena and unitInfo.isPlayer and unitInfo.isEnemy then -- Check to see if unit is a player to avoid needless checks on pets
       for i = 1, 5 do
         if UnitIsUnit(frame.unit, "arena" .. i) then
           frame.name:SetText(i)
@@ -189,7 +189,7 @@ OnPlayerLogin(function()
     end
 
     local healthColor = GetUnitHealthColor(frame.displayedUnit)
-    if EUIDB.nameplateFriendlyNamesClassColor and ur.isFriend then
+    if EUIDB.nameplateFriendlyNamesClassColor and unitInfo.isFriend then
       frame.name:SetTextColor(healthColor.r, healthColor.g, healthColor.b, 1)
     end
 
@@ -199,9 +199,9 @@ OnPlayerLogin(function()
         frame.levelText:SetPoint("RIGHT", frame.healthBar, "RIGHT", -1, 0)
         ModifyFont(frame.levelText, EUIDB.nameplateFont)
       end
-      frame.unitLevel = ur.level
+      frame.unitLevel = unitInfo.level
       local c = GetCreatureDifficultyColor(frame.unitLevel)
-      if ur.classification == 'rare' or ur.classification == 'rareelite' then
+      if unitInfo.classification == 'rare' or unitInfo.classification == 'rareelite' then
         c = {
           r = 0.8,
           g = 0.8,
@@ -214,15 +214,15 @@ OnPlayerLogin(function()
       if (levelText < 0) then
         levelText = '|TInterface\\TargetingFrame\\UI-TargetingFrame-Skull:12|t'
       else
-        if (ur.classification == 'elite') then
+        if (unitInfo.classification == 'elite') then
           levelSuffix = '+'
-        elseif (ur.classification == 'rareelite') then
+        elseif (unitInfo.classification == 'rareelite') then
           levelSuffix = '*+'
-        elseif (ur.classification == 'worldboss') then
+        elseif (unitInfo.classification == 'worldboss') then
           levelSuffix = '++'
-        elseif (ur.classification == 'rare') then
+        elseif (unitInfo.classification == 'rare') then
           levelSuffix = '*'
-        elseif (ur.classification == 'minus') then
+        elseif (unitInfo.classification == 'minus') then
           levelSuffix = '-'
         end
       end
@@ -234,7 +234,7 @@ OnPlayerLogin(function()
       frame.levelText:Hide()
     end
 
-    if ur.isSelf and frame.levelText then
+    if unitInfo.isSelf and frame.levelText then
       frame.levelText:SetText('')
       frame.levelText:Hide()
     end

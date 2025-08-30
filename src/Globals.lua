@@ -268,7 +268,7 @@ function SkinStatusBar(bar)
   bar.euiClean = true
 end
 
-function GetUnitRecord(unit)
+function GetUnitInfo(unit)
   local info = {}
 
   local className, classFileName, classID = UnitClass(unit)
@@ -303,14 +303,14 @@ function GetUnitRecord(unit)
 end
 
 function GetUnitHealthColor(unit)
-  local ur = GetUnitRecord(unit)
+  local unitInfo = GetUnitInfo(unit)
   local classColor = GetUnitClassColor(unit)
 
   if classColor then
     return classColor
   else
-    if ur.exists then
-      local reactionColor = FACTION_BAR_COLORS[ur.reaction]
+    if unitInfo.exists then
+      local reactionColor = FACTION_BAR_COLORS[unitInfo.reaction]
       if reactionColor then return reactionColor end
     end
 
@@ -326,7 +326,7 @@ function GetNameplateUnitInfo(frame, unit)
   unit = unit or frame.unit or frame.displayedUnit
   if not unit then return end
 
-  return GetUnitRecord(unit)
+  return GetUnitInfo(unit)
 end
 
 local function GetLocalizedSpecs()
