@@ -195,9 +195,9 @@ OnPlayerLogin(function()
       end
     end
 
-    local classColor = GetUnitClassColor(frame.displayedUnit)
-    if EUIDB.nameplateFriendlyNamesClassColor and isFriend and classColor then
-      frame.name:SetTextColor(classColor.r, classColor.g, classColor.b, 1)
+    local healthColor = GetUnitHealthColor(frame.displayedUnit)
+    if EUIDB.nameplateFriendlyNamesClassColor and isFriend then
+      frame.name:SetTextColor(healthColor.r, healthColor.g, healthColor.b, 1)
     end
 
     if EUIDB.nameplateShowLevel then

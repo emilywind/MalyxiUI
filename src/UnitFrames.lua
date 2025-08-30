@@ -12,9 +12,9 @@ OnPlayerLogin(function()
     local isConnected = UnitIsConnected(unit)
 
     healthbar:SetStatusBarDesaturated(1)
-    local classColor = GetUnitClassColor(unit)
-    if isPlayer and isConnected and classColor then
-      healthbar:SetStatusBarColor(classColor.r, classColor.g, classColor.b)
+    local healthColor = GetUnitHealthColor(unit)
+    if isPlayer and isConnected then
+      healthbar:SetStatusBarColor(healthColor.r, healthColor.g, healthColor.b)
     elseif isPlayer and not isConnected then
       healthbar:SetStatusBarColor(0.5, 0.5, 0.5)
     else

@@ -133,6 +133,15 @@ for iconStyle, data in next, classInfo.styles do
   CLASS_PORTRAIT_PACKS[format('%s%s', classInfo.path, iconStyle)] = format('%s (by %s)', data.name, data.artist)
 end
 
+local function GetUnitClassColor(unit)
+  if not unit or not UnitIsPlayer(unit) then return end
+
+  local class = select(2, UnitClass(unit))
+
+  local color = RAID_CLASS_COLORS[class]
+  return CreateColorFromHexString(color.colorStr)
+end
+
 function GetFrameColour(unit)
   local classColor = GetUnitClassColor(unit)
   if EUIDB.classColoredUnitFrames and classColor then
@@ -291,15 +300,6 @@ function GetUnitHealthColor(unit)
 
     return CreateColor(r, g, b)
   end
-end
-
-function GetUnitClassColor(unit)
-  if not unit or not UnitIsPlayer(unit) then return end
-
-  local class = select(2, UnitClass(unit))
-
-  local color = RAID_CLASS_COLORS[class]
-  return CreateColorFromHexString(color.colorStr)
 end
 
 CASTBAR_NO_INTERRUPT_COLOR = { 1, 0, 0.01568627543747425 }

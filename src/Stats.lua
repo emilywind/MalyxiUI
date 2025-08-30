@@ -10,7 +10,7 @@ OnPlayerLogin(function()
   local fontFlag = "THINOUTLINE"
   local textAlign = "CENTER"
   local useShadow = true
-  local color = GetUnitClassColor("player")
+  local color = GetUnitHealthColor("player")
 
   local function status()
     local function getFPS() return "|c00ffffff" .. floor(GetFramerate()) .. "|r fps" end
@@ -49,9 +49,7 @@ OnPlayerLogin(function()
     StatsFrame.text:SetShadowOffset(1, -1)
     StatsFrame.text:SetShadowColor(0, 0, 0)
   end
-  if color then
-    StatsFrame.text:SetTextColor(color.r, color.g, color.b)
-  end
+  StatsFrame.text:SetTextColor(color.r, color.g, color.b)
 
   local lastUpdate = 0
 
