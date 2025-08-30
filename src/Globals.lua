@@ -311,9 +311,7 @@ function GetUnitHealthColor(unit)
   else
     if ur.exists then
       local reactionColor = FACTION_BAR_COLORS[ur.reaction]
-      if reactionColor then
-        return CreateColor(reactionColor.r, reactionColor.g, reactionColor.b)
-      end
+      if reactionColor then return reactionColor end
     end
 
     return CreateColor(GameTooltip_UnitColor(unit))
