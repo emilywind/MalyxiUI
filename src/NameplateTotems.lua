@@ -62,7 +62,7 @@ OnPlayerLogin(function()
 
   local function CreateIcon(nameplate)
     local frame = CreateFrame("Frame", nil, nameplate)
-    frame:SetSize(25, 25)
+    frame:SetSize(42, 42)
     frame:SetPoint("BOTTOM", nameplate, "TOP", 0, 5)
 
     local icon = frame:CreateTexture(nil, "ARTWORK")
