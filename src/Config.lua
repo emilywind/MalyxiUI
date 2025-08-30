@@ -1125,7 +1125,7 @@ local function setupEuiOptions()
 
   local nameplateResourceOnTarget = newCheckbox(
     "Show Resource on Target Nameplate",
-    "Show the resource (mana, energy, rage, etc) on the nameplate of your current target.",
+    "Show the special resource (holy power, combo points, chi, etc) on the nameplate of your current target.",
     EUIDB.nameplateResourceOnTarget,
     function(value)
       EUIDB.nameplateResourceOnTarget = value
