@@ -114,6 +114,18 @@ FABLED_CLASS_CIRCLES_DATA = {
   },
 }
 
+HEALER_SPECS = {
+  [105]  = true, --> druid resto
+  [270]  = true, --> monk mw
+  [65]   = true, --> paladin holy
+  [256]  = true, --> priest disc
+  [257]  = true, --> priest holy
+  [264]  = true, --> shaman resto
+  [1468] = true, --> preservation evoker
+}
+
+PARTY_MARKER = "plunderstorm-glues-logoarrow"
+
 CLASS_PORTRAIT_PACKS = {}
 local classInfo = FABLED_CLASS_CIRCLES_DATA.class
 

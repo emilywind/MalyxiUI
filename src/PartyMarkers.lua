@@ -1,15 +1,3 @@
-local HealerSpecs = {
-  [105]  = true,   --> druid resto
-  [270]  = true,   --> monk mw
-  [65]   = true,   --> paladin holy
-  [256]  = true,   --> priest disc
-  [257]  = true,   --> priest holy
-  [264]  = true,   --> shaman resto
-  [1468] = true,   --> preservation evoker
-}
-
-PARTY_MARKER = "plunderstorm-glues-logoarrow"
-
 function PartyMarker(frame)
   if (not EUIDB.partyMarker and not EUIDB.partyMarkerHealer) or frame:IsForbidden() then return end
 
@@ -100,7 +88,7 @@ function PartyMarker(frame)
   if EUIDB.partyMarkerHealer then
     local specID = GetSpecID(frame)
     if specID then
-      if HealerSpecs[specID] then
+      if HEALER_SPECS[specID] then
         partyMarker.healerIcon:Show()
         partyMarker.healerIcon:ClearAllPoints()
         partyMarker.healerIcon:SetPoint("CENTER", partyMarker.icon, "CENTER", 0, 0)
