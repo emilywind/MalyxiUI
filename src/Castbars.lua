@@ -28,6 +28,7 @@ end)
 local function skinCastBar(self, setScale)
   if self:IsForbidden() then return end
   if InCombatLockdown() then return end
+  local unit = self.unit
 
   self.Icon:SetSize(16, 16)
   self.Icon:ClearAllPoints()
@@ -45,8 +46,12 @@ local function skinCastBar(self, setScale)
     self:SetScale(EUIDB.castBarScale, EUIDB.castBarScale)
   end
 
-  DarkenTexture(self.Border)
-  DarkenTexture(self.Background)
+  -- for k, v in pairs(self) do
+  --   print(k)
+  -- end
+
+  DarkenTexture(self.Border, unit)
+  DarkenTexture(self.Background, unit)
 
   local castText = self.Text:GetText()
   if castText ~= nil then

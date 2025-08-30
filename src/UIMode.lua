@@ -1,16 +1,18 @@
-function DarkenTexture(texture)
+function DarkenTexture(texture, unit)
   if EUIDB.uiMode == 'blizzard' then return end
 
   texture:SetDesaturated(true)
-  texture:SetVertexColor(GetFrameColour())
+  texture:SetVertexColor(GetFrameColour(unit))
 end
 
-function BlackenTexture(texture)
+function BlackenTexture(texture, unit)
   if EUIDB.uiMode == 'blizzard' then return end
 
   texture:SetDesaturated(true)
 
-  if EUIDB.uiMode == 'black' then
+  if EUIDB.uiMode == 'class' then
+    texture:SetVertexColor(GetFrameColour(unit))
+  elseif EUIDB.uiMode == 'black' then
     texture:SetVertexColor(0, 0, 0)
   elseif EUIDB.uiMode == 'dark' then
     texture:SetVertexColor(0.3, 0.3, 0.3)
@@ -44,19 +46,19 @@ OnPlayerLogin(function()
 
   -- Pet Frame
   PetFrame:HookScript("OnUpdate", function()
-    BlackenTexture(PetFrameTexture)
+    BlackenTexture(PetFrameTexture, "pet")
   end)
 
   -- Target Frame
   TargetFrame:HookScript("OnUpdate", function()
-    BlackenTexture(TargetFrame.TargetFrameContainer.FrameTexture)
-    BlackenTexture(TargetFrameToT.FrameTexture)
+    BlackenTexture(TargetFrame.TargetFrameContainer.FrameTexture, "target")
+    BlackenTexture(TargetFrameToT.FrameTexture, "targettarget")
   end)
 
   -- Focus Frame
   FocusFrame:HookScript("OnUpdate", function()
-    BlackenTexture(FocusFrame.TargetFrameContainer.FrameTexture)
-    BlackenTexture(FocusFrameToT.FrameTexture)
+    BlackenTexture(FocusFrame.TargetFrameContainer.FrameTexture, "focus")
+    BlackenTexture(FocusFrameToT.FrameTexture, "focustarget")
   end)
 
   -- Totem Bar
@@ -69,7 +71,7 @@ OnPlayerLogin(function()
   for i = 1, 5 do
     local bossFrame = _G['Boss'..i..'TargetFrame']
     bossFrame:HookScript('OnEvent', function()
-      BlackenTexture(bossFrame.TargetFrameContainer.FrameTexture)
+      BlackenTexture(bossFrame.TargetFrameContainer.FrameTexture, bossFrame.unit)
     end)
   end
 

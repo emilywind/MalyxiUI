@@ -121,6 +121,8 @@ function layout:Initialize(frame)
   frame.ClassIconMask:SetAllPoints(f)
   frame.ClassIconMask:SetSize(60, 60)
 
+  local unit = frame.unit
+
   -- trinket
   local trinket = frame.Trinket
   local trinketBorder = frame.TexturePool:Acquire()
@@ -133,7 +135,7 @@ function layout:Initialize(frame)
   trinketBorder:SetPoint("TOPLEFT", trinket, "TOPLEFT", -4, 4)
   trinketBorder:SetPoint("BOTTOMRIGHT", trinket, "BOTTOMRIGHT", 4, -4)
   trinketBorder:SetDrawLayer("ARTWORK", 3)
-  BlackenTexture(trinketBorder)
+  BlackenTexture(trinketBorder, unit)
   trinketBorder:Show()
 
   -- racial
@@ -148,7 +150,7 @@ function layout:Initialize(frame)
   racialBorder:SetPoint("TOPLEFT", racial, "TOPLEFT", -4, 4)
   racialBorder:SetPoint("BOTTOMRIGHT", racial, "BOTTOMRIGHT", 4, -4)
   racialBorder:SetDrawLayer("ARTWORK", 3)
-  BlackenTexture(racialBorder)
+  BlackenTexture(racialBorder, unit)
   racialBorder:Show()
 
   -- spec icon
@@ -160,7 +162,7 @@ function layout:Initialize(frame)
   specBorder:SetAtlas("UI-HUD-UnitFrame-TotemFrame")
   specBorder:SetPoint("TOPLEFT", frame.SpecIcon, "TOPLEFT", -3, 3)
   specBorder:SetPoint("BOTTOMRIGHT", frame.SpecIcon, "BOTTOMRIGHT", 6, -6)
-  BlackenTexture(specBorder)
+  BlackenTexture(specBorder, unit)
   specBorder:Show()
 
   -- castBar
@@ -186,7 +188,7 @@ function layout:Initialize(frame)
   castBarBorder:SetAtlas("UI-CastingBar-Frame")
   castBarBorder:SetPoint("TOPLEFT", f, "TOPLEFT", -1, 2)
   castBarBorder:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", 1, -2)
-  BlackenTexture(castBarBorder)
+  BlackenTexture(castBarBorder, unit)
   castBarBorder:Show()
   local typeInfoTexture = "ui-castingbar-tier4-empower-2x";
   f:SetStatusBarTexture(typeInfoTexture)
@@ -214,7 +216,7 @@ function layout:Initialize(frame)
   frameTexture:SetDrawLayer("ARTWORK", 3)
   frameTexture:SetAllPoints(frame)
   frameTexture:SetAtlas("UI-HUD-UnitFrame-Target-PortraitOn")
-  BlackenTexture(frameTexture)
+  BlackenTexture(frameTexture, unit)
   frameTexture:Show()
 
   self:UpdateOrientation(frame)

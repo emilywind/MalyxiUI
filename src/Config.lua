@@ -308,7 +308,7 @@ local function setupEuiOptions()
 
   local uiModeChooser, uiModeDropdown = newDropdown(
     "UI Mode",
-    { ["blizzard"] = "Blizzard", ["dark"] = "Dark", ["light"] = "Light", ["black"] = "Black" },
+    { ["blizzard"] = "Blizzard", ["dark"] = "Dark", ["light"] = "Light", ["black"] = "Black", ["class"] = "Class" },
     EUIDB.uiMode,
     80,
     function(value)

@@ -121,8 +121,17 @@ for iconStyle, data in next, classInfo.styles do
   CLASS_PORTRAIT_PACKS[format('%s%s', classInfo.path, iconStyle)] = format('%s (by %s)', data.name, data.artist)
 end
 
-function GetFrameColour()
-  if EUIDB.uiMode == 'black' then
+function GetFrameColour(unit)
+  if EUIDB.uiMode == 'class' then
+    unit = unit or "player"
+
+    if UnitIsPlayer(unit) then
+      local classColor = GetUnitClassColor(unit)
+      return classColor.r, classColor.g, classColor.b
+    else
+      return 0.3, 0.3, 0.3
+    end
+  elseif EUIDB.uiMode == 'black' then
     return 0.2, 0.2, 0.2
   elseif EUIDB.uiMode == 'dark' then
     return 0.3, 0.3, 0.3
