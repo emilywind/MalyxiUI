@@ -35,80 +35,82 @@ function PartyPointer(frame)
 
   local pointerMode =  EUIDB.partyPointerTexture
   local normalTexture = ppTextures[pointerMode]
+  local partyPointer = frame.partyPointer
 
   if info.isEnemy or not isInParty or not info.isPlayer or info.isSelf or info.isNpc then
     if EUIDB.partyPointerHideRaidmarker then
       frame.RaidTargetFrame.RaidTargetIcon:SetAlpha(1)
     end
-    if frame.partyPointer then
-      frame.partyPointer:Hide()
+    if partyPointer then
+      partyPointer:Hide()
     end
     return
   else
-    if frame.partyPointer then
-      frame.partyPointer:Show()
+    if partyPointer then
+      partyPointer:Show()
     end
   end
 
-  if not frame.partyPointer then
-    frame.partyPointer = CreateFrame("Frame", nil, frame)
-    frame.partyPointer:SetFrameLevel(0)
-    frame.partyPointer:SetSize(24, 24)
-    frame.partyPointer.icon = frame.partyPointer:CreateTexture(nil, "BACKGROUND", nil, 1)
-    frame.partyPointer.icon:SetAtlas(normalTexture)
-    frame.partyPointer.icon:SetSize(34, 48)
-    frame.partyPointer.icon:SetPoint("BOTTOM", frame.partyPointer, "BOTTOM", 0, 5)
-    frame.partyPointer.icon:SetDesaturated(true)
+  if not partyPointer then
+    partyPointer = CreateFrame("Frame", nil, frame)
+    partyPointer:SetFrameLevel(0)
+    partyPointer:SetSize(24, 24)
+    partyPointer.icon = partyPointer:CreateTexture(nil, "BACKGROUND", nil, 1)
+    partyPointer.icon:SetAtlas(normalTexture)
+    partyPointer.icon:SetSize(34, 48)
+    partyPointer.icon:SetPoint("BOTTOM", partyPointer, "BOTTOM", 0, 5)
+    partyPointer.icon:SetDesaturated(true)
 
-    frame.partyPointer.highlight = frame.partyPointer:CreateTexture(nil, "BACKGROUND")
-    frame.partyPointer.highlight:SetAtlas(normalTexture)
-    frame.partyPointer.highlight:SetSize(55, 69)
-    frame.partyPointer.highlight:SetPoint("CENTER", frame.partyPointer.icon, "CENTER", 0, -1)
-    frame.partyPointer.highlight:SetDesaturated(true)
-    frame.partyPointer.highlight:SetBlendMode("ADD")
-    frame.partyPointer.highlight:SetVertexColor(1, 1, 0)
-    frame.partyPointer.highlight:Hide()
+    partyPointer.highlight = partyPointer:CreateTexture(nil, "BACKGROUND")
+    partyPointer.highlight:SetAtlas(normalTexture)
+    partyPointer.highlight:SetSize(55, 69)
+    partyPointer.highlight:SetPoint("CENTER", partyPointer.icon, "CENTER", 0, -1)
+    partyPointer.highlight:SetDesaturated(true)
+    partyPointer.highlight:SetBlendMode("ADD")
+    partyPointer.highlight:SetVertexColor(1, 1, 0)
+    partyPointer.highlight:Hide()
 
-    frame.partyPointer.healerIcon = frame.partyPointer:CreateTexture(nil, "BORDER")
-    frame.partyPointer.healerIcon:SetAtlas("communities-chat-icon-plus")
-    frame.partyPointer.healerIcon:SetSize(45, 45)
-    frame.partyPointer.healerIcon:SetPoint("BOTTOM", frame.partyPointer.icon, "TOP", 0, -13)
-    frame.partyPointer.healerIcon:SetDesaturated(true)
-    frame.partyPointer.healerIcon:SetVertexColor(0, 1, 0)
-    frame.partyPointer.healerIcon:Hide()
+    partyPointer.healerIcon = partyPointer:CreateTexture(nil, "BORDER")
+    partyPointer.healerIcon:SetAtlas("communities-chat-icon-plus")
+    partyPointer.healerIcon:SetSize(45, 45)
+    partyPointer.healerIcon:SetPoint("BOTTOM", partyPointer.icon, "TOP", 0, -13)
+    partyPointer.healerIcon:SetDesaturated(true)
+    partyPointer.healerIcon:SetVertexColor(0, 1, 0)
+    partyPointer.healerIcon:Hide()
 
-    frame.partyPointer:SetIgnoreParentAlpha(true)
-    frame.partyPointer:SetFrameStrata("LOW")
+    partyPointer:SetIgnoreParentAlpha(true)
+    partyPointer:SetFrameStrata("LOW")
+    frame.partyPointer = partyPointer
   end
-  frame.partyPointer.icon:SetAtlas(normalTexture)
-  frame.partyPointer:SetAlpha(1)
+  partyPointer.icon:SetAtlas(normalTexture)
+  partyPointer:SetAlpha(1)
 
   if pointerMode == 2 or pointerMode == 3 then
-    frame.partyPointer.icon:SetRotation(math.rad(90))
+    partyPointer.icon:SetRotation(math.rad(90))
   else
-    frame.partyPointer.icon:SetRotation(0)
+    partyPointer.icon:SetRotation(0)
   end
 
-  frame.partyPointer:SetScale(EUIDB.partyPointerScale)
-  frame.partyPointer.icon:SetWidth(120)
-  frame.partyPointer.icon:SetHeight(120)
-  frame.partyPointer.highlight:SetWidth(120 + 26)
-  frame.partyPointer.highlight:SetHeight(120 + 26)
-  frame.partyPointer.healerIcon:SetScale(EUIDB.partyPointerScale)
+  partyPointer:SetScale(EUIDB.partyPointerScale)
+  partyPointer.icon:SetWidth(120)
+  partyPointer.icon:SetHeight(120)
+  partyPointer.highlight:SetWidth(120 + 26)
+  partyPointer.highlight:SetHeight(120 + 26)
+  partyPointer.healerIcon:SetScale(EUIDB.partyPointerScale)
 
-  frame.partyPointer:SetPoint("BOTTOM", frame.name, "TOP", 0, -26)
+  partyPointer:SetPoint("BOTTOM", frame.name, "TOP", 0, -26)
 
   local classColor = GetUnitClassColor(frame.displayedUnit)
   local r, g, b = classColor.r, classColor.g, classColor.b
 
-  frame.partyPointer.icon:SetVertexColor(r, g, b)
+  partyPointer.icon:SetVertexColor(r, g, b)
 
   if EUIDB.partyPointerHighlight then
-    frame.partyPointer.highlight:SetScale(EUIDB.partyPointerScale)
+    partyPointer.highlight:SetScale(EUIDB.partyPointerScale)
     if info.isTarget then
-      frame.partyPointer.highlight:Show()
+      partyPointer.highlight:Show()
     else
-      frame.partyPointer.highlight:Hide()
+      partyPointer.highlight:Hide()
     end
   end
 
@@ -116,18 +118,18 @@ function PartyPointer(frame)
     local specID = GetSpecID(frame)
     if specID then
       if HealerSpecs[specID] then
-        frame.partyPointer.healerIcon:Show()
-        frame.partyPointer.healerIcon:ClearAllPoints()
-        frame.partyPointer.healerIcon:SetPoint("CENTER", frame.partyPointer.icon, "CENTER", 0, 0)
-        frame.partyPointer.icon:Hide()
+        partyPointer.healerIcon:Show()
+        partyPointer.healerIcon:ClearAllPoints()
+        partyPointer.healerIcon:SetPoint("CENTER", partyPointer.icon, "CENTER", 0, 0)
+        partyPointer.icon:Hide()
       else
-        frame.partyPointer.healerIcon:Hide()
-        frame.partyPointer.icon:Show()
+        partyPointer.healerIcon:Hide()
+        partyPointer.icon:Show()
       end
     end
   else
-    frame.partyPointer.healerIcon:Hide()
-    frame.partyPointer:Show()
+    partyPointer.healerIcon:Hide()
+    partyPointer:Show()
     if EUIDB.partyPointerHideRaidmarker then
       frame.RaidTargetFrame.RaidTargetIcon:SetAlpha(0)
     end
