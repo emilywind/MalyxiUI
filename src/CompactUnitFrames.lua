@@ -62,9 +62,3 @@ end
 
 hooksecurefunc("CompactUnitFrame_UtilSetBuff", skinAura)
 hooksecurefunc("CompactUnitFrame_UtilSetDebuff", skinAura)
-
-OnPlayerLogin(function()
-  SetCVar("raidFramesDisplayClassColor", 1)
-  SetCVar("raidFramesDisplayPowerBars", 1)
-  SetCVar("raidFramesDisplayOnlyHealerPowerBars", 1)
-end)
