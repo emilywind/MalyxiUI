@@ -1174,7 +1174,7 @@ local function setupEuiOptions()
 
   local autoLootDefault = newCheckbox(
     "Auto Loot",
-    "Enable auto-loot by default instead of having to press a key.",
+    "Enable auto loot by default instead of having to press a key.",
     EUIDB.autoLootDefault,
     function(value)
       EUIDB.autoLootDefault = value
