@@ -185,8 +185,8 @@ local function addMythicPlusScore(unitRecord)
 end
 
 local colors = {
-  guildName = 'f232e7',
-  guildRank = 'bd8cf2',
+	guildName = CreateColorFromHexString('fff232e7'),
+	guildRank = CreateColorFromHexString('ffbd8cf2'),
 }
 
 OnPlayerLogin(function()
@@ -256,14 +256,16 @@ OnPlayerLogin(function()
       local playerInfoLine = GameTooltipTextLeft2
 			local guildName, guildRank, _, realm = GetGuildInfo(unit)
 			local playerGuildName, _, _, playerRealm = GetGuildInfo("player")
+			local trimmedGuild = Trim(guildName)
+			local trimmedRank = Trim(guildRank)
 			if (guildName and guildName == playerGuildName and realm == playerRealm) then
         playerInfoLine = GameTooltipTextLeft3
 				local guildLine = GameTooltipTextLeft2
-				guildLine:SetText('|cff' .. colors.guildName .. guildName .. '|r' .. '|cff' .. colors.guildRank .. ' (' .. guildRank .. ')|r')
+				guildLine:SetText(colors.guildName:WrapTextInColorCode(trimmedGuild) .. colors.guildRank:WrapTextInColorCode(' (' .. trimmedRank .. ')'))
 			elseif guildName then
 				playerInfoLine = GameTooltipTextLeft3
 				local guildLine = GameTooltipTextLeft2
-				guildLine:SetText(guildName .. ' (' .. guildRank .. ')')
+				guildLine:SetText(trimmedGuild .. ' (' .. trimmedRank .. ')')
 			end
 
       playerInfoLine:SetText(level .. ' ' .. race .. ' ' .. unitClassColor:WrapTextInColorCode(unitRecord.className))
