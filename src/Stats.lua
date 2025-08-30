@@ -5,11 +5,7 @@ OnPlayerLogin(function()
   StatsFrame:ClearAllPoints()
   StatsFrame:SetPoint(EUIDB.statsframe.point, UIParent, EUIDB.statsframe.point, EUIDB.statsframe.x, EUIDB.statsframe.y)
 
-  local font = STANDARD_TEXT_FONT
   local fontSize = 13
-  local fontFlag = "THINOUTLINE"
-  local textAlign = "CENTER"
-  local useShadow = true
   local color = GetUnitHealthColor("player")
 
   local function status()
@@ -43,12 +39,10 @@ OnPlayerLogin(function()
   StatsFrame:SetWidth(50)
   StatsFrame:SetHeight(fontSize)
   StatsFrame.text = StatsFrame:CreateFontString(nil, "BACKGROUND")
-  StatsFrame.text:SetPoint(textAlign, StatsFrame)
-  StatsFrame.text:SetFont(font, fontSize, fontFlag)
-  if useShadow then
-    StatsFrame.text:SetShadowOffset(1, -1)
-    StatsFrame.text:SetShadowColor(0, 0, 0)
-  end
+  StatsFrame.text:SetPoint("CENTER", StatsFrame)
+  StatsFrame.text:SetFont(EUIDB.font, fontSize, "THINOUTLINE")
+  StatsFrame.text:SetShadowOffset(1, -1)
+  StatsFrame.text:SetShadowColor(0, 0, 0)
   StatsFrame.text:SetTextColor(color.r, color.g, color.b)
 
   local lastUpdate = 0
