@@ -267,7 +267,7 @@ OnPlayerLogin(function()
 			elseif guildName then
 				playerInfoLine = GameTooltipTextLeft3
 				local guildLine = GameTooltipTextLeft2
-				guildLine:SetText('|cffffffff' .. guildName .. '|r' .. '|cffaaaaaa (' .. guildRank .. ')|r')
+				guildLine:SetText(guildName .. ' (' .. guildRank .. ')')
 			end
 
       playerInfoLine:SetText(level .. ' ' .. race .. ' ' .. unitClassColor:WrapTextInColorCode(unitRecord.className))
