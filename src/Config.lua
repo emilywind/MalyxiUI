@@ -54,6 +54,8 @@ EUIDBDefaults = {
   nameplateHideFriendlyHealthbars = true,
   nameplateFriendlyClickthrough = true,
   nameplateCastbarColorInterrupt = true,
+  nameplateShowTargetText = true,
+ -- Nameplate CVars
   nameplateResourceOnTarget = true,
   showAllNameplates = true,
   nameplateShowFriends = true,
@@ -735,6 +737,17 @@ local function setupEuiOptions()
       EUIDB.nameplateCastbarColorInterrupt = value
     end,
     nameplateFriendlyClickthrough,
+    EUI_Nameplates
+  )
+
+  local nameplateShowTargetText = newCheckbox(
+    "Show Target Text on Nameplates",
+    "Show the target of the current cast on nameplates.",
+    EUIDB.nameplateShowTargetText,
+    function(value)
+      EUIDB.nameplateShowTargetText = value
+    end,
+    nameplateColorInterrupt,
     EUI_Nameplates
   )
 
