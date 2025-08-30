@@ -142,9 +142,9 @@ OnPlayerLogin(function()
     NamePlateDriverFrame,
     'GetNamePlateTypeFromUnit',
     function(_, unit)
-      local uc = GetUnitCharacteristics(unit)
+      local ur = GetUnitRecord(unit)
       local instanceInfo = GetInstanceData()
-      if not uc.isFriend or not instanceInfo.isInPvE then
+      if not ur.isFriend or not instanceInfo.isInPvE then
         setValue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar', false)
       else
         if EUIDB.nameplateHideFriendlyHealthbars then
@@ -167,9 +167,9 @@ OnPlayerLogin(function()
 
     local isPersonal = UnitIsUnit(frame.displayedUnit, "player")
 
-    local uc = GetUnitCharacteristics(unit)
+    local ur = GetUnitRecord(unit)
 
-    if EUIDB.nameplateHideFriendlyHealthbars and uc.isFriend and not isPersonal then
+    if EUIDB.nameplateHideFriendlyHealthbars and ur.isFriend and not isPersonal then
       frame.HealthBarsContainer:Hide()
       frame.HealthBarsContainer:SetAlpha(0)
     else
@@ -177,7 +177,7 @@ OnPlayerLogin(function()
       frame.HealthBarsContainer:SetAlpha(1)
     end
 
-    if EUIDB.arenaNumbers and IsActiveBattlefieldArena() and uc.isPlayer and uc.isEnemy then -- Check to see if unit is a player to avoid needless checks on pets
+    if EUIDB.arenaNumbers and IsActiveBattlefieldArena() and ur.isPlayer and ur.isEnemy then -- Check to see if unit is a player to avoid needless checks on pets
       for i = 1, 5 do
         if UnitIsUnit(frame.unit, "arena" .. i) then
           frame.name:SetText(i)
@@ -188,7 +188,7 @@ OnPlayerLogin(function()
     end
 
     local healthColor = GetUnitHealthColor(frame.displayedUnit)
-    if EUIDB.nameplateFriendlyNamesClassColor and uc.isFriend then
+    if EUIDB.nameplateFriendlyNamesClassColor and ur.isFriend then
       frame.name:SetTextColor(healthColor.r, healthColor.g, healthColor.b, 1)
     end
 

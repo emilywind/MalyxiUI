@@ -268,10 +268,16 @@ function SkinStatusBar(bar)
   bar.euiClean = true
 end
 
-function GetUnitCharacteristics(unit)
+function GetUnitRecord(unit)
   local info = {}
 
+  local className, classFileName, classID = UnitClass(unit)
+
+  info.id = unit
+  info.guid = UnitGUID(unit)
   info.name = UnitName(unit)
+  info.level = UnitEffectiveLevel(unit)
+  info.isWildBattlePet = UnitIsWildBattlePet(unit)
   info.isSelf = UnitIsUnit("player", unit)
   info.isTarget = UnitIsUnit("target", unit)
   info.isFocus = UnitIsUnit("focus", unit)
@@ -279,18 +285,21 @@ function GetUnitCharacteristics(unit)
   info.isPlayer = UnitIsPlayer(unit)
   info.isNpc = not info.isPlayer
   info.unitGUID = UnitGUID(unit)
-  info.class = info.isPlayer and UnitClassBase(unit) or nil
+  info.className = info.isPlayer and className or nil
+  info.classFileName = info.isPlayer and classFileName or nil
+  info.classID = info.isPlayer and classID or nil
   info.reaction = UnitReaction(unit, "player")
   info.isEnemy = (info.reaction and info.reaction < 4) and not info.isSelf
   info.isNeutral = (info.reaction and info.reaction == 4) and not info.isSelf
   info.isFriend = (info.reaction and info.reaction >= 5) and not info.isSelf
   info.playerClass = select(2, UnitClass("player"))
+  info.sex = UnitSex(unit)
 
   return info
 end
 
 function GetUnitHealthColor(unit)
-  local uc = GetUnitCharacteristics(unit)
+  local ur = GetUnitRecord(unit)
   local classColor = GetUnitClassColor(unit)
 
   if classColor then
@@ -301,7 +310,7 @@ function GetUnitHealthColor(unit)
       if unitIsTapDenied and not UnitPlayerControlled(unit) then
         return CreateColor(0.5, 0.5, 0.5)
       elseif not unitIsTapDenied then
-        local reactionColor = FACTION_BAR_COLORS[uc.reaction]
+        local reactionColor = FACTION_BAR_COLORS[ur.reaction]
         if reactionColor then
           return CreateColor(reactionColor.r, reactionColor.g, reactionColor.b)
         end
@@ -324,7 +333,7 @@ function GetNameplateUnitInfo(frame, unit)
   unit = unit or frame.unit or frame.displayedUnit
   if not unit then return end
 
-  return GetUnitCharacteristics(unit)
+  return GetUnitRecord(unit)
 end
 
 local function GetLocalizedSpecs()
@@ -396,22 +405,6 @@ function GetInstanceData()
     isInBg = isInBg,
     isInArena = isInArena,
     isInPvE = isInPvE
-  }
-end
-
-function GetUnitRecord(unit)
-  local className, classFileName, classID = UnitClass(unit)
-
-  return {
-    id = unit,
-    guid = UnitGUID(unit),
-    isPlayer = UnitIsPlayer(unit),
-    level = UnitEffectiveLevel(unit),
-    isWildBattlePet = UnitIsWildBattlePet(unit),
-    classID = classID,
-    className = className,
-    classFileName = classFileName,
-    sex = UnitSex(unit),
   }
 end
 
