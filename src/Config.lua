@@ -3,6 +3,7 @@ local LSM = LibStub("LibSharedMedia-3.0")
 local name, EUI = ...
 EUIDBDefaults = {
   uiMode = 'dark', -- 'dark', 'light', 'black', or 'blizzard'
+  classColoredUnitFrames = false,
 
   hideHotkeys = false,
   hideMacroText = false,
@@ -87,8 +88,6 @@ EUIDBDefaults = {
   chatTop = false, -- Move chat edit box to top of chat frame
   chatFont = EUI_FONTS.Andika,
   chatFontSize = 14,
-
-  classColoredUnitFrames = true,
 }
 
 local function copyTable(src, dst)
