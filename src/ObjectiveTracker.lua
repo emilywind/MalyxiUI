@@ -3,12 +3,10 @@ local function hideObjectiveTracker()
 
   if instanceData.isInBg then
     ObjectiveTrackerFrame:SetAlpha(0)
-    RegisterStateDriver(ObjectiveTrackerFrame, 'visibility', 'hide')
   else
     local alpha = ObjectiveTrackerFrame:GetAlpha()
     if alpha == 0 then
       ObjectiveTrackerFrame:SetAlpha(1)
-      RegisterStateDriver(ObjectiveTrackerFrame, 'visibility', 'auto')
     end
   end
 end
