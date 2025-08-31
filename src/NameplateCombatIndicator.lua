@@ -17,7 +17,7 @@ function CombatIndicator(frame)
   end
 
   -- Conditon check: Only show on enemy players
-  local shouldShow = not info.inCombat and info.isEnemy and info.isPlayer
+  local shouldShow = not info.inCombat and info.isEnemy
 
   -- Add some offset if both Pet Indicator and Combat Indicator has the same anchor and shows at the same time
   local petOffset = 2
