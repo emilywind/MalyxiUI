@@ -11,7 +11,8 @@ function CombatIndicator(frame)
       frame.combatIndicator:SetAtlas("food")
     elseif EUIDB.nameplateCombatIndicator == 'sap' then
       frame.combatIndicator:SetSize(18, 16)
-      frame.combatIndicator:SetTexture("Interface\\AddOns\\BetterBlizzPlates\\media\\ABILITY_SAP")
+      frame.combatIndicator:SetTexture("Interface\\Icons\\Ability_Sap")
+      StyleIcon(frame.combatIndicator)
     end
   end
 
