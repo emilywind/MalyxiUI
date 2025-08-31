@@ -151,6 +151,16 @@ OnPlayerLogin(function()
     end
   )
 
+  OnEvents({
+    "NAME_PLATE_UNIT_ADDED",
+    "NAME_PLATE_UNIT_REMOVED",
+  }, function(self, event, unit)
+    local frame = GetSafeNameplate(unit)
+    if not frame then return end
+
+    PetIndicator(frame)
+  end)
+
   hooksecurefunc("CompactUnitFrame_UpdateName", function(frame)
     local unit = frame.displayedUnit or frame.unit
     if not unit or not frame.isNameplate or frame:IsForbidden() then return end
@@ -161,6 +171,7 @@ OnPlayerLogin(function()
     local instanceData = GetInstanceData()
 
     PartyMarker(frame)
+    PetIndicator(frame)
 
     local unitInfo = GetUnitInfo(unit)
 

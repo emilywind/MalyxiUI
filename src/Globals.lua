@@ -288,7 +288,6 @@ function GetUnitInfo(unit)
   info.isPet = UnitIsUnit("pet", unit)
   info.isPlayer = UnitIsPlayer(unit)
   info.isNpc = not info.isPlayer
-  info.unitGUID = UnitGUID(unit)
   info.className = info.isPlayer and className or nil
   info.classFileName = info.isPlayer and classFileName or nil
   info.classID = info.isPlayer and classID or nil
@@ -302,6 +301,7 @@ function GetUnitInfo(unit)
   info.tapDenied = UnitIsTapDenied(unit)
   info.playerControlled = UnitPlayerControlled(unit)
   info.classification = UnitClassification(unit) -- elite, rare, rareelite, worldboss
+  info.inCombat = UnitAffectingCombat(unit)
 
   return info
 end
@@ -331,6 +331,16 @@ function GetNameplateUnitInfo(frame, unit)
   if not unit then return end
 
   return GetUnitInfo(unit)
+end
+
+function GetSafeNameplate(unit)
+  local nameplate = C_NamePlate.GetNamePlateForUnit(unit, issecure())
+  -- If there's no nameplate or the nameplate doesn't have a UnitFrame, return nils.
+  if not nameplate or not nameplate.UnitFrame then return nil, nil end
+
+  local frame = nameplate.UnitFrame
+  -- If none of the above conditions are met, return both the nameplate and the frame.
+  return nameplate, frame
 end
 
 local function GetLocalizedSpecs()
@@ -409,4 +419,8 @@ function Trim(s)
   if not s then return '' end
 
   return s:gsub("^%s*(.-)%s*$", "%1")
+end
+
+function GetNPCIDFromGUID(guid)
+  return tonumber(guid:match("%-([0-9]+)%-%x+$"))
 end

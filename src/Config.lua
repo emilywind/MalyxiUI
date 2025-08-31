@@ -40,6 +40,7 @@ EUIDBDefaults = {
 
   -- Nameplate Settings
   skinNameplates = true,
+  nameplateCombatIndicator = 'food', -- 'none', 'food', or 'sap'
   nameplateFont = EUI_FONTS.Andika,
   nameplateNameFontSize = 16,
   nameplateHideServerNames = true,
@@ -55,6 +56,8 @@ EUIDBDefaults = {
   nameplateFriendlyClickthrough = true,
   nameplateCastbarColorInterrupt = true,
   nameplateShowTargetText = true,
+  nameplatePetIndicator = true,
+  nameplateFadeSecondaryPets = true,
  -- Nameplate CVars
   nameplateResourceOnTarget = true,
   showAllNameplates = true,

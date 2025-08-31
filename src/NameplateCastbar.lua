@@ -191,16 +191,6 @@ function TWWGetSpellCooldown(spellID)
   end
 end
 
-function GetSafeNameplate(unit)
-  local nameplate = C_NamePlate.GetNamePlateForUnit(unit, issecure())
-  -- If there's no nameplate or the nameplate doesn't have a UnitFrame, return nils.
-  if not nameplate or not nameplate.UnitFrame then return nil, nil end
-
-  local frame = nameplate.UnitFrame
-  -- If none of the above conditions are met, return both the nameplate and the frame.
-  return nameplate, frame
-end
-
 local function updateCastTimer(frame, castBar, unit)
   local name, _, _, startTime, endTime = UnitCastingInfo(unit)
   if not name then
