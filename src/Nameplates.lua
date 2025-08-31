@@ -172,6 +172,7 @@ OnPlayerLogin(function()
 
     PartyMarker(frame)
     PetIndicator(frame)
+    CombatIndicator(frame)
 
     local unitInfo = GetUnitInfo(unit)
 
