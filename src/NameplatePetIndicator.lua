@@ -71,6 +71,25 @@ local function FadeNameplate(frame)
     frame.petIndicator:Hide()
   end
 end
+
+local function ShowIndicator(frame)
+  frame.fadedNPC = true
+  frame:SetAlpha(1)
+  frame.fadedNPC = false
+  if frame.petIndicator then
+    frame.petIndicator:Show()
+  end
+end
+
+local function HideIndicator(frame)
+  frame.fadedNCPC = true
+  frame:SetAlpha(1)
+  frame.fadedNCPC = false
+  if frame.petIndicator then
+    frame.petIndicator:Hide()
+  end
+end
+
 -- Pet Indicator
 function PetIndicator(frame)
   local unit = frame.displayedUnit or frame.unit
@@ -120,15 +139,15 @@ function PetIndicator(frame)
         end
       end
       if isRealPet then
-        frame.petIndicator:Show()
+        ShowIndicator(frame)
       else
-        frame.petIndicator:Hide()
-      end
-      if EUIDB.nameplateFadeSecondaryPets then
-        FadeNameplate(frame)
+        HideIndicator(frame)
+        if EUIDB.nameplateFadeSecondaryPets then
+          FadeNameplate(frame)
+        end
       end
     else
-      frame.petIndicator:Show()
+      ShowIndicator(frame)
     end
     return
   end
@@ -143,14 +162,12 @@ function PetIndicator(frame)
         end
       end
       if isRealPet then
-        frame.petIndicator:Show()
-        return
+        ShowIndicator(frame)
       else
-        frame.petIndicator:Hide()
-      end
-      if EUIDB.nameplateFadeSecondaryPets then
-        FadeNameplate(frame)
-        return
+        HideIndicator(frame)
+        if EUIDB.nameplateFadeSecondaryPets then
+          FadeNameplate(frame)
+        end
       end
     else
       local isValidPet = false
@@ -162,28 +179,23 @@ function PetIndicator(frame)
         end
       end
       if isValidPet then
-        frame.petIndicator:Show()
-        return
-      elseif EUIDB.nameplateFadeSecondaryPets then
-       FadeNameplate(frame)
-       return
+        ShowIndicator(frame)
+      else
+        HideIndicator(frame)
+        if EUIDB.nameplateFadeSecondaryPets then
+          FadeNameplate(frame)
+        end
       end
     end
-  end
-
-  if EUIDB.nameplateFadeSecondaryPets and secondaryPets[npcID] then
-    FadeNameplate(frame)
     return
   end
 
   if mainPets[npcID] then
-    frame.petIndicator:Show()
+    ShowIndicator(frame)
   else
-    frame.petIndicator:Hide()
-  end
-
-  if frame.fadedNPC then -- Unfade any faded NPCs not re-caught above
-    frame:SetAlpha(1)
-    frame.fadedNPC = false
+    HideIndicator(frame)
+    if EUIDB.nameplateFadeSecondaryPets and secondaryPets[npcID] then
+      FadeNameplate(frame)
+    end
   end
 end
