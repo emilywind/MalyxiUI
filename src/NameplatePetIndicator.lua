@@ -109,6 +109,8 @@ function PetIndicator(frame)
       self.changingAlpha = true
       if self.unit and not UnitIsUnit(self.unit, "target") then
         self:SetAlpha(alpha)
+      elseif self.unit and UnitIsUnit(self.unit, "target") then
+        self:SetAlpha(1)
       end
       self.changingAlpha = nil
     end)
