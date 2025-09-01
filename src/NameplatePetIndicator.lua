@@ -66,24 +66,19 @@ local secondaryPets = {
 
 local function FadeNameplate(frame)
   if not UnitIsUnit(frame.unit, "target") then
-    frame.fadedNPC = true
     frame:SetAlpha(0.5)
   end
 end
 
 local function ShowIndicator(frame)
-  frame.fadedNPC = true
   frame:SetAlpha(1)
-  frame.fadedNPC = false
   if frame.petIndicator then
     frame.petIndicator:Show()
   end
 end
 
 local function HideIndicator(frame)
-  frame.fadedNCPC = true
   frame:SetAlpha(1)
-  frame.fadedNCPC = false
   if frame.petIndicator then
     frame.petIndicator:Hide()
   end
@@ -93,28 +88,13 @@ end
 function PetIndicator(frame)
   local unit = frame.displayedUnit or frame.unit
   if not unit then return end
+
   local info = GetUnitInfo(unit)
   local instanceData = GetInstanceData()
 
   if not EUIDB.nameplatePetIndicator then
-    if frame.petIndicator then
-      frame.petIndicator:Hide()
-    end
+    HideIndicator(frame)
     return
-  end
-
-  if not frame.alphaHook then
-    hooksecurefunc(frame, "SetAlpha", function(self, alpha)
-      if not self.fadedNPC or self.changingAlpha or self:IsForbidden() then return end
-      self.changingAlpha = true
-      if self.unit and not UnitIsUnit(self.unit, "target") then
-        self:SetAlpha(alpha)
-      elseif self.unit and UnitIsUnit(self.unit, "target") then
-        self:SetAlpha(1)
-      end
-      self.changingAlpha = nil
-    end)
-    frame.alphaHook = true
   end
 
   -- Initialize
