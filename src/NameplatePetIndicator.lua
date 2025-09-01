@@ -68,7 +68,6 @@ local function FadeNameplate(frame)
   if not UnitIsUnit(frame.unit, "target") then
     frame.fadedNPC = true
     frame:SetAlpha(0.5)
-    frame.petIndicator:Hide()
   end
 end
 
