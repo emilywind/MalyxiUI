@@ -52,7 +52,6 @@ end
 hooksecurefunc("CompactUnitFrame_UpdateAll", updateTextures)
 
 local function skinAura(self)
-  if self:IsForbidden() then return end
   local border = self.border
 
   local euiBorder = ApplyEuiBackdrop(self)
