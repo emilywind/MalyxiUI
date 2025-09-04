@@ -54,7 +54,7 @@ end
 local function cleanupTooltip(tip)
 	local unit = GetTooltipUnit()
 	local unitInfo = GetUnitInfo(unit)
-	if not unitInfo then return end
+	if not unitInfo.exists then return end
 	local creatureFamily = UnitCreatureFamily(unitInfo.id)
 	local creatureType = UnitCreatureType(unitInfo.id)
 
