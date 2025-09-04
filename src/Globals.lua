@@ -153,10 +153,10 @@ function GetFrameColor(unit)
     return BLACK_FRAME_COLOR
   elseif EUIDB.uiMode == 'dark' then
     return DARK_FRAME_COLOR
-  elseif EUIDB.uiMode == 'blizzard' then
-    return WHITE_FRAME_COLOR
-  else
+  elseif EUIDB.uiMode == 'light' then
     return LIGHT_FRAME_COLOR
+  else
+    return WHITE_FRAME_COLOR
   end
 end
 
