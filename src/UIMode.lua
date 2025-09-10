@@ -6,44 +6,36 @@ function ApplyUIMode(texture, unit)
 end
 
 OnPlayerLogin(function()
-  -- Minimap
   ApplyUIMode(MinimapCompassTexture)
 
-  -- Alternate Power Bar
   for _, v in ipairs({
-      PlayerFrameAlternateManaBarBorder,
-      PlayerFrameAlternateManaBarLeftBorder,
-      PlayerFrameAlternateManaBarRightBorder,
-      PetFrameTexture
+    PlayerFrameAlternateManaBarBorder,
+    PlayerFrameAlternateManaBarLeftBorder,
+    PlayerFrameAlternateManaBarRightBorder,
   }) do
-      ApplyUIMode(v, "player")
+    ApplyUIMode(v, "player")
   end
 
-  -- Player Frame
   PlayerFrame:HookScript("OnUpdate", function()
     ApplyUIMode(PlayerFrame.PlayerFrameContainer.FrameTexture, "player")
     ApplyUIMode(PlayerFrame.PlayerFrameContent.PlayerFrameContentContextual.PlayerPortraitCornerIcon, "player")
     ApplyUIMode(PlayerFrame.PlayerFrameContainer.AlternatePowerFrameTexture, "player")
   end)
 
-  -- Pet Frame
   PetFrame:HookScript("OnUpdate", function()
     ApplyUIMode(PetFrameTexture, "pet")
   end)
 
-  -- Target Frame
   TargetFrame:HookScript("OnUpdate", function()
     ApplyUIMode(TargetFrame.TargetFrameContainer.FrameTexture, "target")
     ApplyUIMode(TargetFrameToT.FrameTexture, "targettarget")
   end)
 
-  -- Focus Frame
   FocusFrame:HookScript("OnUpdate", function()
     ApplyUIMode(FocusFrame.TargetFrameContainer.FrameTexture, "focus")
     ApplyUIMode(FocusFrameToT.FrameTexture, "focustarget")
   end)
 
-  -- Totem Bar
   TotemFrame:HookScript("OnEvent", function(self)
     for totem, _ in self.totemPool:EnumerateActive() do
       ApplyUIMode(totem.Border)
@@ -67,7 +59,7 @@ OnPlayerLogin(function()
   end
 
   -- Class Resource Bars
-  local _, playerClass = UnitClass("player")
+  local playerClass = select(2, UnitClass("player"))
 
   if (playerClass == 'ROGUE') then
     -- Rogue
