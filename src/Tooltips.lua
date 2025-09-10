@@ -223,6 +223,8 @@ OnPlayerLogin(function()
     skinGameTooltip()
 		cleanupTooltip(self)
 
+		if not unitInfo.exists then return end
+
 		local level = unitInfo.level
     if (level < 0) then
       level = "??"
