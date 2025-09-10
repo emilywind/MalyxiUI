@@ -1,6 +1,6 @@
 function ApplyUIMode(texture, unit)
   local unitInfo = GetUnitInfo(unit)
-  texture:SetDesaturated(EUIDB.uiMode ~= 'blizzard' or (EUIDB.classColoredUnitFrames and unitInfo.isPlayer and unitInfo.exists))
+  texture:SetDesaturated(EUIDB.uiMode ~= 'blizzard' or (EUIDB.classColoredUnitFrames and unitInfo.isPlayer))
   local fc = GetFrameColor(unit)
   texture:SetVertexColor(fc.r, fc.g, fc.b)
 end
