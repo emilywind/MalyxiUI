@@ -37,15 +37,14 @@ local function makeEUIPortrait(frame)
   if not frame.portrait then return end
 
   local unit = frame.unit
+  local info = GetUnitInfo(unit)
+  if not info.exists then return end
 
   if EUIDB.portraitStyle == "class" then -- Flat class icons
-    if UnitIsPlayer(unit) then
-      local _, playerClass = UnitClass(unit)
-      if playerClass then
-        frame.portrait:SetTexture(EUIDB.classPortraitPack)
-        frame.portrait:SetTexCoord(unpack(FABLED_CLASS_CIRCLES_DATA.class[playerClass].texCoords))
-        makePortraitBG(frame)
-      end
+    if info.classFileName then
+      frame.portrait:SetTexture(EUIDB.classPortraitPack)
+      frame.portrait:SetTexCoord(unpack(FABLED_CLASS_CIRCLES_DATA.class[info.classFileName].texCoords))
+      makePortraitBG(frame)
     else
       frame.portrait:SetTexCoord(0.15, 0.85, 0.15, 0.85)
     end
@@ -74,14 +73,12 @@ local function makeEUIPortrait(frame)
       make3DPortraitFG(frame)
     end
 
-    local unitGuid = UnitGUID(unit)
+    if not info.guid or (unit == 'targettarget' and info.guid == frame.portraitModel.guid) then return end -- Target of Target is spammy and needs this protection
 
-    if not unitGuid or (unit == 'targettarget' and unitGuid == frame.portraitModel.guid) then return end -- Target of Target is spammy and needs this protection
+    frame.portraitModel.guid = info.guid
 
-    frame.portraitModel.guid = unitGuid
-
-    -- The players not in range so swap to question mark
-    if not UnitIsVisible(unit) or not UnitIsConnected(unit) then
+    -- The player is not in range so swap to question mark
+    if not info.isVisible or not info.isConnected then
       frame.portraitModel:ClearModel()
       frame.portraitModel:SetModelScale(5.5)
       resetCamera(frame.portraitModel)

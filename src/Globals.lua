@@ -300,7 +300,6 @@ function GetUnitInfo(unit)
   info.isEnemy = (info.reaction and info.reaction < 4) and not info.isSelf
   info.isNeutral = (info.reaction and info.reaction == 4) and not info.isSelf
   info.isFriend = (info.reaction and info.reaction >= 5) and not info.isSelf
-  info.playerClass = select(2, UnitClass("player"))
   info.sex = UnitSex(unit)
   info.tapDenied = UnitIsTapDenied(unit)
   info.playerControlled = UnitPlayerControlled(unit)
@@ -310,6 +309,7 @@ function GetUnitInfo(unit)
   info.family = UnitCreatureFamily(unit)
   info.type = UnitCreatureType(unit)
   info.isConnected = UnitIsConnected(unit)
+  info.isVisible = UnitIsVisible(unit)
 
   return info
 end
