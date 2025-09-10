@@ -309,6 +309,7 @@ function GetUnitInfo(unit)
   info.race = UnitRace(unit)
   info.family = UnitCreatureFamily(unit)
   info.type = UnitCreatureType(unit)
+  info.isConnected = UnitIsConnected(unit)
 
   return info
 end

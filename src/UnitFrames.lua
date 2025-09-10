@@ -9,12 +9,11 @@ OnPlayerLogin(function()
     local unit = healthbar.unit
     if not unit then return end
     local unitInfo = GetUnitInfo(unit)
-    local isConnected = UnitIsConnected(unit)
 
     healthbar:SetStatusBarDesaturated(1)
     local healthColor = GetUnitHealthColor(unit)
 
-    if unitInfo.isPlayer and not isConnected then
+    if unitInfo.isPlayer and not unitInfo.isConnected then
       healthbar:SetStatusBarColor(0.5, 0.5, 0.5)
     else
       healthbar:SetStatusBarColor(healthColor.r, healthColor.g, healthColor.b)
