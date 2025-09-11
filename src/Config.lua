@@ -36,6 +36,7 @@ EUIDBDefaults = {
   tooltipShowMount = true, -- Show mount information in tooltips
   tooltipShowMythicPlus = true, -- Show Mythic+ information in tooltips
   tooltipHideHealthBar = false, -- Hide the health bar in tooltips
+  tooltipShowSpellIds = false, -- Show spell IDs in spell tooltips
 
   -- Nameplate Settings
   skinNameplates = true,
@@ -986,6 +987,17 @@ local function setupEuiOptions()
     EUI_Tooltips
   )
 
+  local tooltipShowSpellIds = newCheckbox(
+    "Show Spell IDs",
+    "Show spell IDs in tooltips.",
+    EUIDB.tooltipShowSpellIds,
+    function(value)
+      EUIDB.tooltipShowSpellIds = value
+    end,
+    tooltipHideHealthBar,
+    EUI_Tooltips
+  )
+
   function DisableTooltipSettings()
     tooltipAnchorDropdown:Disable()
     tooltipSpecAndIlvl:Disable()
@@ -993,6 +1005,7 @@ local function setupEuiOptions()
     classColoredName:Disable()
     showMythicPlus:Disable()
     tooltipHideHealthBar:Disable()
+    tooltipShowSpellIds:Disable()
   end
 
   function EnableTooltipSettings()
@@ -1002,6 +1015,7 @@ local function setupEuiOptions()
     classColoredName:Enable()
     showMythicPlus:Enable()
     tooltipHideHealthBar:Enable()
+    tooltipShowSpellIds:Enable()
   end
 
   if

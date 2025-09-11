@@ -212,6 +212,29 @@ OnPlayerLogin(function()
 
   skinGameTooltip()
 
+	if EUIDB.tooltipShowSpellIds then
+		local function spellid(self, unit, index, filter)
+			local id
+			if unit then
+				local aura = C_UnitAuras.GetAuraDataByIndex(unit, index, filter)
+				id = aura and aura.spellId
+			else
+				id = select(2, self:GetSpell())
+			end
+			if id then
+				self:AddLine(" ")
+				self:AddLine("ID: " .. id)
+			end
+			self:Show()
+		end
+		hooksecurefunc(GameTooltip, "SetUnitAura", spellid)
+		hooksecurefunc(GameTooltip, "SetUnitBuff", spellid)
+		hooksecurefunc(GameTooltip, "SetUnitDebuff", spellid)
+		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Spell, function(self)
+			spellid(self)
+		end)
+	end
+
 	-- Class colors
 	local function onTooltipSetUnit(self)
     if self ~= GameTooltip then return end
