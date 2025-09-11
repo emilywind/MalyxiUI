@@ -58,6 +58,7 @@ OnPlayerLogin(function()
     [135002] = { 265187, 15 }, -- Demonic Tyrant
     [179193] = { 353601, 15 }, -- Fel Obelisk
     [107100] = { 201996, 20 }, -- Call Observer
+    [103673] = { 205180, 20 }, -- Darkglare
   }
 
   local function CreateIcon(nameplate)
