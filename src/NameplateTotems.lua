@@ -2,7 +2,7 @@
 OnPlayerLogin(function()
   if
     not EUIDB.skinNameplates
-    or not EUIDB.nameplateTotems
+    or EUIDB.nameplateTotemIndicators == "none"
   then
     return
   end
@@ -22,24 +22,17 @@ OnPlayerLogin(function()
     return tonumber(npcID)
   end
 
-  local totemNpcIDs = {
+  local importantTotemNpcIDs = {
     -- [npcID] = { spellID, duration }
     [5913] = { 8143, 10 }, -- Tremor
     [5925] = { 204336, 3 }, -- Grounding
     [53006] = { 98008, 6 }, -- Spirit Link
     [59764] = { 108280, 12 }, -- Healing Tide
     [61245] = { 192058, 2 }, -- Static Charge
-    [100943] = { 198838, 15 }, -- Earthen Wall
     [97285] = { 192077, 15 }, -- Wind Rush
     [105451] = { 204331, 15 }, -- Counterstrike
     [105427] = { 204330, 15 }, -- Skyfury
     [179867] = { 355580, 6 }, -- Static Field
-
-    -- Less important totems
-    [2630] = { 2484, 20 },   -- Earthbind
-    [60561] = { 51485, 20 }, -- Earthgrab
-    [3527] = { 5394, 15 },   -- Healing Stream
-    [6112] = { 8512, 120 },  -- Windfury
 
     -- Warrior
     [119052] = { 236320, 15 }, -- War Banner
@@ -54,6 +47,22 @@ OnPlayerLogin(function()
     [107100] = { 201996, 20 }, -- Call Observer
     [103673] = { 205180, 20 }, -- Darkglare
   }
+
+  local lessImportantTotemNpcIDs = {
+    -- Less important totems
+    [2630] = { 2484, 20 },     -- Earthbind
+    [60561] = { 51485, 20 },   -- Earthgrab
+    [3527] = { 5394, 15 },     -- Healing Stream
+    [6112] = { 8512, 120 },    -- Windfury
+    [100943] = { 198838, 15 }, -- Earthen Wall
+  }
+
+  local totemNpcIDs = importantTotemNpcIDs
+  if EUIDB.nameplateTotemIndicators == "all" then
+    for k, v in pairs(lessImportantTotemNpcIDs) do
+      totemNpcIDs[k] = v
+    end
+  end
 
   local function CreateIcon(nameplate)
     local frame = CreateFrame("Frame", nil, nameplate)

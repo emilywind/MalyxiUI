@@ -51,7 +51,7 @@ EUIDBDefaults = {
   nameplateHideCastText = false,
   nameplateShowLevel = true,
   nameplateHealthPercent = true,
-  nameplateTotems = true,
+  nameplateTotemIndicators = 'important', -- 'all', 'important', or 'none'
   nameplateHideClassificationIcon = true,
   nameplateHideFriendlyHealthbars = true,
   nameplateFriendlyClickthrough = true,
@@ -554,7 +554,7 @@ local function setupEuiOptions()
   scrollFrame:SetPoint("TOPLEFT", EUI_Nameplates, "TOPLEFT", 0, 0)
 
   local Nameplate_Content = CreateFrame("Frame", nil, scrollFrame)
-  Nameplate_Content:SetSize(640, 860) -- Height should fit all your content
+  Nameplate_Content:SetSize(640, 900) -- Height should fit all your content
   scrollFrame:SetScrollChild(Nameplate_Content)
 
   local nameplateText = Nameplate_Content:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
@@ -675,16 +675,17 @@ local function setupEuiOptions()
     Nameplate_Content
   )
 
-  local nameplateTotems = newCheckbox(
-    "Show icon above Totems, Warbanner, Psyfied, and Demonic Tyrant",
-    "Show icon above key NPCs",
-    EUIDB.nameplateTotems,
+  local nameplateTotemIndicators, nameplateTotemIndicatorsDropdown = newDropdown(
+    "Totem/Important Pet (Psyfiend, Demonic Tyrant, etc.) Indicators",
+    { ["none"] = "None", ["all"] = "All", ["important"] = "Important" },
+    EUIDB.nameplateTotemIndicators,
+    120,
     function(value)
-      EUIDB.nameplateTotems = value
+      EUIDB.nameplateTotemIndicators = value
     end,
-    nameplateShowHealth,
     Nameplate_Content
   )
+  nameplateTotemIndicators:SetPoint("TOPLEFT", nameplateShowHealth, "BOTTOMLEFT", 0, -16)
 
   local arenaNumbers = newCheckbox(
     "Show Arena Numbers on nameplates in arenas",
@@ -693,9 +694,11 @@ local function setupEuiOptions()
     function(value)
       EUIDB.arenaNumbers = value
     end,
-    nameplateTotems,
+    nameplateTotemIndicators,
     Nameplate_Content
   )
+  arenaNumbers:ClearAllPoints()
+  arenaNumbers:SetPoint("TOPLEFT", nameplateTotemIndicators, "BOTTOMLEFT", 0, -48)
 
   local nameplateHideCastText = newCheckbox(
     "Hide Nameplate Cast Text",
@@ -844,7 +847,7 @@ local function setupEuiOptions()
     nameplateFriendlySmall:Disable()
     nameplateShowLevel:Disable()
     nameplateShowHealth:Disable()
-    nameplateTotems:Disable()
+    nameplateTotemIndicatorsDropdown:Disable()
     arenaNumbers:Disable()
     nameplateHideCastText:Disable()
     nameplateHideFriendlyHealthbars:Disable()
@@ -869,7 +872,7 @@ local function setupEuiOptions()
     nameplateFriendlySmall:Enable()
     nameplateShowLevel:Enable()
     nameplateShowHealth:Enable()
-    nameplateTotems:Enable()
+    nameplateTotemIndicatorsDropdown:Enable()
     arenaNumbers:Enable()
     nameplateHideCastText:Enable()
     nameplateHideFriendlyHealthbars:Enable()
