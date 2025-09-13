@@ -48,7 +48,6 @@ OnPlayerLogin(function()
   }
 
   local lessImportantTotemNpcIDs = {
-    -- Less important totems
     [2630] = { 2484, 20 },     -- Earthbind
     [60561] = { 51485, 20 },   -- Earthgrab
     [3527] = { 5394, 15 },     -- Healing Stream
