@@ -79,23 +79,23 @@ local function skinSpellFlyout()
   end
 end
 
+local function hideHotKeys()
+  for i = 1, 12 do
+    updateHotkey(_G["ActionButton" .. i])
+    updateHotkey(_G["MultiBarBottomLeftButton" .. i])
+    updateHotkey(_G["MultiBarBottomRightButton" .. i])
+    updateHotkey(_G["MultiBarLeftButton" .. i])
+    updateHotkey(_G["MultiBarRightButton" .. i])
+  end
+  for i = 1, 10 do
+    updateHotkey(_G["StanceButton" .. i])
+    updateHotkey(_G["PetActionButton" .. i])
+  end
+  updateHotkey(ExtraActionButton1)
+end
+
 local function applyHooks()
   if EUIDB.hideHotkeys then
-    local function hideHotKeys()
-      for i = 1, 12 do
-        updateHotkey(_G["ActionButton" .. i])
-        updateHotkey(_G["MultiBarBottomLeftButton" .. i])
-        updateHotkey(_G["MultiBarBottomRightButton" .. i])
-        updateHotkey(_G["MultiBarLeftButton" .. i])
-        updateHotkey(_G["MultiBarRightButton" .. i])
-      end
-      for i = 1, 10 do
-        updateHotkey(_G["StanceButton" .. i])
-        updateHotkey(_G["PetActionButton" .. i])
-      end
-      updateHotkey(ExtraActionButton1)
-    end
-
     OnEvent("UPDATE_BINDINGS", hideHotKeys)
 
     hideHotKeys()
