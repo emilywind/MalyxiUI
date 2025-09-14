@@ -51,7 +51,7 @@ OnPlayerLogin(function()
 
     local healthBar = frame.healthBar
     local healthPercentage = ceil((UnitHealth(unit) / UnitHealthMax(unit) * 100))
-    local isPersonal = C_NamePlate.GetNamePlateForUnit(unit) == C_NamePlate.GetNamePlateForUnit("player")
+    local isPersonal = GetSafeNameplate(unit) == GetSafeNameplate("player")
     local healthColor = GetUnitHealthColor(unit)
 
     if isPersonal then

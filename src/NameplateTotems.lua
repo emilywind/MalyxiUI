@@ -82,7 +82,7 @@ OnPlayerLogin(function()
   end
 
   function f.NAME_PLATE_UNIT_ADDED(unit)
-    local np = C_NamePlate.GetNamePlateForUnit(unit)
+    local np = GetSafeNameplate(unit)
     local guid = UnitGUID(unit)
 
     if not np or not guid then return end
@@ -112,7 +112,7 @@ OnPlayerLogin(function()
   end
 
   function f.NAME_PLATE_UNIT_REMOVED(unit)
-    local np = C_NamePlate.GetNamePlateForUnit(unit)
+    local np = GetSafeNameplate(unit)
 
     if not np then return end
 
