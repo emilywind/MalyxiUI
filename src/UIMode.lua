@@ -5,7 +5,7 @@ function ApplyUIMode(texture, unit)
   texture:SetVertexColor(fc.r, fc.g, fc.b)
 end
 
-OnPlayerLogin(function()
+function ApplyStaticUIMode()
   ApplyUIMode(MinimapCompassTexture)
 
   for _, v in ipairs({
@@ -15,6 +15,10 @@ OnPlayerLogin(function()
   }) do
     ApplyUIMode(v, "player")
   end
+end
+
+OnPlayerLogin(function()
+  ApplyStaticUIMode()
 
   PlayerFrame:HookScript("OnUpdate", function()
     ApplyUIMode(PlayerFrame.PlayerFrameContainer.FrameTexture, "player")

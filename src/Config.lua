@@ -328,6 +328,9 @@ local function setupEuiOptions()
     80,
     function(value)
       EUIDB.uiMode = value
+      StyleActionBars()
+      ApplyStaticUIMode()
+      SkinVigorBar()
     end
   )
   uiModeChooser:SetPoint("TOPLEFT", euiTitle, "BOTTOMLEFT", 0, -16)

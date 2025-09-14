@@ -1,4 +1,4 @@
-local function skinVigorBar(frame)
+local function skinVigorBarFrame(frame)
   if frame then
     frame:SetDesaturated(true)
 
@@ -18,27 +18,31 @@ local function skinVigorBar(frame)
   end
 end
 
+function SkinVigorBar()
+  for _, child in ipairs({ UIWidgetPowerBarContainerFrame:GetChildren() }) do
+    if child.DecorLeft and child.DecorLeft.GetAtlas then
+      local atlasName = child.DecorLeft:GetAtlas()
+      if atlasName == "dragonriding_vigor_decor" then
+        skinVigorBarFrame(child.DecorLeft)
+        skinVigorBarFrame(child.DecorRight)
+      end
+    end
+    for _, grandchild in ipairs({ child:GetChildren() }) do
+      if grandchild.Frame and grandchild.Frame.GetAtlas then
+        local atlasName = grandchild.Frame:GetAtlas()
+        if atlasName == "dragonriding_vigor_frame" then
+          skinVigorBarFrame(grandchild.Frame)
+        end
+      end
+    end
+  end
+end
+
 OnEvents({
   "PLAYER_MOUNT_DISPLAY_CHANGED",
   "PLAYER_ENTERING_WORLD"
 }, function()
   C_Timer.After(0.1, function() -- Delay to ensure UIWidgetPowerBarContainerFrame is fully loaded
-    for _, child in ipairs({ UIWidgetPowerBarContainerFrame:GetChildren() }) do
-      if child.DecorLeft and child.DecorLeft.GetAtlas then
-        local atlasName = child.DecorLeft:GetAtlas()
-        if atlasName == "dragonriding_vigor_decor" then
-          skinVigorBar(child.DecorLeft)
-          skinVigorBar(child.DecorRight)
-        end
-      end
-      for _, grandchild in ipairs({ child:GetChildren() }) do
-        if grandchild.Frame and grandchild.Frame.GetAtlas then
-          local atlasName = grandchild.Frame:GetAtlas()
-          if atlasName == "dragonriding_vigor_frame" then
-            skinVigorBar(grandchild.Frame)
-          end
-        end
-      end
-    end
+    SkinVigorBar()
   end)
 end)
