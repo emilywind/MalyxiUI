@@ -1,39 +1,67 @@
+-------------------------------
+-- Class Colored Health Bars --
+-------------------------------
+local function setUnitColor(healthbar)
+  local unit = healthbar.unit
+  if not unit then return end
+  local unitInfo = GetUnitInfo(unit)
+
+  healthbar:SetStatusBarDesaturated(1)
+  local healthColor = GetUnitHealthColor(unit)
+
+  if unitInfo.isPlayer and not unitInfo.isConnected then
+    healthbar:SetStatusBarColor(0.5, 0.5, 0.5)
+  else
+    healthbar:SetStatusBarColor(healthColor.r, healthColor.g, healthColor.b)
+  end
+end
+
+------------------------------------------
+-- Buffs/Debuffs on Target/Focus Frames --
+------------------------------------------
+local function applyAuraSkin(aura)
+  if aura.border and aura.Border then
+    aura.Border:SetAlpha(1)
+    SetEuiBorderColor(aura.border, aura.Border:GetVertexColor())
+    aura.Border:SetAlpha(0)
+  end
+
+  if aura.euiClean then return end
+
+  --icon
+  local icon = aura.Icon
+  StyleIcon(icon)
+
+  --border
+  local border = ApplyEuiBackdrop(icon, aura)
+  aura.border = border
+
+  if aura.Border then
+    SetEuiBorderColor(border, aura.Border:GetVertexColor())
+    aura.Border:SetAlpha(0)
+  else
+    SetEuiBorderColor(border, 0, 0, 0)
+  end
+
+  aura.euiClean = true
+end
+
 OnPlayerLogin(function()
-  -------------------
-  -- Class Colours --
-  -------------------
   TargetFrame.TargetFrameContent.TargetFrameContentMain.ReputationColor:Hide()
   FocusFrame.TargetFrameContent.TargetFrameContentMain.ReputationColor:Hide()
 
-  local function setUnitColour(healthbar)
-    local unit = healthbar.unit
-    if not unit then return end
-    local unitInfo = GetUnitInfo(unit)
-
-    healthbar:SetStatusBarDesaturated(1)
-    local healthColor = GetUnitHealthColor(unit)
-
-    if unitInfo.isPlayer and not unitInfo.isConnected then
-      healthbar:SetStatusBarColor(0.5, 0.5, 0.5)
-    else
-      healthbar:SetStatusBarColor(healthColor.r, healthColor.g, healthColor.b)
-    end
-  end
-
-  hooksecurefunc("UnitFrameHealthBar_Update", setUnitColour)
-  hooksecurefunc("HealthBar_OnValueChanged", setUnitColour)
+  hooksecurefunc("UnitFrameHealthBar_Update", setUnitColor)
+  hooksecurefunc("HealthBar_OnValueChanged", setUnitColor)
 
   hooksecurefunc(TargetFrame, "OnEvent", function(self)
-    -- Style Buffs & Debuffs
     for aura, _ in self.auraPools:EnumerateActive() do
-      ApplyAuraSkin(aura)
+      applyAuraSkin(aura)
     end
   end)
 
   hooksecurefunc(FocusFrame, "OnEvent", function(self)
-    -- Style Buffs & Debuffs
     for aura, _ in self.auraPools:EnumerateActive() do
-      ApplyAuraSkin(aura)
+      applyAuraSkin(aura)
     end
   end)
 
