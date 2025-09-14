@@ -12,7 +12,7 @@ OnPlayerLogin(function()
     "NAME_PLATE_UNIT_REMOVED",
     "COMBAT_LOG_EVENT_UNFILTERED"
   }, function(self, event, ...)
-    return self[event](self, event, ...)
+    return self[event](...)
   end)
 
   local totemStartTimes = setmetatable({}, { __mode = "v" })
@@ -81,7 +81,7 @@ OnPlayerLogin(function()
     return frame
   end
 
-  function f.NAME_PLATE_UNIT_ADDED(self, event, unit)
+  function f.NAME_PLATE_UNIT_ADDED(unit)
     local np = C_NamePlate.GetNamePlateForUnit(unit)
     local guid = UnitGUID(unit)
 
@@ -111,7 +111,7 @@ OnPlayerLogin(function()
     end
   end
 
-  function f.NAME_PLATE_UNIT_REMOVED(self, event, unit)
+  function f.NAME_PLATE_UNIT_REMOVED(unit)
     local np = C_NamePlate.GetNamePlateForUnit(unit)
 
     if not np then return end
@@ -121,15 +121,13 @@ OnPlayerLogin(function()
     end
   end
 
-  function f:COMBAT_LOG_EVENT_UNFILTERED(event, unit)
-    local timestamp, eventType, hideCaster,
-    srcGUID, srcName, srcFlags, srcFlags2,
-    dstGUID, dstName, dstFlags, dstFlags2 = CombatLogGetCurrentEventInfo()
+  function f:COMBAT_LOG_EVENT_UNFILTERED()
+    local _, subevent, _, _, _, _, _, destGUID = CombatLogGetCurrentEventInfo()
 
-    if eventType == "SPELL_SUMMON" then
-      local npcID = GetNPCIDFromGUID(dstGUID)
+    if subevent == "SPELL_SUMMON" then
+      local npcID = GetNPCIDFromGUID(destGUID)
       if npcID and totemNpcIDs[npcID] then
-        totemStartTimes[dstGUID] = GetTime()
+        totemStartTimes[destGUID] = GetTime()
       end
     end
   end
