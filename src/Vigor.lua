@@ -32,7 +32,6 @@ OnEvents({
         end
       end
       for _, grandchild in ipairs({ child:GetChildren() }) do
-        -- Check for textures with specific atlas names
         if grandchild.Frame and grandchild.Frame.GetAtlas then
           local atlasName = grandchild.Frame:GetAtlas()
           if atlasName == "dragonriding_vigor_frame" then
