@@ -20,7 +20,7 @@ OnPlayerLogin(function()
 		local newLootSpecId = GetLootSpecialization()
 		local lootIcon = ''
 
-		if (lootSpecId ~= newLootSpecId or (lootSpecId == 0 and event == "PLAYER_TALENT_UPDATE")) then
+		if lootSpecId ~= newLootSpecId or (lootSpecId == 0 and event == "PLAYER_TALENT_UPDATE") then
 			lootSpecId = newLootSpecId
 
 			if lootSpecId ~= 0 then
