@@ -1144,6 +1144,7 @@ local function setupEuiOptions()
     200,
     function(value)
       EUIDB.chatFont = value
+      SetupChatPosAndFont()
     end,
     chatOnTop
   )
@@ -1158,7 +1159,11 @@ local function setupEuiOptions()
     1,
     "Font size for Chat",
     chatFontDropdown,
-    EUI_Misc
+    EUI_Misc,
+    function(value)
+      EUIDB.chatFontSize = value
+      SetupChatPosAndFont()
+    end
   )
   chatFontSize:ClearAllPoints()
   chatFontSize:SetPoint("LEFT", chatFontDropdown, "RIGHT", 220, 0)

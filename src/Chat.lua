@@ -167,7 +167,7 @@ OnPlayerLogin(function()
     end
   end
 
-  local function SetupChatPosAndFont()
+  function SetupChatPosAndFont()
     for i = 1, NUM_CHAT_WINDOWS do
       local chat = _G[format("ChatFrame%s", i)]
       local id = chat:GetID()
