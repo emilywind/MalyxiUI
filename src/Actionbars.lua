@@ -29,6 +29,8 @@ local function styleActionButton(bu)
 
   if EUIDB.hideMacroText then
     na:Hide()
+  else
+    na:Show()
   end
 
   if not nt then
@@ -50,8 +52,10 @@ end
 
 local function updateHotkey(self)
   local ho = _G[self:GetName() .. "HotKey"]
-  if ho and ho:IsShown() then
+  if EUIDB.hideHotkeys and ho and ho:IsShown() then
     ho:Hide()
+  elseif not EUIDB.hideHotkeys and ho and not ho:IsShown() then
+    ho:Show()
   end
 end
 
@@ -79,7 +83,7 @@ local function skinSpellFlyout()
   end
 end
 
-local function hideHotKeys()
+local function toggleHotKeys()
   for i = 1, 12 do
     updateHotkey(_G["ActionButton" .. i])
     updateHotkey(_G["MultiBarBottomLeftButton" .. i])
@@ -95,11 +99,7 @@ local function hideHotKeys()
 end
 
 local function applyHooks()
-  if EUIDB.hideHotkeys then
-    OnEvent("UPDATE_BINDINGS", hideHotKeys)
-
-    hideHotKeys()
-  end
+  OnEvent("UPDATE_BINDINGS", toggleHotKeys)
 
   SpellFlyout:HookScript("OnSizeChanged", function()
     skinSpellFlyout()
@@ -133,6 +133,8 @@ function StyleActionBars()
   for i = 1, StanceBar.numButtons do
     styleActionButton(_G["StanceButton" .. i])
   end
+
+  toggleHotKeys()
 end
 
 OnEvents({

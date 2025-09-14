@@ -1060,6 +1060,7 @@ local function setupEuiOptions()
     EUIDB.hideHotkeys,
     function(value)
       EUIDB.hideHotkeys = value
+      StyleActionBars()
     end,
     miscSectionText,
     EUI_Misc
@@ -1071,6 +1072,7 @@ local function setupEuiOptions()
     EUIDB.hideMacroText,
     function(value)
       EUIDB.hideMacroText = value
+      StyleActionBars()
     end,
     hideHotkeys,
     EUI_Misc
