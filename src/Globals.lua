@@ -357,7 +357,7 @@ local function GetLocalizedSpecs()
   local specs = {}
 
   for classID = 1, GetNumClasses() do
-    local _, class = GetClassInfo(classID)
+    local class = select(2, GetClassInfo(classID))
     local classMale = LOCALIZED_CLASS_NAMES_MALE[class]
     local classFemale = LOCALIZED_CLASS_NAMES_FEMALE[class]
 
