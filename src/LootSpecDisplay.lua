@@ -23,11 +23,11 @@ OnPlayerLogin(function()
 		if (lootSpecId ~= newLootSpecId or (not LootSpecId and event == "PLAYER_TALENT_UPDATE")) then
 			lootSpecId = newLootSpecId
 
-			if lootSpecId ~= 0 then
-				_,_,_,lootIcon = GetSpecializationInfoByID(lootSpecId)
-			else
-				_,_,_,lootIcon = GetSpecializationInfo(GetSpecialization())
+			if lootSpecId == 0 then
+				lootSpecId = GetSpecialization()
 			end
+
+			lootIcon = select(4, GetSpecializationInfoByID(lootSpecId))
 
 			if not lootIcon then return end
 
