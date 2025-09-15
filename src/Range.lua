@@ -91,14 +91,5 @@ OnPlayerLogin(function()
     end
   end
 
-  for i = 1, NUM_ACTIONBAR_BUTTONS do
-    registerButtonRange(_G["ActionButton" .. i])
-    registerButtonRange(_G["MultiBarBottomLeftButton" .. i])
-    registerButtonRange(_G["MultiBarBottomRightButton" .. i])
-    for k = 5, 7 do
-      registerButtonRange(_G["MultiBar" .. k .. "Button" .. i])
-    end
-    registerButtonRange(_G["MultiBarRightButton" .. i])
-    registerButtonRange(_G["MultiBarLeftButton" .. i])
-  end
+  DoToActionButtons(registerButtonRange)
 end)

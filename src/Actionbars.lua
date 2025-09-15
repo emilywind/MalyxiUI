@@ -52,7 +52,7 @@ local function skinSpellFlyout()
   end
 end
 
-local function doToActionButtons(func)
+function DoToActionButtons(func, allButtons)
   for i = 1, NUM_ACTIONBAR_BUTTONS do
     func(_G["ActionButton" .. i])
     func(_G["MultiBarBottomLeftButton" .. i])
@@ -63,6 +63,8 @@ local function doToActionButtons(func)
       func(_G["MultiBar" .. k .. "Button" .. i])
     end
   end
+
+  if not allButtons then return end
 
   for i = 1, 6 do
     func(_G["OverrideActionBarButton" .. i])
@@ -84,11 +86,11 @@ local function doToActionButtons(func)
 end
 
 local function updateHotkeys()
-  doToActionButtons(updateHotkey)
+  DoToActionButtons(updateHotkey, true)
 end
 
 function StyleActionBars()
-  doToActionButtons(styleActionButton)
+  DoToActionButtons(styleActionButton, true)
 
   updateHotkeys()
 end
