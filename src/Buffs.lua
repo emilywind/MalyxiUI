@@ -1,20 +1,10 @@
-local function applySkin(aura, isDebuff)
-  local debuffBorder = aura.DebuffBorder -- This exists on buffs too, so we need to pass isDebuff
-
-  if isDebuff and aura.border then
-    debuffBorder:SetAlpha(1)
-    SetEuiBorderColor(aura.border, debuffBorder:GetVertexColor())
-    debuffBorder:SetAlpha(0)
-  end
-
+local function applySkin(aura)
   local duration = aura.Duration
   if duration then
     local point, relativeTo, relativePoint, xOfs = duration:GetPoint()
     local yOfs = point == "TOP" and -3 or 3
     duration:SetPoint(point, relativeTo, relativePoint, xOfs, yOfs)
   end
-
-  if aura.euiClean then return end
 
   if aura.TempEnchantBorder then aura.TempEnchantBorder:Hide() end
 
@@ -25,28 +15,27 @@ local function applySkin(aura, isDebuff)
 
   aura.border = border
 
-  if aura.Border then
-    SetEuiBorderColor(border, aura.Border:GetVertexColor())
-    aura.Border:Hide()
-  else
+  local debuffBorder = aura.DebuffBorder
+  debuffBorder:SetAlpha(1)
+  local debuffColor = CreateColor(debuffBorder:GetVertexColor())
+  debuffBorder:SetAlpha(0)
+
+  local isBuff = debuffColor.r == 1 and debuffColor.g == 1 and debuffColor.b == 1
+
+  if isBuff then
     SetEuiBorderColor(border, 0, 0, 0)
+  else
+    SetEuiBorderColor(border, debuffColor.r, debuffColor.g, debuffColor.b)
   end
-
-  if isDebuff then
-    SetEuiBorderColor(border, debuffBorder:GetVertexColor())
-    debuffBorder:SetAlpha(0)
-  end
-
-  aura.euiClean = true
 end
 
-local function updateAuras(self, isDebuff)
+local function updateAuras(self)
   for _, aura in pairs(self.auraFrames) do
     if not aura.Icon.SetTexCoord then return end
 
-    applySkin(aura, isDebuff)
+    applySkin(aura)
   end
 end
 
-hooksecurefunc(BuffFrame, "UpdateAuraButtons", function(self) updateAuras(self, false) end)
-hooksecurefunc(DebuffFrame, "UpdateAuraButtons", function(self) updateAuras(self, true) end)
+hooksecurefunc(BuffFrame, "UpdateAuraButtons", updateAuras)
+hooksecurefunc(DebuffFrame, "UpdateAuraButtons", updateAuras)
