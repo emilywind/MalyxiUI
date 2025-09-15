@@ -1,15 +1,3 @@
-local function applyEuiButtonSkin(bu)
-  if not bu then return end
-
-  local nt = bu:GetNormalTexture()
-
-  if not nt then return end
-
-  ApplyUIMode(nt)
-
-  return bu.border
-end
-
 local function styleActionButton(bu)
   if not bu then return end
 
@@ -22,7 +10,11 @@ local function styleActionButton(bu)
     na:Show()
   end
 
-  applyEuiButtonSkin(bu)
+  local nt = bu:GetNormalTexture()
+
+  if not nt then return end
+
+  ApplyUIMode(nt)
 end
 
 local function updateHotkey(self)
