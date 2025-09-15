@@ -93,11 +93,12 @@ OnPlayerLogin(function()
     local npcID = GetNPCIDFromGUID(guid)
 
     if npcID and totemNpcIDs[npcID] then
-      if not np.totemIcon then
-        np.totemIcon = CreateIcon(np)
+      local iconFrame = np.totemIcon
+      if not iconFrame then
+        iconFrame = CreateIcon(np)
+        np.totemIcon = iconFrame
       end
 
-      local iconFrame = np.totemIcon
       iconFrame:Show()
 
       local totemData = totemNpcIDs[npcID]
