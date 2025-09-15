@@ -32,9 +32,8 @@ function frame:UNIT_AURA()
 end
 
 function frame:PLAYER_ENTERING_WORLD()
-	if not EUIDB.dampeningDisplay then return end
 	local instanceInfo = GetInstanceData()
-	if instanceInfo.isInArena then
+	if instanceInfo.isInArena and EUIDB.dampeningDisplay then
 		self:RegisterUnitEvent("UNIT_AURA", "player")
 	else
 		self:UnregisterEvent("UNIT_AURA")
