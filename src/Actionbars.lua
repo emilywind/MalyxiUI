@@ -10,16 +10,6 @@ local function applyEuiButtonSkin(bu)
   return bu.border
 end
 
-local function styleExtraActionButton(bu)
-  if not bu then return end
-
-  local icon = bu.icon or bu.Icon
-
-  StyleIcon(icon)
-
-  applyEuiButtonSkin(bu)
-end
-
 local function styleActionButton(bu)
   if not bu then return end
 
@@ -107,8 +97,6 @@ end
 
 function StyleActionBars()
   doToActionButtons(styleActionButton)
-
-  styleExtraActionButton(ExtraActionButton1)
 
   toggleHotKeys()
 end
