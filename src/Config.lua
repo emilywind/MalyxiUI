@@ -307,12 +307,15 @@ local function setupEuiOptions()
 
   local function addReloadButton(frame)
     local reload = CreateFrame("Button", "reload", frame, "UIPanelButtonTemplate")
-    reload:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -10, 10)
+    reload:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -10, -10)
     reload:SetSize(100,22)
     reload:SetText("Reload")
     reload:SetScript("OnClick", function()
       ReloadUI()
     end)
+    reload:Hide()
+
+    return reload
   end
 
   local version = C_AddOns.GetAddOnMetadata("EmsUI", "Version")
@@ -578,6 +581,7 @@ local function setupEuiOptions()
     EUIDB.skinNameplates,
     function(value)
       EUIDB.skinNameplates = value
+      Nameplate_Reload:Show()
       if value then
         EnableNameplateSettings()
       else
@@ -931,6 +935,7 @@ local function setupEuiOptions()
     EUIDB.enhanceTooltips,
     function(value)
       EUIDB.enhanceTooltips = value
+      Tooltips_Reload:Show()
       if value then
         EnableTooltipSettings()
       else
@@ -1150,6 +1155,7 @@ local function setupEuiOptions()
     EUIDB.chatTop,
     function(value)
       EUIDB.chatTop = value
+      ReloadChats()
     end,
     autoRepairOptions,
     EUI_Misc
@@ -1163,7 +1169,7 @@ local function setupEuiOptions()
     200,
     function(value)
       EUIDB.chatFont = value
-      SetupChatPosAndFont()
+      ReloadChats()
     end,
     chatOnTop
   )
@@ -1181,7 +1187,7 @@ local function setupEuiOptions()
     EUI_Misc,
     function(value)
       EUIDB.chatFontSize = value
-      SetupChatPosAndFont()
+      ReloadChats()
     end
   )
   chatFontSize:ClearAllPoints()
@@ -1325,10 +1331,8 @@ local function setupEuiOptions()
     ReloadUI()
   end)
 
-  addReloadButton(EUI.panel)
-  addReloadButton(Nameplate_Content)
-  addReloadButton(EUI_Tooltips)
-  addReloadButton(EUI_Misc)
+  Nameplate_Reload = addReloadButton(Nameplate_Content)
+  Tooltips_Reload = addReloadButton(EUI_Tooltips)
 
   -------------------
   -- Slash Command --

@@ -53,6 +53,8 @@ OnPlayerLogin(function()
     SetHyperlink(self, link, ...)
   end
 
+  local chatFrames = {}
+
   CHAT_FRAME_FADE_TIME = 0.3
   CHAT_FRAME_FADE_OUT_TIME = 1
   CHAT_TAB_HIDE_DELAY = 0.3
@@ -64,6 +66,10 @@ OnPlayerLogin(function()
     local id = frame:GetID()
     local chatName = frame:GetName()
     local chat = _G[chatName]
+
+    if not chatFrames[chatName] then
+      chatFrames[chatName] = frame
+    end
 
     chat:SetFrameLevel(5)
 
@@ -156,7 +162,16 @@ OnPlayerLogin(function()
     -- Hide edit box every time we click on a tab
     chatTab:HookScript("OnClick", function() editBox:Hide() end)
 
-    frame.skinned = true
+    local fontSize = EUIDB.chatFontSize
+
+    -- Min. size for chat font
+    if fontSize < 8 then
+      FCF_SetChatWindowFontSize(nil, chat, 8)
+    else
+      FCF_SetChatWindowFontSize(nil, chat, fontSize)
+    end
+
+    chat:SetFont(EUIDB.chatFont, fontSize, "")
   end
 
   -- Setup chatframes 1 to 10 on login
@@ -167,37 +182,21 @@ OnPlayerLogin(function()
     end
   end
 
-  function SetupChatPosAndFont()
-    for i = 1, NUM_CHAT_WINDOWS do
-      local chat = _G[format("ChatFrame%s", i)]
-      local id = chat:GetID()
-      local fontSize = EUIDB.chatFontSize
-
-      -- Min. size for chat font
-      if fontSize < 11 then
-        FCF_SetChatWindowFontSize(nil, chat, 11)
-      else
-        FCF_SetChatWindowFontSize(nil, chat, fontSize)
-      end
-
-      chat:SetFont(EUIDB.chatFont, fontSize, "")
-    end
-  end
-
-  -- Setup temp chat (BN, WHISPER) when needed
-  local function SetupTempChat()
+  hooksecurefunc("FCF_OpenTemporaryWindow", function()
     local frame = FCF_GetCurrentChatFrame()
-    if frame.skinned then return end
     SetChatStyle(frame)
-  end
-
-  hooksecurefunc("FCF_OpenTemporaryWindow", SetupTempChat)
+  end)
 
   -- init
   SetupChat()
-  SetupChatPosAndFont()
 
   -- Hide quick Join
   QuickJoinToastButton:Hide()
   QuickJoinToastButton.Show = function() end
+
+  function ReloadChats()
+    for _, frame in pairs(chatFrames) do
+      SetChatStyle(frame)
+    end
+  end
 end)
