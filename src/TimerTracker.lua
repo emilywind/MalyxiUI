@@ -6,7 +6,7 @@ OnPlayerLogin(function()
       local prefix = 'TimerTrackerTimer'..i
       local timer = _G[prefix]
       local statusBar = _G['TimerTrackerTimer'..i..'StatusBar']
-      if statusBar and not timer.isFree and not timer.euiClean then
+      if statusBar and not timer.isFree then
         _G[prefix..'StatusBarBorder']:Hide()
         SkinStatusBar(statusBar)
       end
@@ -17,14 +17,11 @@ OnPlayerLogin(function()
     if event ~= 'MIRROR_TIMER_START' then return end
 
     for _, timer in pairs(self.mirrorTimers) do
-      if not timer.euiClean then
-        timer.TextBorder:Hide()
-        timer.Text:ClearAllPoints()
-        timer.Text:SetPoint("CENTER", timer.StatusBar, "CENTER")
-        timer.Text:SetFont(STANDARD_TEXT_FONT, 11, "OUTLINE")
-        ApplyUIMode(timer.Border)
-        timer.euiClean = true
-      end
+      timer.TextBorder:Hide()
+      timer.Text:ClearAllPoints()
+      timer.Text:SetPoint("CENTER", timer.StatusBar, "CENTER")
+      timer.Text:SetFont(STANDARD_TEXT_FONT, 11, "OUTLINE")
+      ApplyUIMode(timer.Border)
     end
   end)
 end)
