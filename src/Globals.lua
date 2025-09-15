@@ -244,7 +244,7 @@ function ModifyFont(textObject, font, size, flags, colorString)
 end
 
 function SkinStatusBar(bar)
-  if not bar or bar.euiClean then return end
+  if not bar then return end
 
   if bar.BorderMid then
     bar.BorderMid:SetAlpha(0)
@@ -261,15 +261,16 @@ function SkinStatusBar(bar)
   end
 
   -- Border
-  local back = bar:CreateTexture(nil, "BACKGROUND")
-  back:SetAtlas('ui-castingbar-background')
-  back:SetPoint("TOPLEFT", bar, "TOPLEFT", -2, 2)
-  back:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", 2, -2)
-  ApplyUIMode(back)
+  local border = bar.border
+  if not border then
+    border = bar:CreateTexture(nil, "BACKGROUND")
+    border:SetAtlas('ui-castingbar-background')
+    border:SetPoint("TOPLEFT", bar, "TOPLEFT", -2, 2)
+    border:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", 2, -2)
+    bar.border = border
+  end
 
-  bar.back = back
-
-  bar.euiClean = true
+  ApplyUIMode(border)
 end
 
 function GetNPCIDFromGUID(guid)
