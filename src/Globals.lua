@@ -262,7 +262,6 @@ function SkinStatusBar(bar)
 
   -- Border
   local back = bar:CreateTexture(nil, "BACKGROUND")
-  back:SetTexture(4505194)
   back:SetAtlas('ui-castingbar-background')
   back:SetPoint("TOPLEFT", bar, "TOPLEFT", -2, 2)
   back:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", 2, -2)
