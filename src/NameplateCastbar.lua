@@ -73,10 +73,6 @@ function SkinCastbar(frame, unitToken)
   if not castBar then return end
   if castBar:IsForbidden() then return end
 
-  if EUIDB.nameplateHideCastText then
-    castBar.Text:Hide()
-  end
-
   if not castBar.timer then
     ModifyFont(castBar.Text, EUIDB.nameplateFont)
     ApplyEuiBackdrop(castBar.Icon, castBar)
@@ -259,6 +255,10 @@ hooksecurefunc(CastingBarMixin, "OnEvent", function(self)
   if frame.hideCastbarOverride or EUIDB.nameplateHideFriendlyCastbars then
     castBar:Hide()
     return
+  end
+
+  if EUIDB.nameplateHideCastText then
+    castBar.Text:Hide()
   end
 
   if castBar.timer then
