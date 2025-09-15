@@ -53,6 +53,7 @@ EUIDBDefaults = {
   nameplateTotemIndicators = 'important', -- 'all', 'important', or 'none'
   nameplateHideClassificationIcon = true,
   nameplateHideFriendlyHealthbars = true,
+  nameplateHideFriendlyCastbars = false,
   nameplateFriendlyClickthrough = true,
   nameplateCastbarColorInterrupt = true,
   nameplateShowTargetText = true,
@@ -564,7 +565,7 @@ local function setupEuiOptions()
   scrollFrame:SetPoint("TOPLEFT", EUI_Nameplates, "TOPLEFT", 0, 0)
 
   local Nameplate_Content = CreateFrame("Frame", nil, scrollFrame)
-  Nameplate_Content:SetSize(640, 900) -- Height should fit all your content
+  Nameplate_Content:SetSize(640, 920) -- Height should fit all your content
   scrollFrame:SetScrollChild(Nameplate_Content)
 
   local nameplateText = Nameplate_Content:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
@@ -732,6 +733,17 @@ local function setupEuiOptions()
     Nameplate_Content
   )
 
+  local nameplateHideFriendlyCastbars = newCheckbox(
+    "Hide Friendly Nameplate Cast Bars",
+    "Hide cast bars for friendly players.",
+    EUIDB.nameplateHideFriendlyCastbars,
+    function(value)
+      EUIDB.nameplateHideFriendlyCastbars = value
+    end,
+    nameplateHideFriendlyHealthbars,
+    Nameplate_Content
+  )
+
   local nameplateHideClassificationIcon = newCheckbox(
     "Hide Nameplate Classification Icon",
     "Hide the classification icon (e.g. elite, rare) on nameplates.",
@@ -739,7 +751,7 @@ local function setupEuiOptions()
     function(value)
       EUIDB.nameplateHideClassificationIcon = value
     end,
-    nameplateHideFriendlyHealthbars,
+    nameplateHideFriendlyCastbars,
     Nameplate_Content
   )
 

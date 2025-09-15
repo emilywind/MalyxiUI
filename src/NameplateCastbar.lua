@@ -246,7 +246,7 @@ local function UpdateNameplateTargetText(frame, unit)
   end
 end
 
-hooksecurefunc(CastingBarMixin, "OnEvent", function(self, event, ...)
+hooksecurefunc(CastingBarMixin, "OnEvent", function(self)
   local unit = self.unit
   if not unit or not unit:find("nameplate") then return end
 
@@ -256,7 +256,7 @@ hooksecurefunc(CastingBarMixin, "OnEvent", function(self, event, ...)
 
   local castBar = frame.castBar
 
-  if frame.hideCastbarOverride then
+  if frame.hideCastbarOverride or EUIDB.nameplateHideFriendlyCastbars then
     castBar:Hide()
     return
   end
