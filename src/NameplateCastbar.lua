@@ -259,6 +259,8 @@ hooksecurefunc(CastingBarMixin, "OnEvent", function(self)
 
   if EUIDB.nameplateHideCastText then
     castBar.Text:Hide()
+  elseif not castBar.Text:IsShown() then
+    castBar.Text:Show()
   end
 
   if castBar.timer then
