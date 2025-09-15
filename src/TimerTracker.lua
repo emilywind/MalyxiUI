@@ -1,5 +1,5 @@
 OnPlayerLogin(function()
-  TimerTracker:HookScript("OnEvent", function(self, event, timerType, timeSeconds, totalTime)
+  TimerTracker:HookScript("OnEvent", function(self, event)
     if event ~= "START_TIMER" then return end
 
     for i = 1, #self.timerList do
@@ -13,7 +13,7 @@ OnPlayerLogin(function()
     end
   end)
 
-  MirrorTimerContainer:HookScript("OnEvent", function(self, event, timerType, timeSeconds, totalTime)
+  MirrorTimerContainer:HookScript("OnEvent", function(self, event)
     if event ~= 'MIRROR_TIMER_START' then return end
 
     for _, timer in pairs(self.mirrorTimers) do
