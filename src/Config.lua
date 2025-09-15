@@ -390,8 +390,8 @@ local function setupEuiOptions()
   lootSpecDisplay:SetPoint("TOPLEFT", portraitDropdown, "BOTTOMLEFT", 0, -16)
 
   local enableFont = newCheckbox(
-    "Use Custom Fonts",
-    "Use custom fonts. Can be set in the dropdown to the right.",
+    "Use Custom Font",
+    "Use custom font. Can be set in the dropdown to the right.",
     EUIDB.enableFont,
     function(value)
       EUIDB.enableFont = value
@@ -420,7 +420,7 @@ local function setupEuiOptions()
 
   local enableDamageFont = newCheckbox(
     "Use Custom Damage Font**",
-    "Use a custom font for damage numbers. Can be set in the dropdown to the right. **Requires relogging.",
+    "Use a custom font for damage numbers. Can be set in the dropdown to the right.\n\n**Change requires relogging.",
     EUIDB.enableDamageFont,
     function(value)
       EUIDB.enableDamageFont = value
