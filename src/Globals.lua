@@ -430,10 +430,10 @@ function Trim(s)
   return s:gsub("^%s*(.-)%s*$", "%1")
 end
 
-function EUISetCVar(cvarName, value, euiVarName)
+function EUISetCVar(cvarName, value, euiVarName, settingNil)
   euiVarName = euiVarName or cvarName
 
-  if value == nil then
+  if value == nil and not settingNil then
     value = EUIDB[euiVarName]
   else
     EUIDB[euiVarName] = value
