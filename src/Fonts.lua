@@ -1,6 +1,6 @@
 local function updateFontObject(FontObject, font)
-  local _, size, style = FontObject:GetFont()
-  FontObject:SetFont(font, size, style)
+  local _, size, flags = FontObject:GetFont()
+  FontObject:SetFont(font, size, flags)
 end
 
 function UpdateFonts()
