@@ -27,25 +27,15 @@ local function styleActionButton(bu)
   local na = _G[name .. "Name"]
   local nt = _G[name .. "NormalTexture"]
 
-  if EUIDB.hideMacroText then
+  if EUIDB.hideMacroText and na then
     na:Hide()
-  else
+  elseif na and not na:IsShown() then
     na:Show()
   end
 
   if not nt then
     nt = bu:GetNormalTexture()
   end
-
-  applyEuiButtonSkin(bu)
-end
-
-local function stylePossessButton(bu)
-  if not bu then return end
-
-  local name = bu:GetName()
-  local nt = _G[name .. "NormalTexture"]
-  nt:SetAllPoints(bu)
 
   applyEuiButtonSkin(bu)
 end
@@ -85,21 +75,39 @@ local function skinSpellFlyout()
   end
 end
 
-local function toggleHotKeys()
+local function doToActionButtons(func)
   for i = 1, NUM_ACTIONBAR_BUTTONS do
-    updateHotkey(_G["ActionButton" .. i])
-    updateHotkey(_G["MultiBarBottomLeftButton" .. i])
-    updateHotkey(_G["MultiBarBottomRightButton" .. i])
-    updateHotkey(_G["MultiBarLeftButton" .. i])
-    updateHotkey(_G["MultiBarRightButton" .. i])
+    func(_G["ActionButton" .. i])
+    func(_G["MultiBarBottomLeftButton" .. i])
+    func(_G["MultiBarBottomRightButton" .. i])
+    func(_G["MultiBarLeftButton" .. i])
+    func(_G["MultiBarRightButton" .. i])
+    for k = 5, 7 do
+      func(_G["MultiBar" .. k .. "Button" .. i])
+    end
   end
+
+  for i = 1, 6 do
+    func(_G["OverrideActionBarButton" .. i])
+  end
+
   for i = 1, StanceBar.numButtons do
-    updateHotkey(_G["StanceButton" .. i])
+    func(_G["StanceButton" .. i])
   end
+
   for i = 1, NUM_PET_ACTION_SLOTS do
-    updateHotkey(_G["PetActionButton" .. i])
+    func(_G["PetActionButton" .. i])
   end
-  updateHotkey(ExtraActionButton1)
+
+  for i = 1, NUM_POSSESS_SLOTS do
+    func(_G["PossessButton" .. i])
+  end
+
+  func(ExtraActionButton1)
+end
+
+local function toggleHotKeys()
+  doToActionButtons(updateHotkey)
 end
 
 local function applyHooks()
@@ -111,32 +119,9 @@ local function applyHooks()
 end
 
 function StyleActionBars()
-  for i = 1, NUM_ACTIONBAR_BUTTONS do
-    styleActionButton(_G["ActionButton" .. i])
-    styleActionButton(_G["MultiBarBottomLeftButton" .. i])
-    styleActionButton(_G["MultiBarBottomRightButton" .. i])
-    styleActionButton(_G["MultiBarRightButton" .. i])
-    for k = 5, 7 do
-      styleActionButton(_G["MultiBar" .. k .. "Button" .. i])
-    end
-    styleActionButton(_G["MultiBarLeftButton" .. i])
-  end
-
-  for i = 1, 6 do
-    styleActionButton(_G["OverrideActionBarButton" .. i])
-  end
-  for i = 1, NUM_PET_ACTION_SLOTS do
-    styleActionButton(_G["PetActionButton" .. i])
-  end
-  for i = 1, NUM_POSSESS_SLOTS do
-    stylePossessButton(_G["PossessButton" .. i])
-  end
+  doToActionButtons(styleActionButton)
 
   styleExtraActionButton(ExtraActionButton1)
-
-  for i = 1, StanceBar.numButtons do
-    styleActionButton(_G["StanceButton" .. i])
-  end
 
   toggleHotKeys()
 end
