@@ -25,16 +25,11 @@ local function styleActionButton(bu)
 
   local name = bu:GetName()
   local na = _G[name .. "Name"]
-  local nt = _G[name .. "NormalTexture"]
 
   if EUIDB.hideMacroText and na then
     na:Hide()
   elseif na and not na:IsShown() then
     na:Show()
-  end
-
-  if not nt then
-    nt = bu:GetNormalTexture()
   end
 
   applyEuiButtonSkin(bu)
