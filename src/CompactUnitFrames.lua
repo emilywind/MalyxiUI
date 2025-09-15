@@ -1,11 +1,17 @@
 -- Raid Frames, Raid-style Party Frames, Arena Frames --
 local SetCVar = C_CVar.SetCVar
 
+local compactUnitFrames = {}
+
 local function updateTextures(self)
   if self:IsForbidden() then return end
   if self and self:GetName() then
     local name = self:GetName()
     if name and name:match("^Compact") then
+      if not compactUnitFrames[name] then
+        compactUnitFrames[name] = self
+      end
+
       if self:IsForbidden() then return end
 
       local healthbar = self.healthBar
@@ -79,3 +85,9 @@ end
 OnPlayerLogin(function()
   UpdateCUFCVars()
 end)
+
+function UpdateAllCompactUnitFrames()
+  for _, frame in pairs(compactUnitFrames) do
+    updateTextures(frame)
+  end
+end
