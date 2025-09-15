@@ -1205,6 +1205,7 @@ local function setupEuiOptions()
     EUIDB.cUFClassColoredHealth,
     function(value)
       EUIDB.cUFClassColoredHealth = value
+      UpdateCUFCVars()
     end,
     cVarsSectionText,
     EUI_CVars
@@ -1221,6 +1222,7 @@ local function setupEuiOptions()
       else
         CUFPowerBarsHealerOnly:Enable()
       end
+      UpdateCUFCVars()
     end,
     classColor,
     EUI_CVars
@@ -1232,6 +1234,7 @@ local function setupEuiOptions()
     EUIDB.cUFPowerBarsHealerOnly,
     function(value)
       EUIDB.cUFPowerBarsHealerOnly = value
+      UpdateCUFCVars()
     end,
     cUFDisplayPowerBars,
     EUI_CVars
@@ -1321,7 +1324,6 @@ local function setupEuiOptions()
   addReloadButton(Nameplate_Content)
   addReloadButton(EUI_Tooltips)
   addReloadButton(EUI_Misc)
-  addReloadButton(EUI_CVars)
 
   -------------------
   -- Slash Command --

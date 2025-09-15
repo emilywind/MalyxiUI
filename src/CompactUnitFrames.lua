@@ -65,7 +65,7 @@ end
 hooksecurefunc("CompactUnitFrame_UtilSetBuff", skinAura)
 hooksecurefunc("CompactUnitFrame_UtilSetDebuff", skinAura)
 
-OnPlayerLogin(function()
+function UpdateCUFCVars()
   local classColor = EUIDB.cUFClassColoredHealth and 1 or 0
   local powerBars = EUIDB.cUFDisplayPowerBars and 1 or 0
   local healerPowerBars = EUIDB.cUFPowerBarsHealerOnly and 1 or 0
@@ -77,4 +77,8 @@ OnPlayerLogin(function()
   SetCVar("pvpFramesDisplayClassColor", classColor)
   SetCVar("pvpFramesDisplayPowerBars", powerBars)
   SetCVar("pvpFramesDisplayOnlyHealerPowerBars", healerPowerBars)
+end
+
+OnPlayerLogin(function()
+  UpdateCUFCVars()
 end)
