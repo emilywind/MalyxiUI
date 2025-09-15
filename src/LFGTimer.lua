@@ -1,6 +1,3 @@
------------------------------------
--- Adapted from LFG_ProposalTime --
------------------------------------
 local _, addon = ...
 
 OnPlayerLogin(function()
