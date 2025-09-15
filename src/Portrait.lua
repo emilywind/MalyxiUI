@@ -20,82 +20,122 @@ local function makePortraitBG(frame)
 end
 
 local function make3DPortraitFG(frame)
-  frame.portraitFG = CreateFrame("Frame", nil, frame)
-  frame.portraitFG:SetFrameLevel(frame:GetFrameLevel())
-  frame.portraitFG:SetFrameStrata("LOW")
-  frame.portraitFG:SetAllPoints(frame.portrait)
-  frame.portraitFG:SetPoint("TOPLEFT", frame.portrait, "TOPLEFT", 0, -1)
-  frame.portraitFG:SetPoint("BOTTOMRIGHT", frame.portrait, "BOTTOMRIGHT", 0, -1)
-  local foreground = frame.portraitFG:CreateTexture("foreLayer", "OVERLAY", nil)
+  local portraitFG = CreateFrame("Frame", nil, frame)
+  portraitFG:SetFrameLevel(frame:GetFrameLevel())
+  portraitFG:SetFrameStrata("LOW")
+  portraitFG:SetAllPoints(frame.portrait)
+  portraitFG:SetPoint("TOPLEFT", frame.portrait, "TOPLEFT", 0, -1)
+  portraitFG:SetPoint("BOTTOMRIGHT", frame.portrait, "BOTTOMRIGHT", 0, -1)
+
+  local foreground = portraitFG:CreateTexture("foreLayer", "OVERLAY", nil)
   foreground:SetTexture(EUI_TEXTURES.portraitModelFront)
   foreground:SetVertexColor(0, 0, 0)
-  foreground:SetAllPoints(frame.portraitFG)
-  frame.portraitFG.forelayer = foreground
+  foreground:SetAllPoints(portraitFG)
+
+  portraitFG.forelayer = foreground
+  frame.portraitFG = portraitFG
 end
 
-local function makeEUIPortrait(frame)
-  if not frame.portrait then return end
+local euiPortraits = {}
+
+local function updateEUIPortrait(frame)
+  if not frame or not frame.portrait then return end
 
   local unit = frame.unit
+  if not euiPortraits[unit] then
+    euiPortraits[unit] = frame
+  end
   local info = GetUnitInfo(unit)
   if not info.exists then return end
 
-  if EUIDB.portraitStyle == "class" then -- Flat class icons
-    if info.classFileName then
-      frame.portrait:SetTexture(EUIDB.classPortraitPack)
-      frame.portrait:SetTexCoord(unpack(FABLED_CLASS_CIRCLES_DATA.class[info.classFileName].texCoords))
-      makePortraitBG(frame)
-    else
-      frame.portrait:SetTexCoord(0.15, 0.85, 0.15, 0.85)
+  local portraitModel = frame.portraitModel
+  local portraitClass = frame.portraitClass
+  local portrait = frame.portrait
+
+  portrait:Show()
+
+  if not frame.portraitFG then
+    make3DPortraitFG(frame)
+  end
+  frame.portraitFG:Hide()
+
+  if portraitModel then
+    portraitModel:Hide()
+  end
+
+  if portraitClass then
+    portraitClass:Hide()
+  end
+
+  if EUIDB.portraitStyle == "default" then return end
+
+  if not frame.portraitBG then
+    makePortraitBG(frame)
+  end
+
+  if EUIDB.portraitStyle == "class" and info.classFileName then
+    if not portraitClass then
+      local mask = portrait:GetMaskTexture(1)
+      portraitClass = frame:CreateTexture(nil, "ARTWORK")
+      portraitClass:SetAllPoints(portrait)
+      portraitClass:AddMaskTexture(mask)
+      frame.portraitClass = portraitClass
     end
+    portraitClass:SetTexture(EUIDB.classPortraitPack)
+    portraitClass:SetTexCoord(unpack(FABLED_CLASS_CIRCLES_DATA.class[info.classFileName].texCoords))
+    portraitClass:Show()
+    portrait:Hide()
   elseif EUIDB.portraitStyle == "3D" then
-    if not frame.portraitModel then -- Initialize 3D Model Container
-      local portrait = frame.portrait
-      local portraitModel = CreateFrame("PlayerModel", nil, frame)
+    if not portraitModel then
+      portraitModel = CreateFrame("PlayerModel", nil, frame) -- Initialize 3D Model Container
       portraitModel:SetScript("OnShow", resetCamera)
       portraitModel:SetScript("OnHide", resetGUID)
       portraitModel.parent = frame
       portraitModel:SetFrameLevel(0)
 
-      makePortraitBG(frame)
-
       -- Round portraits
       local coeff = 0.14
-      local xoff = coeff*portrait:GetWidth() -- circle portrait has model slightly smaller
+      local xoff = coeff*portrait:GetWidth()
       local yoff = coeff*portrait:GetHeight()
       portraitModel:SetAllPoints(portrait)
       portraitModel:SetPoint("TOPLEFT", portrait,"TOPLEFT",xoff,-yoff)
       portraitModel:SetPoint("BOTTOMRIGHT",portrait,"BOTTOMRIGHT",-xoff,yoff)
-      frame.portrait:Hide()
       frame.portraitModel = portraitModel
 
       -- Add foreground mask
       make3DPortraitFG(frame)
     end
 
-    if not info.guid or (unit == 'targettarget' and info.guid == frame.portraitModel.guid) then return end -- Target of Target is spammy and needs this protection
+    frame.portraitFG:Show()
 
-    frame.portraitModel.guid = info.guid
+    if not info.guid or (unit == 'targettarget' and info.guid == portraitModel.guid) then return end -- Target of Target is spammy and needs this protection
+
+    portraitModel.guid = info.guid
 
     -- The player is not in range so swap to question mark
     if not info.isVisible or not info.isConnected then
-      frame.portraitModel:ClearModel()
-      frame.portraitModel:SetModelScale(5.5)
-      resetCamera(frame.portraitModel)
-      frame.portraitModel:SetModel("Interface\\Buttons\\talktomequestionmark.m2")
+      portraitModel:ClearModel()
+      portraitModel:SetModelScale(5.5)
+      resetCamera(portraitModel)
+      portraitModel:SetModel("Interface\\Buttons\\talktomequestionmark.m2")
     else -- Use animated 3D portrait
-      frame.portraitModel:ClearModel()
-      frame.portraitModel:SetModelScale(1)
-      frame.portraitModel:SetUnit(frame.unit)
-      resetCamera(frame.portraitModel)
-      frame.portraitModel:SetPosition(0, 0, 0)
-      frame.portraitModel:SetAnimation(804)
+      portraitModel:ClearModel()
+      portraitModel:SetModelScale(1)
+      portraitModel:SetUnit(frame.unit)
+      resetCamera(portraitModel)
+      portraitModel:SetPosition(0, 0, 0)
+      portraitModel:SetAnimation(804)
     end
+
+    portrait:Hide()
+    portraitModel:Show()
   end
 end
 
-OnPlayerLogin(function()
-  if (EUIDB.portraitStyle == "default") then return end
+function RefreshEUIPortraits()
+  for _, frame in pairs(euiPortraits) do
+    updateEUIPortrait(frame)
+  end
+end
 
-  hooksecurefunc("UnitFramePortrait_Update", makeEUIPortrait)
-end)
+hooksecurefunc("UnitFramePortrait_Update", updateEUIPortrait)

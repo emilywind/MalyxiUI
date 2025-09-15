@@ -354,9 +354,10 @@ local function setupEuiOptions()
     "Portrait Style",
     {["3D"] = "3D", ["class"] = "Class", ["default"] = "Default"},
     EUIDB.portraitStyle,
-    50,
+    60,
     function(value)
       EUIDB.portraitStyle = value
+      RefreshEUIPortraits()
     end
   )
   portraitSelect:SetPoint("TOPLEFT", uiModeDropdown, "BOTTOMLEFT", 0, -16)
@@ -368,6 +369,7 @@ local function setupEuiOptions()
     200,
     function(value)
       EUIDB.classPortraitPack = value
+      RefreshEUIPortraits()
     end
   )
   classPortraitPack:SetPoint("LEFT", portraitSelect, "RIGHT", 50, 0)
