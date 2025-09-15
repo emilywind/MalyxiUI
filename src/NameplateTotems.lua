@@ -51,12 +51,18 @@ OnPlayerLogin(function()
     [97285] = { 192077, 15 },  -- Wind Rush
   }
 
-  local totemNpcIDs = importantTotemNpcIDs
-  if EUIDB.nameplateTotemIndicators == "all" then
-    for k, v in pairs(lessImportantTotemNpcIDs) do
-      totemNpcIDs[k] = v
+  local totemNpcIDs = {}
+
+  function UpdateTotemSetting()
+    totemNpcIDs = CopyTable(importantTotemNpcIDs)
+
+    if EUIDB.nameplateTotemIndicators == "all" then
+      for k, v in pairs(lessImportantTotemNpcIDs) do
+        totemNpcIDs[k] = v
+      end
     end
   end
+  UpdateTotemSetting()
 
   local function CreateIcon(nameplate)
     local frame = CreateFrame("Frame", nil, nameplate)

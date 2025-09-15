@@ -712,6 +712,7 @@ local function setupEuiOptions()
     120,
     function(value)
       EUIDB.nameplateTotemIndicators = value
+      UpdateTotemSetting()
     end,
     Nameplate_Content
   )
