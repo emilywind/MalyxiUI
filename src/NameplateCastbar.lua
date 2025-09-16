@@ -113,7 +113,7 @@ function SkinCastbar(frame)
   local castSpark = castBar.spark
   if not castSpark then
     castSpark = castBar:CreateTexture(nil, "OVERLAY")
-    castSpark:SetColorTexture(0, 1, 0, 1)     -- Solid green color with full opacity
+    castSpark:SetColorTexture(0, 1, 0, 1)
     castSpark:SetSize(2, castBar:GetHeight())
     castBar.spark = castSpark
   end
@@ -267,8 +267,6 @@ hooksecurefunc(CastingBarMixin, "OnEvent", function(self)
 end)
 
 OnEvent("UNIT_TARGET", function(_, _, unit)
-  if not EUIDB.nameplateCastbarColorInterrupt then return end
-
   local np = GetSafeNameplate(unit)
   if np then SkinCastbar(np) end
 end)
