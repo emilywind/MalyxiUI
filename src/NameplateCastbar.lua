@@ -88,7 +88,7 @@ local function colorCastbarByInterrupt(castBar, unit)
 
     if not cooldownRemaining then
       cooldownRemaining = cooldown
-    elseif cooldown and cooldown < cooldownRemaining then
+    elseif cooldown < cooldownRemaining then
       cooldownRemaining = cooldown
     end
   end
