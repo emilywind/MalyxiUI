@@ -196,7 +196,6 @@ local function UpdateNameplateTargetText(frame, unit)
     return
   end
 
-
   if not targetText then
     targetText = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     targetText:SetJustifyH("CENTER")
