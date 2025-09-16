@@ -192,6 +192,8 @@ OnPlayerLogin(function()
           break
         end
       end
+    else
+      frame.hasArenaNumber = false
     end
 
     local healthColor = GetUnitHealthColor(frame.displayedUnit)
