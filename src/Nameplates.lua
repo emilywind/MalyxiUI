@@ -53,7 +53,7 @@ OnPlayerLogin(function()
   -- Red color when below 30% on Personal Resource Bar --
   -------------------------------------------------------
   local function updateHealth(frame)
-    if frame:IsForbidden() or not frame.isNameplate then return end
+    if frame:IsForbidden() then return end
 
     local unit = frame.displayedUnit or frame.unit
 
@@ -97,14 +97,8 @@ OnPlayerLogin(function()
   end
   hooksecurefunc("CompactUnitFrame_UpdateHealth", updateHealth)
 
-  hooksecurefunc(NamePlateDriverFrame, "AcquireUnitFrame", function(_, nameplate)
-    if (nameplate.UnitFrame) then
-      nameplate.UnitFrame.isNameplate = true
-    end
-  end)
-
   local function modifyNamePlates(frame)
-    if frame:IsForbidden() or not frame.isNameplate then return end
+    if frame:IsForbidden() then return end
 
     local healthBar = frame.healthBar
     healthBar:SetStatusBarTexture(EUIDB.statusBarTex)
@@ -161,7 +155,8 @@ OnPlayerLogin(function()
 
   local function updateName(frame)
     local unit = frame.displayedUnit or frame.unit
-    if not unit or not frame.isNameplate or frame:IsForbidden() then return end
+    if not unit or frame:IsForbidden() then return end
+    if unit == "player" then return end -- No need to do this for personal resource display
 
     frame.classificationIndicator:SetAlpha(EUIDB.nameplateHideClassificationIcon and 0 or 1)
     frame.selectionHighlight:SetAlpha(0) -- Hide the ugly target background
@@ -217,10 +212,10 @@ OnPlayerLogin(function()
         }
       end
 
-      local levelText = frame.unitLevel
+      local levelString = frame.unitLevel
       local levelSuffix = ''
-      if (levelText < 0) then
-        levelText = '|TInterface\\TargetingFrame\\UI-TargetingFrame-Skull:12|t'
+      if (levelString < 0) then
+        levelString = '|TInterface\\TargetingFrame\\UI-TargetingFrame-Skull:12|t'
       else
         if (unitInfo.classification == 'elite') then
           levelSuffix = '+'
@@ -234,8 +229,8 @@ OnPlayerLogin(function()
           levelSuffix = '-'
         end
       end
-      frame.levelText:SetTextColor( c.r, c.g, c.b )
-      frame.levelText:SetText(levelText .. levelSuffix)
+      frame.levelText:SetTextColor(c.r, c.g, c.b)
+      frame.levelText:SetText(levelString .. levelSuffix)
       frame.levelText:Show()
     elseif not EUIDB.nameplateShowLevel and frame.levelText then
       frame.levelText:SetText('')
@@ -262,6 +257,8 @@ OnPlayerLogin(function()
     end
   end
 
+  hooksecurefunc("CompactUnitFrame_UpdateName", updateName)
+
   function RefreshNameplates()
     for _, nameplate in pairs(GetAllNameplates()) do
       PartyMarker(nameplate)
@@ -270,6 +267,4 @@ OnPlayerLogin(function()
       modifyNamePlates(nameplate)
     end
   end
-
-  hooksecurefunc("CompactUnitFrame_UpdateName", updateName)
 end)
