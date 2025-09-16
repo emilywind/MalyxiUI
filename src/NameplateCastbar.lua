@@ -1,20 +1,20 @@
 local interruptSpellsByClass = {
   -- [classID] = {spellID, ...}
-  [1] = { 6552 },  -- Pummel (Warrior)
-  [2] = {          -- Paladin
-    96231,         -- Rebuke
-    231665,        -- Avenger's Shield
+  [1] = { 6552 },    -- Pummel (Warrior)
+  [2] = {            -- Paladin
+    96231,           -- Rebuke
+    231665,          -- Avenger's Shield
   },
-  [3] = {          -- Hunter
-    187707,        -- Muzzle
-    147362,        -- Countershot
+  [3] = {            -- Hunter
+    187707,          -- Muzzle
+    147362,          -- Countershot
   },
-  [4] = { 1766 },  -- Kick (Rogue)
-  [6] = {          -- Death Knight
-    47528,         -- Mind Freeze
-    15487,         -- Silence
-    47482,         -- Leap
-    91802,         -- Shambling Rush
+  [4] = { 1766 },    -- Kick (Rogue)
+  [6] = {            -- Death Knight
+    47528,           -- Mind Freeze
+    15487,           -- Silence
+    47482,           -- Leap
+    91802,           -- Shambling Rush
   },
   [7] = { 57994 },   -- Wind Shear (Shaman)
   [8] = { 2139 },    -- Counterspell (Mage)
@@ -28,10 +28,10 @@ local interruptSpellsByClass = {
     171138,          -- Shadow Lock
   },
   [10] = { 116705 }, -- Spear Hand Strike (Monk)
-  [11] = {          -- Druid
-    97547,          -- Solar Beam
-    78675,          -- Solar Beam
-    106839,         -- Skull Bash
+  [11] = {           -- Druid
+    97547,           -- Solar Beam
+    78675,           -- Solar Beam
+    106839,          -- Skull Bash
   },
   [12] = { 183752 }, -- Disrupt (Demon Hunter)
   [13] = { 351338 }, -- Evoker (Quell)
