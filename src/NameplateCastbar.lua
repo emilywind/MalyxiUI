@@ -243,13 +243,9 @@ hooksecurefunc(CastingBarMixin, "OnEvent", function(self)
     castBar.Text:Show()
   end
 
-  if castBar.timer then
-    updateCastTimer(frame, castBar, unit)
-  end
-
-  if EUIDB.nameplateShowTargetText then
-    UpdateNameplateTargetText(frame, unit)
-  end
-
   skinCastbar(frame)
+
+  updateCastTimer(frame, castBar, unit)
+
+  UpdateNameplateTargetText(frame, unit)
 end)
