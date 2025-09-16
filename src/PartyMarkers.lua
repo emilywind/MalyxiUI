@@ -23,7 +23,7 @@ function PartyMarker(frame)
     partyMarker:SetFrameLevel(0)
     partyMarker:SetSize(24, 24)
     partyMarker.icon = partyMarker:CreateTexture(nil, "BACKGROUND", nil, 1)
-    partyMarker.icon:SetAtlas(PARTY_MARKER)
+    partyMarker.icon:SetAtlas("plunderstorm-glues-logoarrow")
     partyMarker.icon:SetSize(34, 48)
     partyMarker.icon:SetPoint("BOTTOM", partyMarker, "BOTTOM", 0, 5)
     partyMarker.icon:SetDesaturated(true)
@@ -40,7 +40,6 @@ function PartyMarker(frame)
     partyMarker:SetFrameStrata("LOW")
     frame.partyMarker = partyMarker
   end
-  partyMarker.icon:SetAtlas(PARTY_MARKER)
   partyMarker:SetAlpha(1)
 
   partyMarker:SetScale(EUIDB.partyMarkerScale)

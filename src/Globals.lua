@@ -123,8 +123,6 @@ HEALER_SPECS = {
   [1468] = true, --> preservation evoker
 }
 
-PARTY_MARKER = "plunderstorm-glues-logoarrow"
-
 CLASS_PORTRAIT_PACKS = {}
 local classInfo = FABLED_CLASS_CIRCLES_DATA.class
 
