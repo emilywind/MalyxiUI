@@ -14,6 +14,12 @@ end
 OnPlayerLogin(function()
   if not EUIDB.skinNameplates then return end
 
+  hooksecurefunc(NamePlateDriverFrame, "AcquireUnitFrame", function(_, nameplate)
+    if (nameplate.UnitFrame) then
+      nameplate.UnitFrame.isNameplate = true
+    end
+  end)
+
   local cVars = {
     nameplateGlobalScale = 1,
     nameplateMinScale = 1,
@@ -53,7 +59,7 @@ OnPlayerLogin(function()
   -- Red color when below 30% on Personal Resource Bar --
   -------------------------------------------------------
   local function updateHealth(frame)
-    if frame:IsForbidden() then return end
+    if frame:IsForbidden() or not frame.isNameplate then return end
 
     local unit = frame.displayedUnit or frame.unit
 
@@ -98,7 +104,7 @@ OnPlayerLogin(function()
   hooksecurefunc("CompactUnitFrame_UpdateHealth", updateHealth)
 
   local function modifyNamePlates(frame)
-    if frame:IsForbidden() then return end
+    if frame:IsForbidden() or not frame.isNameplate then return end
 
     local healthBar = frame.healthBar
     healthBar:SetStatusBarTexture(EUIDB.statusBarTex)
@@ -155,8 +161,7 @@ OnPlayerLogin(function()
 
   local function updateName(frame)
     local unit = frame.displayedUnit or frame.unit
-    if unit == "player" then return end -- No need to do this for personal resource display
-    if not unit or frame:IsForbidden() then return end
+    if not unit or frame:IsForbidden() or not frame.isNameplate then return end
 
     frame.classificationIndicator:SetAlpha(EUIDB.nameplateHideClassificationIcon and 0 or 1)
     frame.selectionHighlight:SetAlpha(0) -- Hide the ugly target background
