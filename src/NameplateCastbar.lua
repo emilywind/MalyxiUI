@@ -80,8 +80,8 @@ local function colorCastbarByInterrupt(castBar, unit)
 
   local cooldownRemaining = nil
   for _, interruptSpellID in ipairs(knownInterruptSpellIDs) do
-    local start, duration = TWWGetSpellCooldown(interruptSpellID)
-    local cooldown = start + duration - GetTime()
+    local spellCD = C_Spell.GetSpellCooldown(interruptSpellID)
+    local cooldown = spellCD.startTime + spellCD.duration - GetTime()
 
     if not cooldownRemaining then
       cooldownRemaining = cooldown
@@ -172,13 +172,6 @@ local function skinCastbar(frame)
 
   if EUIDB.nameplateCastbarColorInterrupt then
     colorCastbarByInterrupt(castBar, unit)
-  end
-end
-
-function TWWGetSpellCooldown(spellID)
-  local spellCooldownInfo = C_Spell.GetSpellCooldown(spellID)
-  if spellCooldownInfo then
-    return spellCooldownInfo.startTime, spellCooldownInfo.duration
   end
 end
 
