@@ -178,7 +178,7 @@ end
 function TWWGetSpellCooldown(spellID)
   local spellCooldownInfo = C_Spell.GetSpellCooldown(spellID)
   if spellCooldownInfo then
-    return spellCooldownInfo.startTime, spellCooldownInfo.duration, spellCooldownInfo.isEnabled, spellCooldownInfo.modRate
+    return spellCooldownInfo.startTime, spellCooldownInfo.duration
   end
 end
 
