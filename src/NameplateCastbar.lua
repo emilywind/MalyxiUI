@@ -20,7 +20,7 @@ local interruptSpellsByClass = {
   [8] = { 2139 },    -- Counterspell (Mage)
   [9] = {            -- Warlock
     19647,           -- Spell Lock
-    132409,          -- Spell Lock
+    132409,          -- Spell Lock (Grimoire of Sacrifice)
     119910,          -- Spell lock (pet)
     115781,          -- Optical Blast
     89766,           -- Axe Toss
