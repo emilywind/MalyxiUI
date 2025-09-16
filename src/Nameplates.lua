@@ -35,10 +35,10 @@ local function updateHealth(frame)
 
   if isPersonal then
     healthBar:SetStatusBarTexture(EUIDB.statusBarTex)
+    healthBar.myHealPrediction:SetTexture(EUIDB.statusBarTex)
     ClassNameplateManaBarFrame:SetStatusBarTexture(EUIDB.statusBarTex)
     ClassNameplateManaBarFrame.FeedbackFrame.BarTexture:SetTexture(EUIDB.statusBarTex)
     ClassNameplateManaBarFrame.FeedbackFrame.LossGlowTexture:SetTexture(EUIDB.statusBarTex)
-    healthBar.myHealPrediction:SetTexture(EUIDB.statusBarTex)
 
     if frame.optionTable.colorNameBySelection then
       if healthPercentage <= 100 and healthPercentage >= 30 then
