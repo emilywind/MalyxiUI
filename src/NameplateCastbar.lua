@@ -237,7 +237,6 @@ end
 hooksecurefunc(CastingBarMixin, "OnEvent", function(self)
   local unit = self.unit
   if not unit or not unit:find("nameplate") then return end
-  local isFriend = UnitIsFriend("player", unit)
 
   local frame = GetSafeNameplate(unit)
   if not frame then return end
@@ -245,7 +244,7 @@ hooksecurefunc(CastingBarMixin, "OnEvent", function(self)
 
   local castBar = frame.castBar
 
-  if frame.hideCastbarOverride or (EUIDB.nameplateHideFriendlyCastbars and isFriend) then
+  if frame.hideCastbarOverride or (EUIDB.nameplateHideFriendlyCastbars and UnitIsFriend("player", unit)) then
     castBar:Hide()
     return
   end
