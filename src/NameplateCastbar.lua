@@ -56,9 +56,8 @@ local interruptSpellUpdate = OnEvents({
   if event == "UNIT_SPELLCAST_SUCCEEDED" then
     if not petSummonSpells[spellID] then return end
   end
-  if EUIDB.skinNameplates and EUIDB.nameplateCastbarColorInterrupt then
+  if EUIDB.skinNameplates then
     C_Timer.After(0.1, function()
-      GetInterruptSpell()
       for _, nameplate in pairs(GetAllNameplates()) do
         SkinCastbar(nameplate)
       end
@@ -84,7 +83,6 @@ function SkinCastbar(frame)
   ModifyFont(castBar.Text, EUIDB.nameplateFont)
   ModifyFont(timer, EUIDB.nameplateFont, 11, "THINOUTLINE", 'ffffffff')
 
-  local castBarTexture = castBar:GetStatusBarTexture()
   local spellName, spellID, notInterruptible, endTime, channeling, castStart, empoweredCast
 
   if UnitCastingInfo(unitToken) then
@@ -120,6 +118,8 @@ function SkinCastbar(frame)
   if castSpark and castSpark:IsShown() then
     castSpark:Hide()
   end
+
+  local castBarTexture = castBar:GetStatusBarTexture()
 
   if cooldownRemaining > 0 and cooldownRemaining > castRemaining then
     castBarTexture:SetDesaturated(true)
