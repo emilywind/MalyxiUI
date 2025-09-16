@@ -1,3 +1,10 @@
+local urlPatterns = {
+  "(https://%S+%.%S+)",
+  "(http://%S+%.%S+)",
+  "(www%.%S+%.%S+)",
+  "(%d+%.%d+%.%d+%.%d+:?%d*/?%S*)"
+}
+
 local chatFrames = {}
 
 local function styleChat(frame)
@@ -111,13 +118,6 @@ local function styleChat(frame)
   chat:SetFont(EUIDB.chatFont, fontSize, "")
 end
 
-local function setupChat()
-  for i = 1, NUM_CHAT_WINDOWS do
-    local frame = _G[format("ChatFrame%s", i)]
-    styleChat(frame)
-  end
-end
-
 function ReloadChats()
   for _, frame in pairs(chatFrames) do
     styleChat(frame)
@@ -126,13 +126,6 @@ end
 
 OnPlayerLogin(function()
   if C_AddOns.IsAddOnLoaded('Prat-3.0') or C_AddOns.IsAddOnLoaded('BasicChatMods') then return end
-
-  local patterns = {
-    "(https://%S+%.%S+)",
-    "(http://%S+%.%S+)",
-    "(www%.%S+%.%S+)",
-    "(%d+%.%d+%.%d+%.%d+:?%d*/?%S*)"
-  }
 
   for _, event in next, {
     "CHAT_MSG_SAY",
@@ -157,7 +150,7 @@ OnPlayerLogin(function()
     "CHAT_MSG_SYSTEM"
   } do
     ChatFrame_AddMessageEventFilter(event, function(_, _, str, ...)
-      for _, pattern in pairs(patterns) do
+      for _, pattern in pairs(urlPatterns) do
         local result, match = string.gsub(str, pattern, "|cff0394ff|Hurl:%1|h[%1]|h|r")
         if match > 0 then
           return false, result, ...
@@ -190,7 +183,10 @@ OnPlayerLogin(function()
     styleChat(frame)
   end)
 
-  setupChat()
+  for i = 1, NUM_CHAT_WINDOWS do
+    local frame = _G[format("ChatFrame%s", i)]
+    styleChat(frame)
+  end
 
   -- Hide quick Join
   QuickJoinToastButton:Hide()
