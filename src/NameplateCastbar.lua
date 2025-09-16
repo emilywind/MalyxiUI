@@ -284,6 +284,6 @@ end)
 OnEvent("UNIT_TARGET", function(_, _, unit)
   if not EUIDB.nameplateCastbarColorInterrupt then return end
 
-  local nameplate = GetSafeNameplate(unit)
-  if nameplate then SkinCastbar(nameplate) end
+  local np = GetSafeNameplate(unit)
+  if np then SkinCastbar(np) end
 end)
