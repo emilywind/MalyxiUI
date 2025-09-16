@@ -278,14 +278,12 @@ hooksecurefunc(CastingBarMixin, "OnEvent", function(self)
 
   if EUIDB.nameplateCastbarColorInterrupt then
     SkinCastbar(frame)
+  end
+end)
 
-    if not UnitTargetCastbarUpdate then
-      UnitTargetCastbarUpdate = OnEvent("UNIT_TARGET", function(_, _, unit)
-        local npFrame = GetSafeNameplate(unit)
-        if npFrame and not UnitIsPlayer(unit) then
-          SkinCastbar(npFrame)
-        end
-      end)
-    end
+OnEvent("UNIT_TARGET", function(_, _, unit)
+  local npFrame = GetSafeNameplate(unit)
+  if npFrame and EUIDB.nameplateCastbarColorInterrupt then
+    SkinCastbar(npFrame)
   end
 end)
