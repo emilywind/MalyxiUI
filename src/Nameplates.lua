@@ -179,7 +179,7 @@ OnPlayerLogin(function()
       frame.hasArenaNumber = false
     end
 
-    local healthColor = GetUnitHealthColor(frame.displayedUnit)
+    local healthColor = GetUnitHealthColor(unit)
     if EUIDB.nameplateFriendlyNamesClassColor and unitInfo.isFriend then
       frame.name:SetTextColor(healthColor.r, healthColor.g, healthColor.b, 1)
     end
@@ -233,7 +233,7 @@ OnPlayerLogin(function()
     end
 
     if not frame.hasArenaNumber and (EUIDB.nameplateHideServerNames or EUIDB.nameplateNameLength > 0) then
-      local name, realm = UnitName(frame.displayedUnit)
+      local name, realm = UnitName(unit)
 
       if not EUIDB.nameplateHideServerNames and realm then
         name = name .. " - " .. realm
