@@ -11,6 +11,18 @@ local function abbrev(str, length)
   return str
 end
 
+local function setValue(table, member, bool)
+  if bool then
+    TextureLoadingGroupMixin.AddTexture(
+      { textures = table }, member
+    )
+  else
+    TextureLoadingGroupMixin.RemoveTexture(
+      { textures = table }, member
+    )
+  end
+end
+
 local function updateHealth(frame)
   if frame:IsForbidden() or not frame.isNameplate then return end
 
@@ -69,17 +81,6 @@ local function modifyNamePlates(frame)
   end
 end
 
-local function setValue(table, member, bool)
-  if bool then
-    TextureLoadingGroupMixin.AddTexture(
-      { textures = table }, member
-    )
-  else
-    TextureLoadingGroupMixin.RemoveTexture(
-      { textures = table }, member
-    )
-  end
-end
 local function updateName(frame)
   local unit = frame.displayedUnit or frame.unit
   if not unit or frame:IsForbidden() or not frame.isNameplate then return end
