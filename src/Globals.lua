@@ -381,10 +381,9 @@ CASTBAR_NO_INTERRUPT_COLOR = { 1, 0, 0.01568627543747425 }
 CASTBAR_DELAYED_INTERRUPT_COLOR = { 1, 0.4784314036369324, 0.9568628072738647 }
 
 ---@param frame Frame
----@param unit UnitToken
 ---@return table|nil
-function GetNameplateUnitInfo(frame, unit)
-  unit = unit or frame.displayedUnit or frame.unit
+function GetNameplateUnitInfo(frame)
+  local unit = frame.displayedUnit or frame.unit
   if not unit then return end
 
   return GetUnitInfo(unit)
