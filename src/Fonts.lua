@@ -1,6 +1,7 @@
-local function updateFontObject(FontObject, font)
-  local _, size, flags = FontObject:GetFont()
-  FontObject:SetFont(font, size, flags)
+---@param fontObject Font
+local function updateFontObject(fontObject, font)
+  local _, size, flags = fontObject:GetFont()
+  fontObject:SetFont(font, size, flags)
 end
 
 function UpdateFonts()
@@ -15,7 +16,7 @@ function UpdateFonts()
   NAMEPLATE_FONT = EUIDB.font
   NAMEPLATE_SPELLCAST_FONT = EUIDB.font
 
-  local FontObjects = {
+  local fontObjects = {
     SystemFont_NamePlateCastBar,
     SystemFont_NamePlateFixed,
     SystemFont_LargeNamePlateFixed,
@@ -127,9 +128,9 @@ function UpdateFonts()
     Game15Font_Shadow
   }
 
-  for _, FontObject in pairs(FontObjects) do
+  for _, FontObject in pairs(fontObjects) do
     updateFontObject(FontObject, EUIDB.font)
   end
 end
 
-OnEvent("ADDON_LOADED", UpdateFonts)
+OnPlayerLogin(UpdateFonts)
