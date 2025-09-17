@@ -5,7 +5,12 @@ OnPlayerLogin(function()
   local inQueue = false
 
   -- Queue Status Icon
-  local function queueIconPos(_, layoutName, point, x, y)
+  ---@param frame Frame
+  ---@param layoutName string
+  ---@param point string
+  ---@param x number
+  ---@param y number
+  local function queueIconPos(frame, layoutName, point, x, y)
     db.queueicon.point = point
     db.queueicon.x = x
     db.queueicon.y = y
@@ -28,7 +33,9 @@ OnPlayerLogin(function()
     end
   end)
 
-  LEM:RegisterCallback('layout', function(layoutName)
+  LEM:RegisterCallback('layout',
+  ---@param layoutName string
+  function(layoutName)
     QueueStatusButton:SetPoint(db.queueicon.point, UIParent, db.queueicon.point, db.queueicon.x, db.queueicon.y)
   end)
 
@@ -41,13 +48,16 @@ OnPlayerLogin(function()
     QueueStatusButton:SetPoint(db.queueicon.point, UIParent, db.queueicon.point, db.queueicon.x, db.queueicon.y)
   end)
 
-  if StatsFrame then
-    local function statsFramePos(frame, layoutName, point, x, y)
-      db.statsframe.point = point
-      db.statsframe.x = x
-      db.statsframe.y = y
-    end
-
-    LEM:AddFrame(StatsFrame, statsFramePos)
+  ---@param frame Frame
+  ---@param layoutName string
+  ---@param point string
+  ---@param x number
+  ---@param y number
+  local function statsFramePos(frame, layoutName, point, x, y)
+    db.statsframe.point = point
+    db.statsframe.x = x
+    db.statsframe.y = y
   end
+
+  LEM:AddFrame(StatsFrame, statsFramePos)
 end)
