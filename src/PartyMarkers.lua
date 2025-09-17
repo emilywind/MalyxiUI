@@ -1,3 +1,4 @@
+---@param frame Frame
 function PartyMarker(frame)
   if frame:IsForbidden() then return end
 
