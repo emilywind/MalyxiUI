@@ -225,10 +225,8 @@ end
 function SetDefaultFont(textObject, size, outlinestyle)
   if not textObject then return end
   local currSize = select(2, textObject:GetFont())
-  if not size then size = currSize end
-  if not outlinestyle then outlinestyle = "THINOUTLINE" end
 
-  textObject:SetFont(EUIDB.font, size, outlinestyle)
+  textObject:SetFont(EUIDB.font, size or currSize, outlinestyle or "THINOUTLINE")
 end
 
 function ModifyFont(textObject, font, size, flags, colorString)
