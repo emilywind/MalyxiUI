@@ -41,6 +41,8 @@ OnPlayerLogin(function()
   end
 
   local SetHyperlink = _G.ItemRefTooltip.SetHyperlink
+  ---@param link string
+  ---@param ... any
   function _G.ItemRefTooltip:SetHyperlink(link, ...)
     if link and (strsub(link, 1, 3) == "url") then
       local editbox = ChatEdit_ChooseBoxForSend()
@@ -61,6 +63,7 @@ OnPlayerLogin(function()
 
   local chatFrames = {}
 
+  ---@param frame Frame
   local function styleChat(frame)
     local id = frame:GetID()
     local chatName = frame:GetName()
