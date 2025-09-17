@@ -5,10 +5,10 @@ OnPlayerLogin(function()
   local timeElapsed = 0
 
   local colors = {
-    ["normal"] = {1, 1, 1},
-    ["oor"] = {.8, .1, .1},
-    ["oom"] = {.5, .5, 1},
-    ["unusable"] = {.3, .3, .3}
+    ["normal"] = COLOR_WHITE,
+    ["oor"] = CreateColor(.8, .1, .1),
+    ["oom"] = CreateColor(.5, .5, 1),
+    ["unusable"] = CreateColor(.3, .3, .3)
   }
 
   local function SetButtonColor(button, colorIndex)
@@ -17,8 +17,7 @@ OnPlayerLogin(function()
     end
     buttonColors[button] = colorIndex
 
-    local r, g, b = unpack(colors[colorIndex])
-    button.icon:SetVertexColor(r, g, b)
+    SetVertexColor(button.icon, colors[colorIndex])
   end
 
   local function UpdateButtonUsable(button, force)

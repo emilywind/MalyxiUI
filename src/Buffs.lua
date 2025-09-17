@@ -17,15 +17,15 @@ local function applySkin(aura)
 
   local debuffBorder = aura.DebuffBorder
   debuffBorder:SetAlpha(1)
-  local debuffColor = CreateColor(debuffBorder:GetVertexColor())
+  local debuffColor = GetVertexColor(debuffBorder)
   debuffBorder:SetAlpha(0)
 
-  local isBuff = debuffColor.r == 1 and debuffColor.g == 1 and debuffColor.b == 1
+  local isBuff = debuffColor:GenerateHexColor() == COLOR_WHITE:GenerateHexColor()
 
   if isBuff then
-    SetEuiBorderColor(border, 0, 0, 0)
+    SetEuiBorderColor(border, COLOR_BLACK)
   else
-    SetEuiBorderColor(border, debuffColor.r, debuffColor.g, debuffColor.b)
+    SetEuiBorderColor(border, debuffColor)
   end
 end
 

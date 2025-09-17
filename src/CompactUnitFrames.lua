@@ -44,7 +44,7 @@ local function updateTextures(self)
 
         if debuffFrame.Border then
           debuffFrame.Border:SetAlpha(1)
-          SetEuiBorderColor(debuffFrame.euiBorder, debuffFrame.Border:GetVertexColor())
+          SetEuiBorderColor(debuffFrame.euiBorder, GetVertexColor(debuffFrame.Border))
           debuffFrame.Border:SetAlpha(0)
         end
       end
@@ -60,7 +60,7 @@ local function skinAura(self)
   local euiBorder = ApplyEuiBackdrop(self)
   if border then
     border:SetAlpha(1)
-    SetEuiBorderColor(euiBorder, border:GetVertexColor())
+    SetEuiBorderColor(euiBorder, GetVertexColor(border))
     border:SetAlpha(0)
   end
 end

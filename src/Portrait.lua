@@ -14,7 +14,7 @@ local function makePortraitBG(frame)
   frame.portraitBG:SetAllPoints(frame.portrait)
   local backLayer = frame.portraitBG:CreateTexture("backLayer", "BACKGROUND", nil, -1)
 	backLayer:SetTexture(EUI_TEXTURES.circleTexture)
-  backLayer:SetVertexColor(0, 0, 0)
+  SetVertexColor(backLayer, COLOR_BLACK)
   backLayer:SetAllPoints(frame.portraitBG)
   frame.portraitBG.backlayer = backLayer
 end
@@ -29,7 +29,7 @@ local function make3DPortraitFG(frame)
 
   local foreground = portraitFG:CreateTexture("foreLayer", "OVERLAY", nil)
   foreground:SetTexture(EUI_TEXTURES.portraitModelFront)
-  foreground:SetVertexColor(0, 0, 0)
+  SetVertexColor(foreground, COLOR_BLACK)
   foreground:SetAllPoints(portraitFG)
 
   portraitFG.forelayer = foreground

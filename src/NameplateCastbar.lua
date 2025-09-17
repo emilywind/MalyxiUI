@@ -168,7 +168,7 @@ local function skinCastbar(frame)
     castBar.timer = timer
   end
   ModifyFont(castBar.Text, EUIDB.nameplateFont)
-  ModifyFont(timer, EUIDB.nameplateFont, 11, "THINOUTLINE", 'ffffffff')
+  ModifyFont(timer, EUIDB.nameplateFont, 11, "THINOUTLINE", COLOR_WHITE)
 
   if EUIDB.nameplateCastbarColorInterrupt then
     colorCastbarByInterrupt(castBar, unit)

@@ -5,10 +5,10 @@ MediaDir = AddonDir.."\\media"
 FontsDir = MediaDir.."\\fonts"
 TextureDir = MediaDir.."\\textures"
 
-DARK_FRAME_COLOR = CreateColor(0.3, 0.3, 0.3)
-BLACK_FRAME_COLOR = CreateColor(0, 0, 0)
-WHITE_FRAME_COLOR = CreateColor(1, 1, 1)
-LIGHT_FRAME_COLOR = CreateColor(0.8, 0.8, 0.8)
+COLOR_DARK = CreateColor(0.3, 0.3, 0.3)
+COLOR_BLACK = CreateColor(0, 0, 0)
+COLOR_WHITE = CreateColor(1, 1, 1)
+COLOR_LIGHT = CreateColor(0.8, 0.8, 0.8)
 
 EUI_TEXTURES = {
   buttons = {
@@ -141,19 +141,21 @@ local function GetUnitClassColor(unit)
   return CreateColorFromHexString(color.colorStr)
 end
 
+---@param unit UnitToken
+---@return ColorMixin
 function GetFrameColor(unit)
   local classColor = unit and GetUnitClassColor(unit)
 
   if EUIDB.classColoredUnitFrames and classColor then
     return classColor
   elseif EUIDB.uiMode == 'black' then
-    return BLACK_FRAME_COLOR
+    return COLOR_BLACK
   elseif EUIDB.uiMode == 'dark' then
-    return DARK_FRAME_COLOR
+    return COLOR_DARK
   elseif EUIDB.uiMode == 'light' then
-    return LIGHT_FRAME_COLOR
+    return COLOR_LIGHT
   else
-    return WHITE_FRAME_COLOR
+    return COLOR_WHITE
   end
 end
 
@@ -214,14 +216,31 @@ function ApplyEuiBackdrop(b, frame)
   return border
 end
 
-function SetEuiBorderColor(border, r, g, b)
+---@param border Texture
+---@param color ColorMixin
+function SetEuiBorderColor(border, color)
   if border.SetVertexColor then
-    border:SetVertexColor(r, g, b)
+    SetVertexColor(border, color)
   else
-    border:SetBackdropBorderColor(r, g, b)
+    border:SetBackdropBorderColor(color:GetRGB())
   end
 end
 
+---@param texture Texture
+---@return ColorMixin
+function GetVertexColor(texture)
+  return CreateColor(texture:GetVertexColor())
+end
+
+---@param texture Texture
+---@param color ColorMixin
+function SetVertexColor(texture, color)
+  texture:SetVertexColor(color.r, color.g, color.b, color.a or 1)
+end
+
+---@param textObject FontString
+---@param size? number
+---@param outlinestyle? string
 function SetDefaultFont(textObject, size, outlinestyle)
   if not textObject then return end
   local currSize = select(2, textObject:GetFont())
@@ -229,15 +248,20 @@ function SetDefaultFont(textObject, size, outlinestyle)
   textObject:SetFont(EUIDB.font, size or currSize, outlinestyle or "THINOUTLINE")
 end
 
-function ModifyFont(textObject, font, size, flags, colorString)
-  if colorString then
-    local color = CreateColorFromHexString(colorString)
-    textObject:SetTextColor(color.r, color.g, color.b)
+---@param textObject FontString
+---@param font string
+---@param size? number
+---@param flags? string
+---@param color? ColorMixin
+function ModifyFont(textObject, font, size, flags, color)
+  if color then
+    textObject:SetTextColor(color:GetRGBA())
   end
   local fontFile, currSize = textObject:GetFont()
   textObject:SetFont(font or fontFile, size or currSize, flags or "THINOUTLINE")
 end
 
+---@param bar StatusBar
 function SkinStatusBar(bar)
   if not bar then return end
 

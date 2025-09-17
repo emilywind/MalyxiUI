@@ -1,8 +1,10 @@
+---@param texture Texture
+---@param unit? UnitToken
 function ApplyUIMode(texture, unit)
   local unitInfo = GetUnitInfo(unit)
   texture:SetDesaturated(EUIDB.uiMode ~= 'blizzard' or (EUIDB.classColoredUnitFrames and unitInfo.isPlayer))
   local fc = GetFrameColor(unit)
-  texture:SetVertexColor(fc.r, fc.g, fc.b)
+  SetVertexColor(texture, fc)
 end
 
 function ApplyStaticUIMode()

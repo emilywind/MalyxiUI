@@ -27,10 +27,10 @@ local function applyAuraSkin(aura)
 
   if aura.Border then
     aura.Border:SetAlpha(1)
-    SetEuiBorderColor(border, aura.Border:GetVertexColor())
+    SetEuiBorderColor(border, GetVertexColor(aura.Border))
     aura.Border:SetAlpha(0)
   else
-    SetEuiBorderColor(border, 0, 0, 0)
+    SetEuiBorderColor(border, COLOR_BLACK)
   end
 end
 
