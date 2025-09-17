@@ -25,6 +25,8 @@ end)
 -------------------------------------
 -- Target, Focus, and Arena Frames --
 -------------------------------------
+---@param self Frame
+---@param setScale boolean
 local function skinCastBar(self, setScale)
   if self:IsForbidden() then return end
   if InCombatLockdown() then return end
@@ -42,7 +44,7 @@ local function skinCastBar(self, setScale)
   self.Text:SetFont(STANDARD_TEXT_FONT, 11, "OUTLINE")
 
   if setScale then
-    self:SetScale(EUIDB.castBarScale, EUIDB.castBarScale)
+    self:SetScale(EUIDB.castBarScale)
   end
 
   ApplyUIMode(self.Border)
@@ -101,6 +103,8 @@ OnPlayerLogin(function()
     FocusFrameSpellBar.update = 0.1
   end
 
+  ---@param self Frame
+  ---@param elapsed number
   local function CastingBarFrame_OnUpdate_Hook(self, elapsed)
     if not self.timer then return end
     if self.update and self.update < elapsed then

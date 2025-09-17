@@ -1,3 +1,4 @@
+---@param aura Button
 local function applySkin(aura)
   local duration = aura.Duration
   if duration then

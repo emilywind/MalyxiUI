@@ -1,3 +1,4 @@
+---@param bu Button
 local function styleActionButton(bu)
   if not bu then return end
 
@@ -17,6 +18,7 @@ local function styleActionButton(bu)
   ApplyUIMode(nt)
 end
 
+---@param self Button
 local function updateHotkey(self)
   local ho = _G[self:GetName() .. "HotKey"]
   if not ho then return end
@@ -52,6 +54,8 @@ local function skinSpellFlyout()
   end
 end
 
+---@param func fun(button: Button)
+---@param allButtons? boolean
 function DoToActionButtons(func, allButtons)
   for i = 1, NUM_ACTIONBAR_BUTTONS do
     func(_G["ActionButton" .. i])

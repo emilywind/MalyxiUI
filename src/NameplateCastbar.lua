@@ -153,6 +153,7 @@ local function colorCastbarByInterrupt(castBar, unit)
   end
 end
 
+---@param frame Frame
 local function skinCastbar(frame)
   local castBar = frame.castBar
   if not castBar then return end
