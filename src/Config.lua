@@ -104,8 +104,10 @@ EUIDBDefaults = {
   chatFontSize = 14,
 }
 
+---@param src table
+---@param dst? table
+---@return table
 local function copyTable(src, dst)
-  if type(src) ~= "table" then return {} end
   if type(dst) ~= "table" then dst = {} end
 
   for k, v in pairs(src) do
@@ -123,6 +125,8 @@ OnPlayerLogin(function()
   EUIDB = copyTable(EUIDBDefaults, EUIDB)
 end)
 
+---@param table table
+---@return table
 local function tableToWowDropdown(table)
   local wowTable = {}
   for k, v in pairs(table) do
@@ -132,6 +136,10 @@ local function tableToWowDropdown(table)
   return wowTable
 end
 
+---@param frameName string
+---@param mainpanel Frame
+---@param panelName string
+---@return Frame
 local makePanel = function(frameName, mainpanel, panelName)
   local panel = CreateFrame("Frame", frameName, mainpanel)
   panel.name, panel.parent = panelName, name
@@ -155,11 +163,18 @@ local function setupEuiOptions()
   category.ID = "EmsUI"
   Settings.RegisterAddOnCategory(category)
 
+  ---@param label string
+  ---@param description string
+  ---@param initialValue any
+  ---@param onChange fun(value: any)
+  ---@param relativeEl Frame
+  ---@param frame Frame
+  ---@param point1? string
+  ---@param point2? string
+  ---@param x? number
+  ---@param y? number
+  ---@return CheckButton
   local function newCheckbox(label, description, initialValue, onChange, relativeEl, frame, point1, point2, x, y)
-    if ( not frame ) then
-      frame = EUI.panel
-    end
-
     local check = CreateFrame("CheckButton", "EUICheck" .. label, frame, "ChatConfigCheckButtonTemplate")
     check:SetScript("OnClick", function(self)
       local tick = self:GetChecked()
@@ -174,19 +189,19 @@ local function setupEuiOptions()
     check.label:SetText(label)
     check.tooltip = description
     check:SetChecked(initialValue)
-    if (relativeEl) then
-      check:SetPoint(point1 or "TOPLEFT", relativeEl, point2 or "BOTTOMLEFT", x or 0, y or -8)
-    else
-      check:SetPoint("TOPLEFT", 16, -16)
-    end
+    check:SetPoint(point1 or "TOPLEFT", relativeEl, point2 or "BOTTOMLEFT", x or 0, y or -8)
 
+    ---@cast check CheckButton
     return check
   end
 
+  ---@param label string
+  ---@param options table
+  ---@param initialValue any
+  ---@param width number
+  ---@param onChange fun(value: any)
+  ---@param frame Frame
   local function newDropdown(label, options, initialValue, width, onChange, frame)
-    if not frame then
-      frame = EUI.panel
-    end
     local dropdownText = frame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
     dropdownText:SetText(label)
 
@@ -225,11 +240,18 @@ local function setupEuiOptions()
     return dropdownText, dropdown
   end
 
+  ---@param frameName string
+  ---@param label string
+  ---@param configVar string
+  ---@param min number
+  ---@param max number
+  ---@param valueStep number
+  ---@param tooltip string
+  ---@param relativeEl Frame
+  ---@param frame Frame
+  ---@param onChanged? fun(value: any)
+  ---@return Slider
   local function newSlider(frameName, label, configVar, min, max, valueStep, tooltip, relativeEl, frame, onChanged)
-    if not frame then
-      frame = EUI.panel
-    end
-
     local function onValueChanged(self, value)
       self.Text:SetFormattedText(label, value)
       EUIDB[configVar] = value
@@ -302,9 +324,12 @@ local function setupEuiOptions()
 
     editBox:SetScript("OnEnterPressed", HandleEditBoxInput)
 
+    ---@cast slider Slider
     return slider
   end
 
+  ---@param frame Frame
+  ---@return Button
   local function addReloadButton(frame)
     local reload = CreateFrame("Button", "reload", frame, "UIPanelButtonTemplate")
     reload:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -10, -10)
@@ -315,6 +340,7 @@ local function setupEuiOptions()
     end)
     reload:Hide()
 
+    ---@cast reload Button
     return reload
   end
 
@@ -334,7 +360,8 @@ local function setupEuiOptions()
       StyleActionBars()
       ApplyStaticUIMode()
       SkinVigorBar()
-    end
+    end,
+    EUI.panel
   )
   uiModeChooser:SetPoint("TOPLEFT", euiTitle, "BOTTOMLEFT", 0, -16)
 
@@ -361,7 +388,8 @@ local function setupEuiOptions()
     function(value)
       EUIDB.portraitStyle = value
       RefreshEUIPortraits()
-    end
+    end,
+    EUI.panel
   )
   portraitSelect:SetPoint("TOPLEFT", uiModeDropdown, "BOTTOMLEFT", 0, -16)
 
@@ -373,7 +401,8 @@ local function setupEuiOptions()
     function(value)
       EUIDB.classPortraitPack = value
       RefreshEUIPortraits()
-    end
+    end,
+    EUI.panel
   )
   classPortraitPack:SetPoint("LEFT", portraitSelect, "RIGHT", 50, 0)
 
@@ -385,7 +414,8 @@ local function setupEuiOptions()
       EUIDB.lootSpecDisplay = value
       UpdateLootSpecDisplay()
     end,
-    portraitSelect
+    portraitSelect,
+    EUI.panel
   )
   lootSpecDisplay:SetPoint("TOPLEFT", portraitDropdown, "BOTTOMLEFT", 0, -16)
 
@@ -403,7 +433,8 @@ local function setupEuiOptions()
         Main_Reload:Hide()
       end
     end,
-    lootSpecDisplay
+    lootSpecDisplay,
+    EUI.panel
   )
 
   local fontChooser, fontDropdown = newDropdown(
@@ -414,7 +445,8 @@ local function setupEuiOptions()
     function(value)
       EUIDB.font = value
       UpdateFonts()
-    end
+    end,
+    EUI.panel
   )
   fontChooser:SetPoint("LEFT", lootSpecDisplay, "RIGHT", 300, 0)
 
@@ -431,7 +463,8 @@ local function setupEuiOptions()
       EUIDB.enableDamageFont = value
       UpdateDamageFontChooser()
     end,
-    enableFont
+    enableFont,
+    EUI.panel
   )
 
   local damageFontChooser, damageFontDropdown = newDropdown(
@@ -441,7 +474,8 @@ local function setupEuiOptions()
     200,
     function(value)
       EUIDB.damageFont = value
-    end
+    end,
+    EUI.panel
   )
   damageFontChooser:SetPoint("LEFT", enableDamageFont, "RIGHT", 300, 0)
 
@@ -461,7 +495,8 @@ local function setupEuiOptions()
     function(value)
       EUIDB.dampeningDisplay = value
     end,
-    pvpText
+    pvpText,
+    EUI.panel
   )
 
   local statusBarChooser = newDropdown(
@@ -473,7 +508,8 @@ local function setupEuiOptions()
       EUIDB.statusBarTex = value
       RefreshNameplates()
       UpdateAllCompactUnitFrames()
-    end
+    end,
+    EUI.panel
   )
   statusBarChooser:SetPoint("LEFT", dampeningDisplay, "RIGHT", 300, 0)
 
@@ -484,7 +520,8 @@ local function setupEuiOptions()
     function(value)
       EUIDB.tabBinder = value
     end,
-    dampeningDisplay
+    dampeningDisplay,
+    EUI.panel
   )
 
   local hideArenaFrames = newCheckbox(
@@ -495,7 +532,8 @@ local function setupEuiOptions()
       EUIDB.hideArenaFrames = value
       HideArenaFrames()
     end,
-    tabBinder
+    tabBinder,
+    EUI.panel
   )
 
   local hideObjectiveTracker = newCheckbox(
@@ -505,7 +543,8 @@ local function setupEuiOptions()
     function(value)
       EUIDB.hideObjectiveTracker = value
     end,
-    hideArenaFrames
+    hideArenaFrames,
+    EUI.panel
   )
 
   local miscText = EUI.panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
@@ -520,7 +559,8 @@ local function setupEuiOptions()
     2,
     0.1,
     "Set scale for Target and Focus cast bars",
-    miscText
+    miscText,
+    EUI.panel
   )
 
   local enableStatsFrame = newCheckbox(
@@ -536,7 +576,8 @@ local function setupEuiOptions()
         StatsFrame:Hide()
       end
     end,
-    castBarScale
+    castBarScale,
+    EUI.panel
   )
 
   local enableStatsSpeed = newCheckbox(
