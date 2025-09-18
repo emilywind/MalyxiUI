@@ -391,10 +391,9 @@ function GetUnitHealthColor(unit)
 end
 
 ---@param frame Frame
----@return table|nil
+---@return table
 function GetNameplateUnitInfo(frame)
   local unit = frame.displayedUnit or frame.unit
-  if not unit then return end
 
   return GetUnitInfo(unit)
 end

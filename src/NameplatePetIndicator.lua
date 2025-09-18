@@ -90,10 +90,9 @@ end
 
 -- Pet Indicator
 function PetIndicator(frame)
-  local unit = frame.displayedUnit or frame.unit
-  if not unit then return end
+  local info = GetNameplateUnitInfo(frame)
+  if not info.exists then return end
 
-  local info = GetUnitInfo(unit)
   local instanceData = GetInstanceData()
 
   -- Initialize
