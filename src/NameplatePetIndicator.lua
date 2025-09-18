@@ -74,6 +74,7 @@ local function FadeNameplate(frame)
 end
 
 local function ShowIndicator(frame)
+  if not EUIDB.nameplatePetIndicator then return end
   frame:SetAlpha(1)
   if frame.petIndicator then
     frame.petIndicator:Show()
@@ -95,20 +96,17 @@ function PetIndicator(frame)
   local info = GetUnitInfo(unit)
   local instanceData = GetInstanceData()
 
-  if not EUIDB.nameplatePetIndicator then
-    HideIndicator(frame)
-    return
-  end
-
   -- Initialize
-  if not frame.petIndicator then
-    frame.petIndicator = frame.healthBar:CreateTexture(nil, "OVERLAY")
-    frame.petIndicator:SetAtlas("newplayerchat-chaticon-newcomer")
-    frame.petIndicator:SetSize(12, 12)
+  local petIndicator = frame.petIndicator
+  if not petIndicator then
+    petIndicator = frame.healthBar:CreateTexture(nil, "OVERLAY")
+    petIndicator:SetAtlas("newplayerchat-chaticon-newcomer")
+    petIndicator:SetSize(12, 12)
+    frame.petIndicator = petIndicator
   end
 
   -- Set position and scale dynamically
-  frame.petIndicator:SetPoint("LEFT", frame.healthBar, "LEFT", 2, 0)
+  petIndicator:SetPoint("LEFT", frame.healthBar, "LEFT", 2, 0)
 
   -- Demo lock pet
   if info.npcID == 17252 then
