@@ -21,11 +21,11 @@ end
 ---@param self Button
 local function updateHotkey(self)
   local ho = _G[self:GetName() .. "HotKey"]
-  if not ho then return end
+  local text = ho:GetText()
 
   if EUIDB.hideHotkeys and ho:IsShown() then
     ho:Hide()
-  elseif not EUIDB.hideHotkeys and not ho:IsShown() then
+  elseif not EUIDB.hideHotkeys and not ho:IsShown() and text and text ~= "●" then
     ho:Show()
   end
 end
