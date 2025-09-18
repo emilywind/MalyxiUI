@@ -88,7 +88,6 @@ local function HideIndicator(frame)
   end
 end
 
--- Pet Indicator
 function PetIndicator(frame)
   local info = GetNameplateUnitInfo(frame)
 
@@ -99,7 +98,6 @@ function PetIndicator(frame)
     return
   end
 
-  -- Initialize
   local petIndicator = frame.petIndicator
   if not petIndicator then
     petIndicator = frame.healthBar:CreateTexture(nil, "OVERLAY")
@@ -108,7 +106,6 @@ function PetIndicator(frame)
     frame.petIndicator = petIndicator
   end
 
-  -- Set position and scale dynamically
   petIndicator:SetPoint("LEFT", frame.healthBar, "LEFT", 2, 0)
 
   -- Demo lock pet
@@ -134,7 +131,7 @@ function PetIndicator(frame)
     end
     return
   end
-  -- All hunter pets have same NPC id, check for it.
+  -- All hunter pets have same NPC id
   if info.npcID == 165189 then
     if instanceData.isInArena then
       local isRealPet = UnitIsUnit(frame.unit, "pet")
@@ -154,7 +151,7 @@ function PetIndicator(frame)
       end
     else
       local isValidPet = false
-      for i = 1, 6 do -- Only loop through the first 5 buffs
+      for i = 1, 6 do
         local aura = C_UnitAuras.GetAuraDataByIndex(frame.displayedUnit, i, "HELPFUL")
         if aura and petValidSpellIDs[aura.spellId] then
           isValidPet = true
