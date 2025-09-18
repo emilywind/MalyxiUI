@@ -1,29 +1,24 @@
 ---@return table<string, number>
-local function GetLocalizedSpecs()
-  local specs = {}
 
-  for classID = 1, GetNumClasses() do
-    local class = select(2, GetClassInfo(classID))
-    local classMale = LOCALIZED_CLASS_NAMES_MALE[class]
-    local classFemale = LOCALIZED_CLASS_NAMES_FEMALE[class]
+local specList = {}
+for classID = 1, GetNumClasses() do
+  local class = select(2, GetClassInfo(classID))
+  local classMale = LOCALIZED_CLASS_NAMES_MALE[class]
+  local classFemale = LOCALIZED_CLASS_NAMES_FEMALE[class]
 
-    for specIndex = 1, C_SpecializationInfo.GetNumSpecializationsForClassID(classID) do
-      local specID, specName = GetSpecializationInfoForClassID(classID, specIndex)
+  for specIndex = 1, C_SpecializationInfo.GetNumSpecializationsForClassID(classID) do
+    local specID, specName = GetSpecializationInfoForClassID(classID, specIndex)
 
-      if classMale then
-        specs[string.format("%s %s", specName, classMale)] = specID
-      end
-      if classFemale and classFemale ~= classMale then
-        specs[string.format("%s %s", specName, classFemale)] = specID
-      end
+    if classMale then
+      specList[string.format("%s %s", specName, classMale)] = specID
+    end
+    if classFemale and classFemale ~= classMale then
+      specList[string.format("%s %s", specName, classFemale)] = specID
     end
   end
-
-  return specs
 end
 
 local specCache = {}
-local specList = GetLocalizedSpecs()
 ---@param frame Frame
 local function getSpecID(frame)
   local unitInfo = GetNameplateUnitInfo(frame)
