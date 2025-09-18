@@ -456,7 +456,7 @@ function EUISetCVar(cvarName, value, settingNil)
 end
 
 ---@param func fun(frame: Frame)
-function DoToAllNameplates(func)
+function DoToNameplates(func)
   for _, frame in pairs(C_NamePlate.GetNamePlates()) do
     if frame.UnitFrame then
       func(frame.UnitFrame)

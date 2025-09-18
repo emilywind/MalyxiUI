@@ -123,7 +123,7 @@ end
 hooksecurefunc("CompactUnitFrame_UpdateName", updatePartyMarker)
 
 function RefreshPartyMarkers()
-  DoToAllNameplates(updatePartyMarker)
+  DoToNameplates(updatePartyMarker)
 end
 
 -- Update in solo shuffle

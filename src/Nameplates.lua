@@ -246,7 +246,7 @@ OnPlayerLogin(function()
   hooksecurefunc("CompactUnitFrame_UpdateName", updateNameplate)
 
   function RefreshNameplates()
-    DoToAllNameplates(function(nameplate)
+    DoToNameplates(function(nameplate)
       updateNameplate(nameplate)
       updateHealth(nameplate)
       modifyNamePlates(nameplate)
