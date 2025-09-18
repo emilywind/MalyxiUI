@@ -1,4 +1,4 @@
-local specList = {}
+local specList = {} ---@cast specList table<string, number>
 for classID = 1, GetNumClasses() do
   local class = select(2, GetClassInfo(classID))
   local classMale = LOCALIZED_CLASS_NAMES_MALE[class]
@@ -16,7 +16,7 @@ for classID = 1, GetNumClasses() do
   end
 end
 
-local specCache = {}
+local specCache = {} ---@cast specCache table<string, number>
 ---@param frame Frame
 local function getSpecID(frame)
   local unitInfo = GetNameplateUnitInfo(frame)
