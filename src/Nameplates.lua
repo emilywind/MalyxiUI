@@ -144,6 +144,7 @@ OnPlayerLogin(function()
     if not frame then return end
 
     PetIndicator(frame)
+    CombatIndicator(frame)
   end)
 
   ---@param frame Frame
@@ -157,8 +158,6 @@ OnPlayerLogin(function()
     local instanceData = GetInstanceData()
 
     PartyMarker(frame)
-    PetIndicator(frame)
-    CombatIndicator(frame)
 
     if not unitInfo.exists then return end
 
