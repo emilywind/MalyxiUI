@@ -348,7 +348,7 @@ local function setupEuiOptions()
 
   local version = C_AddOns.GetAddOnMetadata("EmsUI", "Version")
 
-  local euiTitle = EUI.panel:CreateFontString(nil, "ARTWORK", "GameFontHighlightLarge")
+  local euiTitle = EUI.panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
   euiTitle:SetPoint("TOPLEFT", 16, -16)
   euiTitle:SetText("Em's UI ("..version..")")
 
@@ -582,13 +582,12 @@ local function setupEuiOptions()
   ----------------
   local EUI_Nameplates = makePanel("EUI_Nameplates", EUI.panel, "Nameplates")
 
-  -- Create a ScrollFrame and a child frame to hold your content
   local scrollFrame = CreateFrame("ScrollFrame", "MyConfigScrollFrame", EUI_Nameplates, "UIPanelScrollFrameTemplate")
   scrollFrame:SetSize(640, 600)
   scrollFrame:SetPoint("TOPLEFT", EUI_Nameplates, "TOPLEFT", 0, 0)
 
   local Nameplate_Content = CreateFrame("Frame", nil, scrollFrame)
-  Nameplate_Content:SetSize(640, 900) -- Height should fit all your content
+  Nameplate_Content:SetSize(640, 720)
   scrollFrame:SetScrollChild(Nameplate_Content)
 
   local nameplateText = Nameplate_Content:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
@@ -807,37 +806,6 @@ local function setupEuiOptions()
   )
   nameplateCombatIndicator:SetPoint("TOPLEFT", nameplateFadeSecondaryPets, "BOTTOMLEFT", 0, -4)
 
-  local partyMarkerText = Nameplate_Content:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-  partyMarkerText:SetText("Party Markers")
-  partyMarkerText:SetPoint("TOPLEFT", nameplateCombatIndicator, "BOTTOMLEFT", 0, -48)
-
-  local partyMarker = newCheckbox(
-    "Show Party Markers",
-    "Show markers for your party members on their nameplates.",
-    "partyMarker",
-    partyMarkerText,
-    Nameplate_Content,
-    RefreshNameplates
-  )
-
-  local partyMarkerHealer = newCheckbox(
-    "Show Healer Markers",
-    "Show a specific marker for healers in your party.",
-    "partyMarkerHealer",
-    partyMarker,
-    Nameplate_Content,
-    RefreshNameplates
-  )
-
-  local partyMarkerHideRaidmarker = newCheckbox(
-    "Hide Default Party Raid Markers",
-    "Hide the default raid markers above party members' heads.",
-    "partyMarkerHideRaidmarker",
-    partyMarkerHealer,
-    Nameplate_Content,
-    RefreshNameplates
-  )
-
   function DisableNameplateSettings()
     nameplateFontDropdown:Disable()
     nameplateFontSlider:Disable()
@@ -858,9 +826,6 @@ local function setupEuiOptions()
     nameplatePetIndicator:Disable()
     nameplateFadeSecondaryPets:Disable()
     nameplateCombatIndicatorDropdown:Disable()
-    partyMarker:Disable()
-    partyMarkerHealer:Disable()
-    partyMarkerHideRaidmarker:Disable()
   end
 
   function EnableNameplateSettings()
@@ -883,9 +848,6 @@ local function setupEuiOptions()
     nameplatePetIndicator:Enable()
     nameplateFadeSecondaryPets:Enable()
     nameplateCombatIndicatorDropdown:Enable()
-    partyMarker:Enable()
-    partyMarkerHealer:Enable()
-    partyMarkerHideRaidmarker:Enable()
   end
 
   if not EUIDB.skinNameplates then
@@ -1120,6 +1082,37 @@ local function setupEuiOptions()
   )
   fasterLoot:ClearAllPoints()
   fasterLoot:SetPoint("TOPLEFT", chatFont, "BOTTOMLEFT", 0, -48)
+
+  local partyMarkerText = EUI_Misc:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+  partyMarkerText:SetText("Party Markers")
+  partyMarkerText:SetPoint("TOPLEFT", fasterLoot, "BOTTOMLEFT", 0, -16)
+
+  local partyMarker = newCheckbox(
+    "Show Party Markers",
+    "Show markers for your party members on their nameplates.",
+    "partyMarker",
+    partyMarkerText,
+    EUI_Misc,
+    RefreshNameplates
+  )
+
+  local partyMarkerHealer = newCheckbox(
+    "Show Healer Markers",
+    "Show a specific marker for healers in your party.",
+    "partyMarkerHealer",
+    partyMarker,
+    EUI_Misc,
+    RefreshNameplates
+  )
+
+  local partyMarkerHideRaidmarker = newCheckbox(
+    "Hide Default Party Raid Markers",
+    "Hide the default raid markers above party members' heads.",
+    "partyMarkerHideRaidmarker",
+    partyMarkerHealer,
+    EUI_Misc,
+    RefreshNameplates
+  )
 
   -----------
   -- CVars --
