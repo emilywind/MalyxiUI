@@ -91,9 +91,13 @@ end
 -- Pet Indicator
 function PetIndicator(frame)
   local info = GetNameplateUnitInfo(frame)
-  if not info.exists then return end
 
   local instanceData = GetInstanceData()
+
+  if not info.isNpc then -- Pets are always NPCs, so no need to create the indicator if not an NPC
+    HideIndicator(frame)
+    return
+  end
 
   -- Initialize
   local petIndicator = frame.petIndicator
