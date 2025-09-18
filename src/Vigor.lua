@@ -45,7 +45,7 @@ OnEvents({
   "PLAYER_MOUNT_DISPLAY_CHANGED",
   "PLAYER_ENTERING_WORLD"
 }, function()
-  C_Timer.After(0.1, function() -- Delay to ensure UIWidgetPowerBarContainerFrame is fully loaded
+  C_Timer.After(0.2, function() -- Delay to ensure UIWidgetPowerBarContainerFrame is fully loaded
     SkinVigorBar()
   end)
 end)
