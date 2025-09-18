@@ -1,5 +1,8 @@
 local SetCVar = C_CVar.SetCVar
 
+---@param table table
+---@param member string
+---@param bool boolean
 local function setValue(table, member, bool)
   if bool then
     TextureLoadingGroupMixin.AddTexture(
@@ -56,6 +59,7 @@ OnPlayerLogin(function()
   end
   SetFriendlyNameplateSize()
 
+  ---@param frame Frame
   local function updateHealth(frame)
     if frame:IsForbidden() or not frame.isNameplate then return end
 
@@ -142,6 +146,7 @@ OnPlayerLogin(function()
     PetIndicator(frame)
   end)
 
+  ---@param frame Frame
   local function updateName(frame)
     local unitInfo = GetNameplateUnitInfo(frame)
     if not unitInfo.exists or frame:IsForbidden() or not frame.isNameplate then return end
