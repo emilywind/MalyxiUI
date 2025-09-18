@@ -232,12 +232,12 @@ OnPlayerLogin(function()
       frame.levelText:Hide()
     end
 
-    if not frame.hasArenaNumber and (EUIDB.nameplateHideServerNames or EUIDB.nameplateNameLength > 0) then
+    if not frame.hasArenaNumber then
       local name = unitInfo.name
       if not EUIDB.nameplateHideServerNames and unitInfo.realm then
         name = name .. " - " .. unitInfo.realm
-      elseif EUIDB.nameplateNameLength > 0 and not unitInfo.isPlayer then
-        name = (string.len(name) > EUIDB.nameplateNameLength) and string.gsub(name, "%s?(.[\128-\191]*)%S+%s", "%1. ") or name
+      elseif EUIDB.nameplateAbbrevNames and not unitInfo.isPlayer then
+        name = (string.len(name) > 20) and string.gsub(name, "%s?(.[\128-\191]*)%S+%s", "%1. ") or name
       end
 
       frame.name:SetText(name)
