@@ -89,7 +89,6 @@ end
 
 function PetIndicator(frame)
   local info = GetNameplateUnitInfo(frame)
-
   local instanceData = GetInstanceData()
 
   if not info.isNpc then -- Pets are always NPCs, so no need to create the indicator if not an NPC
@@ -110,9 +109,9 @@ function PetIndicator(frame)
   -- Demo lock pet
   if info.npcID == 17252 then
     if instanceData.isInArena then
-      local isRealPet = UnitIsUnit(frame.unit, "pet")
+      local isRealPet = UnitIsUnit(info.id, "pet")
       for i = 1, 3 do
-        if UnitIsUnit(frame.unit, "arenapet" .. i) or UnitIsUnit(frame.unit, "partypet" .. i) then
+        if UnitIsUnit(info.id, "arenapet" .. i) or UnitIsUnit(info.id, "partypet" .. i) then
           isRealPet = true
           break
         end
@@ -133,9 +132,9 @@ function PetIndicator(frame)
   -- All hunter pets have same NPC id
   if info.npcID == 165189 then
     if instanceData.isInArena then
-      local isRealPet = UnitIsUnit(frame.unit, "pet")
+      local isRealPet = UnitIsUnit(info.id, "pet")
       for i = 1, 3 do
-        if UnitIsUnit(frame.unit, "arenapet" .. i) or UnitIsUnit(frame.unit, "partypet" .. i) then
+        if UnitIsUnit(info.id, "arenapet" .. i) or UnitIsUnit(info.id, "partypet" .. i) then
           isRealPet = true
           break
         end
@@ -151,7 +150,7 @@ function PetIndicator(frame)
     else
       local isValidPet = false
       for i = 1, 6 do
-        local aura = C_UnitAuras.GetAuraDataByIndex(frame.displayedUnit, i, "HELPFUL")
+        local aura = C_UnitAuras.GetAuraDataByIndex(info.id, i, "HELPFUL")
         if aura and petValidSpellIDs[aura.spellId] then
           isValidPet = true
           break

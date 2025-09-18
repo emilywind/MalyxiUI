@@ -396,9 +396,15 @@ function GetUnitHealthColor(unit)
 end
 
 ---@param frame Frame
+---@return UnitToken
+function GetNameplateUnit(frame)
+  return frame.displayedUnit or frame.unit
+end
+
+---@param frame Frame
 ---@return table
 function GetNameplateUnitInfo(frame)
-  local unit = frame.displayedUnit or frame.unit
+  local unit = GetNameplateUnit(frame)
 
   return GetUnitInfo(unit)
 end
@@ -436,20 +442,22 @@ end
 
 local SpecCache = {}
 local ALL_SPECS = GetLocalizedSpecs()
+---@param frame Frame
 function GetSpecID(frame)
-  local unit = frame.unit or frame.displayedUnit
-  if not UnitIsPlayer(unit) then
-    return nil
+  local unitInfo = GetNameplateUnitInfo(frame)
+
+  if not unitInfo.isPlayer then
+    return
   end
 
-  local guid = UnitGUID(unit)
+  local guid = unitInfo.guid
   local instanceData = GetInstanceData()
 
   if SpecCache[guid] and instanceData.isInPvP then
     return SpecCache[guid]
   end
 
-  local tooltipData = C_TooltipInfo.GetUnit(unit)
+  local tooltipData = C_TooltipInfo.GetUnit(unitInfo.id)
   if not tooltipData or not tooltipData.guid or not tooltipData.lines then
     return nil
   end

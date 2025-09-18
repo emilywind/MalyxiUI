@@ -159,7 +159,7 @@ local function skinCastbar(frame)
   if not castBar then return end
   if castBar:IsForbidden() then return end
 
-  local unit = frame.displayedUnit or frame.unit
+  local unit = GetNameplateUnit(frame)
 
   ApplyEuiBackdrop(castBar.Icon, castBar)
   local timer = castBar.timer
