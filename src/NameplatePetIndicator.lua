@@ -91,7 +91,7 @@ end
 -- Pet Indicator
 function PetIndicator(frame)
   local info = GetNameplateUnitInfo(frame)
-  if not info.isNpc then return end
+  if not info.exists then return end
 
   local instanceData = GetInstanceData()
 
