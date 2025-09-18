@@ -165,22 +165,24 @@ local function setupEuiOptions()
 
   ---@param label string
   ---@param description string
-  ---@param initialValue any
-  ---@param onChange fun(value: boolean, self: CheckButton)
+  ---@param configVar string
   ---@param relativeEl Frame
   ---@param frame Frame
+  ---@param onChange? fun(value: boolean, initialValue: boolean)
   ---@param point1? string
   ---@param point2? string
   ---@param x? number
   ---@param y? number
   ---@return CheckButton
-  local function newCheckbox(label, description, initialValue, onChange, relativeEl, frame, point1, point2, x, y)
+  local function newCheckbox(label, description, configVar, relativeEl, frame, onChange, point1, point2, x, y)
+    local initialValue = EUIDB[configVar]
     local check = CreateFrame("CheckButton", "EUICheck" .. label, frame, "ChatConfigCheckButtonTemplate") ---@cast check CheckButton
     check:SetScript("OnClick",
     ---@param self CheckButton
     function(self)
       local tick = self:GetChecked()
-      onChange(tick, self)
+      EUIDB[configVar] = tick
+      if onChange then onChange(tick, initialValue) end
       if tick then
         PlaySound(856) -- SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
       else
@@ -190,7 +192,6 @@ local function setupEuiOptions()
     check.label = _G[check:GetName() .. "Text"]
     check.label:SetText(label)
     check.tooltip = description
-    check.initialValue = initialValue
     check:SetChecked(initialValue)
     check:SetPoint(point1 or "TOPLEFT", relativeEl, point2 or "BOTTOMLEFT", x or 0, y or -8)
 
@@ -199,16 +200,17 @@ local function setupEuiOptions()
 
   ---@param label string
   ---@param options table
-  ---@param initialValue any
+  ---@param configVar string
   ---@param width number
-  ---@param onChange fun(value: any)
   ---@param frame Frame
-  local function newDropdown(label, options, initialValue, width, onChange, frame)
+  ---@param onChange? fun(value: any)
+  local function newDropdown(label, options, configVar, width, frame, onChange)
     local dropdownText = frame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
     dropdownText:SetText(label)
+    local initialValue = EUIDB[configVar]
 
     local dropdown = CreateFrame("Frame", "EUIDropdown" .. label, frame, "UIDropdownMenuTemplate")
-    dropdown.disabled = false
+    local disabled = false
     _G[dropdown:GetName() .. "Middle"]:SetWidth(width)
     dropdown:SetPoint("TOPLEFT", dropdownText, "BOTTOMLEFT", 0, -8)
     local displayText = _G[dropdown:GetName() .. "Text"]
@@ -218,31 +220,31 @@ local function setupEuiOptions()
       local selected, info = displayText:GetText(), {}
       info.func = function(v)
         displayText:SetText(v:GetText())
-        onChange(v.value)
+        EUIDB[configVar] = v.value
+        if onChange then onChange(v.value) end
       end
       for value, key in pairs(options) do
         info.text = key
         info.value = value
         info.checked = info.text == selected
 
-        info.disabled = dropdown.disabled
+        info.disabled = disabled
 
         UIDropDownMenu_AddButton(info)
       end
     end
 
     dropdown.Disable = function()
-      dropdown.disabled = true
+      disabled = true
     end
 
     dropdown.Enable = function()
-      dropdown.disabled = false
+      disabled = false
     end
 
     return dropdownText, dropdown
   end
 
-  ---@param frameName string
   ---@param label string
   ---@param configVar string
   ---@param min number
@@ -253,7 +255,7 @@ local function setupEuiOptions()
   ---@param frame Frame
   ---@param onChanged? fun(value: any)
   ---@return Slider
-  local function newSlider(frameName, label, configVar, min, max, valueStep, tooltip, relativeEl, frame, onChanged)
+  local function newSlider(label, configVar, min, max, valueStep, tooltip, relativeEl, frame, onChanged)
     local function onValueChanged(self, value)
       self.Text:SetFormattedText(label, value)
       EUIDB[configVar] = value
@@ -261,7 +263,7 @@ local function setupEuiOptions()
         onChanged(value)
       end
     end
-    local slider = CreateFrame("Slider", frameName, frame, "OptionsSliderTemplate") ---@cast slider Slider
+    local slider = CreateFrame("Slider", "EUISlider" .. label, frame, "OptionsSliderTemplate") ---@cast slider Slider
     slider:SetMinMaxValues(min, max)
     slider:SetValue(EUIDB[configVar])
     slider:SetValueStep(valueStep)
@@ -346,34 +348,31 @@ local function setupEuiOptions()
 
   local version = C_AddOns.GetAddOnMetadata("EmsUI", "Version")
 
-  local euiTitle = EUI.panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+  local euiTitle = EUI.panel:CreateFontString(nil, "ARTWORK", "GameFontHighlightLarge")
   euiTitle:SetPoint("TOPLEFT", 16, -16)
   euiTitle:SetText("Em's UI ("..version..")")
 
   local uiModeChooser, uiModeDropdown = newDropdown(
     "UI Mode",
     { ["blizzard"] = "Blizzard", ["dark"] = "Dark", ["light"] = "Light", ["black"] = "Black" },
-    EUIDB.uiMode,
+    "uiMode",
     80,
-    function(value)
-      EUIDB.uiMode = value
+    EUI.panel,
+    function()
       StyleActionBars()
       ApplyStaticUIMode()
       SkinVigorBar()
-    end,
-    EUI.panel
+    end
   )
   uiModeChooser:SetPoint("TOPLEFT", euiTitle, "BOTTOMLEFT", 0, -16)
 
   local classColoredUnitFrames = newCheckbox(
     "Class Colored Unit Frame Borders",
     "Color unit frame borders by class for players.",
-    EUIDB.classColoredUnitFrames,
-    function(value)
-      EUIDB.classColoredUnitFrames = value
-    end,
+    "classColoredUnitFrames",
     uiModeDropdown,
     EUI.panel,
+    nil,
     "LEFT",
     "RIGHT",
     100,
@@ -383,104 +382,93 @@ local function setupEuiOptions()
   local portraitSelect, portraitDropdown = newDropdown(
     "Portrait Style",
     {["3D"] = "3D", ["class"] = "Class", ["default"] = "Default"},
-    EUIDB.portraitStyle,
+    "portraitStyle",
     60,
-    function(value)
-      EUIDB.portraitStyle = value
-      RefreshEUIPortraits()
-    end,
-    EUI.panel
+    EUI.panel,
+    RefreshEUIPortraits
   )
   portraitSelect:SetPoint("TOPLEFT", uiModeDropdown, "BOTTOMLEFT", 0, -16)
 
   local classPortraitPack = newDropdown(
     "Class Portrait Pack",
     CLASS_PORTRAIT_PACKS,
-    EUIDB.classPortraitPack,
+    "classPortraitPack",
     200,
-    function(value)
-      EUIDB.classPortraitPack = value
-      RefreshEUIPortraits()
-    end,
-    EUI.panel
+    EUI.panel,
+    RefreshEUIPortraits
   )
   classPortraitPack:SetPoint("LEFT", portraitSelect, "RIGHT", 50, 0)
 
   local lootSpecDisplay = newCheckbox(
     "Display Loot Spec Indicator",
     "Display loot spec icon in your player portrait.",
-    EUIDB.lootSpecDisplay,
-    function(value)
-      EUIDB.lootSpecDisplay = value
-      UpdateLootSpecDisplay()
-    end,
+    "lootSpecDisplay",
     portraitSelect,
-    EUI.panel
+    EUI.panel,
+    UpdateLootSpecDisplay
   )
   lootSpecDisplay:SetPoint("TOPLEFT", portraitDropdown, "BOTTOMLEFT", 0, -16)
 
   local enableFont = newCheckbox(
     "Use Custom Font",
     "Use custom font. Can be set in the dropdown to the right.",
-    EUIDB.enableFont,
+    "enableFont",
+    lootSpecDisplay,
+    EUI.panel,
     function(value)
-      EUIDB.enableFont = value
       UpdateFontChooser()
       UpdateFonts()
-      if value == false then
+      if not value then
         Main_Reload:Show()
       else
         Main_Reload:Hide()
       end
-    end,
-    lootSpecDisplay,
-    EUI.panel
+    end
   )
 
   local fontChooser, fontDropdown = newDropdown(
     "Font",
     LSM_FONTS,
-    EUIDB.font,
+    "font",
     200,
-    function(value)
-      EUIDB.font = value
-      UpdateFonts()
-    end,
-    EUI.panel
+    EUI.panel,
+    UpdateFonts
   )
   fontChooser:SetPoint("LEFT", lootSpecDisplay, "RIGHT", 300, 0)
 
   function UpdateFontChooser()
-    fontDropdown.disabled = not EUIDB.enableFont
+    if EUIDB.enableFont then
+      fontDropdown:Enable()
+    else
+      fontDropdown:Disable()
+    end
   end
   UpdateFontChooser()
 
   local enableDamageFont = newCheckbox(
     "Use Custom Damage Font**",
     "Use a custom font for damage numbers. Can be set in the dropdown to the right.\n\n**Change requires relogging.",
-    EUIDB.enableDamageFont,
-    function(value)
-      EUIDB.enableDamageFont = value
-      UpdateDamageFontChooser()
-    end,
+    "enableDamageFont",
     enableFont,
-    EUI.panel
+    EUI.panel,
+    UpdateDamageFontChooser
   )
 
   local damageFontChooser, damageFontDropdown = newDropdown(
     "Damage Font (Change requires relog)",
     LSM_FONTS,
-    EUIDB.damageFont,
+    "damageFont",
     200,
-    function(value)
-      EUIDB.damageFont = value
-    end,
     EUI.panel
   )
   damageFontChooser:SetPoint("LEFT", enableDamageFont, "RIGHT", 300, 0)
 
   function UpdateDamageFontChooser()
-    damageFontDropdown.disabled = not EUIDB.enableDamageFont
+    if EUIDB.enableDamageFont then
+      damageFontDropdown:Enable()
+    else
+      damageFontDropdown:Disable()
+    end
   end
   UpdateDamageFontChooser()
 
@@ -491,10 +479,7 @@ local function setupEuiOptions()
   local dampeningDisplay = newCheckbox(
     "Dampening Display",
     "Display Dampening % under remaining time at the top of the screen in arenas.",
-    EUIDB.dampeningDisplay,
-    function(value)
-      EUIDB.dampeningDisplay = value
-    end,
+    "dampeningDisplay",
     pvpText,
     EUI.panel
   )
@@ -504,22 +489,18 @@ local function setupEuiOptions()
     LSM_STATUSBAR,
     EUIDB.statusBarTex,
     200,
-    function(value)
-      EUIDB.statusBarTex = value
+    EUI.panel,
+    function()
       RefreshNameplates()
       UpdateAllCompactUnitFrames()
-    end,
-    EUI.panel
+    end
   )
   statusBarChooser:SetPoint("LEFT", dampeningDisplay, "RIGHT", 300, 0)
 
   local tabBinder = newCheckbox(
     "Tab Binder",
     "Tab-target only between players in Arenas and BGs.",
-    EUIDB.tabBinder,
-    function(value)
-      EUIDB.tabBinder = value
-    end,
+    "tabBinder",
     dampeningDisplay,
     EUI.panel
   )
@@ -527,22 +508,16 @@ local function setupEuiOptions()
   local hideArenaFrames = newCheckbox(
     "Hide Blizzard Arena Frames",
     "Hides the default arena frames in arenas, in favour of Gladius, sArena, or etc",
-    EUIDB.hideArenaFrames,
-    function(value)
-      EUIDB.hideArenaFrames = value
-      HideArenaFrames()
-    end,
+    "hideArenaFrames",
     tabBinder,
-    EUI.panel
+    EUI.panel,
+    HideArenaFrames
   )
 
   local hideObjectiveTracker = newCheckbox(
     "Hide Objective Tracker in Battlegrounds",
     "Hide the Quest Objective Tracker in Battlegrounds to reduce clutter.",
-    EUIDB.hideObjectiveTracker,
-    function(value)
-      EUIDB.hideObjectiveTracker = value
-    end,
+    "hideObjectiveTracker",
     hideArenaFrames,
     EUI.panel
   )
@@ -552,7 +527,6 @@ local function setupEuiOptions()
   miscText:SetPoint("TOPLEFT", hideObjectiveTracker, "BOTTOMLEFT", 0, -16)
 
   local castBarScale = newSlider(
-    "EUI_CastbarScaleSlider",
     "Castbar Scale: %.1f",
     "castBarScale",
     1,
@@ -566,29 +540,26 @@ local function setupEuiOptions()
   local enableStatsFrame = newCheckbox(
     "Enable Stats Frame",
     "Enable the stats frame that shows FPS, latency, and movement speed.",
-    EUIDB.enableStatsFrame,
+    "enableStatsFrame",
+    castBarScale,
+    EUI.panel,
     function(value)
-      EUIDB.enableStatsFrame = value
       UpdateStatsSpeed()
       if value then
         StatsFrame:Show()
       else
         StatsFrame:Hide()
       end
-    end,
-    castBarScale,
-    EUI.panel
+    end
   )
 
   local enableStatsSpeed = newCheckbox(
     "Show Movement Speed",
     "Show movement speed percentage in the stats frame.",
-    EUIDB.enableStatsSpeed,
-    function(value)
-      EUIDB.enableStatsSpeed = value
-    end,
+    "enableStatsSpeed",
     enableStatsFrame,
     EUI.panel,
+    nil,
     "LEFT",
     "RIGHT",
     0,
@@ -628,9 +599,11 @@ local function setupEuiOptions()
     "Enhance Nameplates",
     "Enable the customisation options below for nameplates.",
     EUIDB.skinNameplates,
-    function(value, self)
+    nameplateText,
+    Nameplate_Content,
+    function(value, initialValue)
       EUIDB.skinNameplates = value
-      if value ~= self.initialValue then
+      if value ~= initialValue then
         Nameplate_Reload:Show()
       else
         Nameplate_Reload:Hide()
@@ -640,26 +613,20 @@ local function setupEuiOptions()
       else
         DisableNameplateSettings()
       end
-    end,
-    nameplateText,
-    Nameplate_Content
+    end
   )
 
   local nameplateFont, nameplateFontDropdown = newDropdown(
     "Nameplate Font",
     LSM_FONTS,
-    EUIDB.nameplateFont,
+    "nameplateFont",
     200,
-    function(value)
-      EUIDB.nameplateFont = value
-      RefreshNameplates()
-    end,
-    Nameplate_Content
+    Nameplate_Content,
+    RefreshNameplates
   )
   nameplateFont:SetPoint("TOPLEFT", skinNameplates, "BOTTOMLEFT", 0, -4)
 
   local nameplateFontSlider = newSlider(
-    "EUI_NameplateFontSlider",
     FONT_SIZE.." "..FONT_SIZE_TEMPLATE,
     "nameplateNameFontSize",
     6,
@@ -668,9 +635,7 @@ local function setupEuiOptions()
     "Font size for Nameplate Names",
     nameplateFontDropdown,
     Nameplate_Content,
-    function()
-      RefreshNameplates()
-    end
+    RefreshNameplates
   )
   nameplateFontSlider:ClearAllPoints()
   nameplateFontSlider:SetPoint("LEFT", nameplateFontDropdown, "RIGHT", 220, 0)
@@ -694,10 +659,7 @@ local function setupEuiOptions()
   local nameplateHideServerNames = newCheckbox(
     "Hide Server Names (Must rezone to see change).",
     "Hide server names for players from different servers to reduce clutter.",
-    EUIDB.nameplateHideServerNames,
-    function(value)
-      EUIDB.nameplateHideServerNames = value
-    end,
+    "nameplateHideServerNames",
     nameplateNameLength,
     Nameplate_Content
   )
@@ -705,74 +667,56 @@ local function setupEuiOptions()
   local nameplateFriendlyNamesClassColor = newCheckbox(
     "Class Color Friendly Names",
     "Colors friendly players' names on their nameplates.",
-    EUIDB.nameplateFriendlyNamesClassColor,
-    function(value)
-      EUIDB.nameplateFriendlyNamesClassColor = value
-      RefreshNameplates()
-    end,
+    "nameplateFriendlyNamesClassColor",
     nameplateHideServerNames,
-    Nameplate_Content
+    Nameplate_Content,
+    RefreshNameplates
   )
 
   local nameplateFriendlySmall = newCheckbox(
     "Smaller Friendly Nameplates",
     "Reduce size of friendly nameplates to more easily distinguish friend from foe",
-    EUIDB.nameplateFriendlySmall,
-    function(value)
-      EUIDB.nameplateFriendlySmall = value
-      SetFriendlyNameplateSize()
-    end,
+    "nameplateFriendlySmall",
     nameplateFriendlyNamesClassColor,
-    Nameplate_Content
+    Nameplate_Content,
+    SetFriendlyNameplateSize
   )
 
   local nameplateShowLevel = newCheckbox(
     "Show Level",
     "Show player/mob level on nameplate",
-    EUIDB.nameplateShowLevel,
-    function(value)
-      EUIDB.nameplateShowLevel = value
-      RefreshNameplates()
-    end,
+    "nameplateShowLevel",
     nameplateFriendlySmall,
-    Nameplate_Content
+    Nameplate_Content,
+    RefreshNameplates
   )
 
   local nameplateShowHealth = newCheckbox(
     "Show Health Percentage",
     "Show percentages of health on nameplates",
-    EUIDB.nameplateHealthPercent,
-    function(value)
-      EUIDB.nameplateHealthPercent = value
-      RefreshNameplates()
-    end,
+    "nameplateHealthPercent",
     nameplateShowLevel,
-    Nameplate_Content
+    Nameplate_Content,
+    RefreshNameplates
   )
 
   local nameplateTotemIndicators, nameplateTotemIndicatorsDropdown = newDropdown(
     "Totem/Important Pet (Psyfiend, Demonic Tyrant, etc.) Indicators",
     { ["none"] = "None", ["all"] = "All", ["important"] = "Important" },
-    EUIDB.nameplateTotemIndicators,
+    "nameplateTotemIndicators",
     120,
-    function(value)
-      EUIDB.nameplateTotemIndicators = value
-      UpdateTotemIndicatorSetting()
-    end,
-    Nameplate_Content
+    Nameplate_Content,
+    UpdateTotemIndicatorSetting
   )
   nameplateTotemIndicators:SetPoint("TOPLEFT", nameplateShowHealth, "BOTTOMLEFT", 0, -16)
 
   local arenaNumbers = newCheckbox(
     "Show Arena Numbers on nameplates in arenas",
     "Show Arena number (i.e. 1, 2, 3 etc) on top of nameplates in arenas instead of player names to assist with macro use awareness",
-    EUIDB.arenaNumbers,
-    function(value)
-      EUIDB.arenaNumbers = value
-      RefreshNameplates()
-    end,
+    "arenaNumbers",
     nameplateTotemIndicators,
-    Nameplate_Content
+    Nameplate_Content,
+    RefreshNameplates
   )
   arenaNumbers:ClearAllPoints()
   arenaNumbers:SetPoint("TOPLEFT", nameplateTotemIndicators, "BOTTOMLEFT", 0, -48)
@@ -780,121 +724,94 @@ local function setupEuiOptions()
   local nameplateHideCastText = newCheckbox(
     "Hide Nameplate Cast Text",
     "Hide cast text from nameplate castbars.",
-    EUIDB.nameplateHideCastText,
-    function(value)
-      EUIDB.nameplateHideCastText = value
-      RefreshNameplates()
-    end,
+    "nameplateHideCastText",
     arenaNumbers,
-    Nameplate_Content
+    Nameplate_Content,
+    RefreshNameplates
   )
 
   local nameplateHideFriendlyHealthbars = newCheckbox(
     "Hide Friendly Nameplate Health Bars",
     "Hide health bars for friendly players.",
-    EUIDB.nameplateHideFriendlyHealthbars,
-    function(value)
-      EUIDB.nameplateHideFriendlyHealthbars = value
-      RefreshNameplates()
-    end,
+    "nameplateHideFriendlyHealthbars",
     nameplateHideCastText,
-    Nameplate_Content
+    Nameplate_Content,
+    RefreshNameplates
   )
 
   local nameplateHideFriendlyCastbars = newCheckbox(
     "Hide Friendly Nameplate Cast Bars",
     "Hide cast bars for friendly players.",
-    EUIDB.nameplateHideFriendlyCastbars,
-    function(value)
-      EUIDB.nameplateHideFriendlyCastbars = value
-      RefreshNameplates()
-    end,
+    "nameplateHideFriendlyCastbars",
     nameplateHideFriendlyHealthbars,
-    Nameplate_Content
+    Nameplate_Content,
+    RefreshNameplates
   )
 
   local nameplateHideClassificationIcon = newCheckbox(
     "Hide Nameplate Classification Icon",
     "Hide the classification icon (e.g. elite, rare) on nameplates.",
-    EUIDB.nameplateHideClassificationIcon,
-    function(value)
-      EUIDB.nameplateHideClassificationIcon = value
-      RefreshNameplates()
-    end,
+    "nameplateHideClassificationIcon",
     nameplateHideFriendlyCastbars,
-    Nameplate_Content
+    Nameplate_Content,
+    RefreshNameplates
   )
+
 
   local nameplateFriendlyClickthrough = newCheckbox(
     "Friendly Nameplate Clickthrough",
     "Allow clicking through friendly nameplates to interact with objects behind them.",
-    EUIDB.nameplateFriendlyClickthrough,
-    function(value)
-      EUIDB.nameplateFriendlyClickthrough = value
-      C_NamePlate.SetNamePlateFriendlyClickThrough(value)
-    end,
+    "nameplateFriendlyClickthrough",
     nameplateHideClassificationIcon,
-    Nameplate_Content
+    Nameplate_Content,
+    function(value)
+      C_NamePlate.SetNamePlateFriendlyClickThrough(value)
+    end
   )
 
   local nameplateColorInterrupt = newCheckbox(
     "Color Castbars by Interrupt Availability",
     "Color castbars based upon interrupt availability. This allows you to track your interrupt cooldown without having to look elsewhere.",
     EUIDB.nameplateCastbarColorInterrupt,
-    function(value)
-      EUIDB.nameplateCastbarColorInterrupt = value
-      RefreshNameplates()
-    end,
     nameplateFriendlyClickthrough,
-    Nameplate_Content
+    Nameplate_Content,
+    RefreshNameplates
   )
 
   local nameplateShowTargetText = newCheckbox(
     "Show Target Text on Nameplates",
     "Show the target of the current cast on nameplates.",
-    EUIDB.nameplateShowTargetText,
-    function(value)
-      EUIDB.nameplateShowTargetText = value
-      RefreshNameplates()
-    end,
+    "nameplateShowTargetText",
     nameplateColorInterrupt,
-    Nameplate_Content
+    Nameplate_Content,
+    RefreshNameplates
   )
 
   local nameplatePetIndicator = newCheckbox(
     "Show Pet Indicator on Nameplates",
     "Show an icon on nameplates to indicate primary/important pets.",
-    EUIDB.nameplatePetIndicator,
-    function(value)
-      EUIDB.nameplatePetIndicator = value
-      RefreshNameplates()
-    end,
+    "nameplatePetIndicator",
     nameplateShowTargetText,
-    Nameplate_Content
+    Nameplate_Content,
+    RefreshNameplates
   )
 
   local nameplateFadeSecondaryPets = newCheckbox(
     "Fade Secondary Pets",
     "Fade the nameplates of secondary pets (e.g., second BM Hunter pet, Warlock minions).",
-    EUIDB.nameplateFadeSecondaryPets,
-    function(value)
-      EUIDB.nameplateFadeSecondaryPets = value
-      RefreshNameplates()
-    end,
+    "nameplateFadeSecondaryPets",
     nameplatePetIndicator,
-    Nameplate_Content
+    Nameplate_Content,
+    RefreshNameplates
   )
 
   local nameplateCombatIndicator, nameplateCombatIndicatorDropdown = newDropdown(
     "Nameplate Combat Indicator",
     { ["none"] = "None", ["food"] = "Food", ["sap"] = "Sap" },
-    EUIDB.nameplateCombatIndicator,
+    "nameplateCombatIndicator",
     80,
-    function(value)
-      EUIDB.nameplateCombatIndicator = value
-      RefreshNameplates()
-    end,
-    Nameplate_Content
+    Nameplate_Content,
+    RefreshNameplates
   )
   nameplateCombatIndicator:SetPoint("TOPLEFT", nameplateFadeSecondaryPets, "BOTTOMLEFT", 0, -4)
 
@@ -905,37 +822,28 @@ local function setupEuiOptions()
   local partyMarker = newCheckbox(
     "Show Party Markers",
     "Show markers for your party members on their nameplates.",
-    EUIDB.partyMarker,
-    function(value)
-      EUIDB.partyMarker = value
-      RefreshNameplates()
-    end,
+    "partyMarker",
     partyMarkerText,
-    Nameplate_Content
+    Nameplate_Content,
+    RefreshNameplates
   )
 
   local partyMarkerHealer = newCheckbox(
     "Show Healer Markers",
     "Show a specific marker for healers in your party.",
-    EUIDB.partyMarkerHealer,
-    function(value)
-      EUIDB.partyMarkerHealer = value
-      RefreshNameplates()
-    end,
+    "partyMarkerHealer",
     partyMarker,
-    Nameplate_Content
+    Nameplate_Content,
+    RefreshNameplates
   )
 
   local partyMarkerHideRaidmarker = newCheckbox(
     "Hide Default Party Raid Markers",
     "Hide the default raid markers above party members' heads.",
-    EUIDB.partyMarkerHideRaidmarker,
-    function(value)
-      EUIDB.partyMarkerHideRaidmarker = value
-      RefreshNameplates()
-    end,
+    "partyMarkerHideRaidmarker",
     partyMarkerHealer,
-    Nameplate_Content
+    Nameplate_Content,
+    RefreshNameplates
   )
 
   function DisableNameplateSettings()
@@ -1247,7 +1155,6 @@ local function setupEuiOptions()
   chatFont:SetPoint("TOPLEFT", chatOnTop, "BOTTOMLEFT", 0, -6)
 
   local chatFontSize = newSlider(
-    "EUI_ChatFontSizeSlider",
     FONT_SIZE.." "..FONT_SIZE_TEMPLATE,
     "chatFontSize",
     8,
