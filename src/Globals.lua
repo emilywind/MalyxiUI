@@ -506,7 +506,7 @@ function EUISetCVar(cvarName, value, euiVarName, settingNil)
     EUIDB[euiVarName] = value
   end
 
-  return C_CVar.SetCVar(cvarName, value == true and 1 or value == false and 0 or value)
+  return C_CVar.SetCVar(cvarName, (value == true and 1) or (value == false and 0) or value)
 end
 
 function GetAllNameplates()
