@@ -29,7 +29,7 @@ local function updateTextures(self)
       self.horizTopBorder:Hide()
       self.horizBottomBorder:Hide()
       self.background:SetTexture(SQUARE_TEXTURE)
-      SetVertexColor(self.background, COLOR_RAIDFRAME_BG)
+      self.background:SetVertexColor(0.15, 0.15, 0.15, 0.9)
 
       if self.CcRemoverFrame then
         ApplyEuiBackdrop(self.CcRemoverFrame.Icon, self.CcRemoverFrame)
