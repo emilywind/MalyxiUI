@@ -120,6 +120,8 @@ function PartyMarker(frame)
   frame.RaidTargetFrame.RaidTargetIcon:SetAlpha(EUIDB.partyMarkerHideRaidmarker and 0 or 1)
 end
 
+hooksecurefunc("CompactUnitFrame_UpdateName", PartyMarker)
+
 local function refreshAllNameplates()
   for _, nameplate in pairs(GetAllNameplates()) do
     PartyMarker(nameplate)

@@ -157,8 +157,6 @@ OnPlayerLogin(function()
 
     local instanceData = GetInstanceData()
 
-    PartyMarker(frame)
-
     if not unitInfo.exists then return end
 
     if EUIDB.nameplateHideFriendlyHealthbars and unitInfo.isFriend and not unitInfo.isSelf then
