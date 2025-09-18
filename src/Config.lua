@@ -487,7 +487,7 @@ local function setupEuiOptions()
   local statusBarChooser = newDropdown(
     "Status Bar Texture (Raid Frames and Nameplates)",
     LSM_STATUSBAR,
-    EUIDB.statusBarTex,
+    "statusBarTex",
     200,
     EUI.panel,
     function()
