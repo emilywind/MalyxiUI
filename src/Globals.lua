@@ -494,16 +494,13 @@ end
 --- Sets a CVar and saves it to EUIDB
 ---@param cvarName string
 ---@param value boolean|number|string|nil
----@param euiVarName? string Pass if the EUIDB variable name is different from the CVar name
 ---@param settingNil? boolean If true, allows setting nil value to the CVar
 ---@return boolean
-function EUISetCVar(cvarName, value, euiVarName, settingNil)
-  euiVarName = euiVarName or cvarName
-
+function EUISetCVar(cvarName, value, settingNil)
   if value == nil and not settingNil then
-    value = EUIDB[euiVarName]
+    value = EUIDB[cvarName]
   else
-    EUIDB[euiVarName] = value
+    EUIDB[cvarName] = value
   end
 
   return C_CVar.SetCVar(cvarName, (value == true and 1) or (value == false and 0) or value)
