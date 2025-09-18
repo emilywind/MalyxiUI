@@ -38,7 +38,7 @@ OnPlayerLogin(function()
   end
 
   EUISetCVar("nameplateResourceOnTarget")
-  EUISetCVar("nameplateShowAll", nil, "showAllNameplates")
+  EUISetCVar("nameplateShowAll")
   EUISetCVar("nameplateShowFriends")
   EUISetCVar("nameplateShowEnemyMinions")
 

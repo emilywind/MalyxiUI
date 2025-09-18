@@ -61,7 +61,7 @@ EUIDBDefaults = {
   nameplateFadeSecondaryPets = true,
  -- Nameplate CVars
   nameplateResourceOnTarget = true,
-  showAllNameplates = true,
+  nameplateShowAll = true,
   nameplateShowFriends = true,
   nameplateShowEnemyMinions = true,
 
@@ -1335,12 +1335,12 @@ local function setupEuiOptions()
     CUFPowerBarsHealerOnly:Disable()
   end
 
-  local showAllNameplates = newCheckbox(
+  local nameplateShowAll = newCheckbox(
     "Always Show Nameplates",
     "Show nameplates for all units, not just ones in combat.",
-    EUIDB.showAllNameplates,
+    EUIDB.nameplateShowAll,
     function(value)
-      EUISetCVar("nameplateShowAll", value, "showAllNameplates")
+      EUISetCVar("nameplateShowAll", value)
     end,
     cUFDisplayPowerBars,
     EUI_CVars
@@ -1353,7 +1353,7 @@ local function setupEuiOptions()
     function(value)
       EUISetCVar("nameplateResourceOnTarget", value)
     end,
-    showAllNameplates,
+    nameplateShowAll,
     EUI_CVars
   )
 
