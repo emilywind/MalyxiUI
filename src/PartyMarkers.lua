@@ -34,7 +34,7 @@ function PartyMarker(frame)
     partyMarker.healerIcon:SetSize(45, 45)
     partyMarker.healerIcon:SetPoint("BOTTOM", partyMarker.icon, "TOP", 0, -13)
     partyMarker.healerIcon:SetDesaturated(true)
-    partyMarker.healerIcon:SetVertexColor(0, 1, 0)
+    SetVertexColor(partyMarker.healerIcon, COLOR_GREEN)
     partyMarker.healerIcon:Hide()
 
     partyMarker:SetIgnoreParentAlpha(true)

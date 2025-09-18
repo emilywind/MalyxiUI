@@ -9,6 +9,8 @@ COLOR_DARK = CreateColor(0.3, 0.3, 0.3)
 COLOR_BLACK = CreateColor(0, 0, 0)
 COLOR_WHITE = CreateColor(1, 1, 1)
 COLOR_LIGHT = CreateColor(0.8, 0.8, 0.8)
+COLOR_GREEN = CreateColor(0, 1, 0)
+COLOR_BORDER = CreateColor(0.1, 0.1, 0.1)
 
 EUI_TEXTURES = {
   buttons = {
@@ -224,15 +226,17 @@ function ApplyEuiBackdrop(b, frame)
   border:SetTexture(EUI_TEXTURES.roundedBorder)
   border:SetPoint("TOPLEFT", icon, "TOPLEFT", -1, 1)
   border:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT", 1, -1)
-  border:SetVertexColor(0.1, 0.1, 0.1)
+  SetEuiBorderColor(border)
   b.euiBorder = border
 
   return border
 end
 
 ---@param border Texture
----@param color ColorMixin
+---@param color? ColorMixin
 function SetEuiBorderColor(border, color)
+  color = color or COLOR_BORDER
+
   if border.SetVertexColor then
     SetVertexColor(border, color)
   else
@@ -286,7 +290,7 @@ function SkinStatusBar(bar)
   end
 
   bar:SetStatusBarTexture("ui-castingbar-tier4-empower-2x")
-  bar:GetStatusBarTexture():SetVertexColor(0.8, 0, 0)
+  SetVertexColor(bar:GetStatusBarTexture(), CreateColor(0.8, 0, 0))
 
   if bar.BarBG then
     bar.BarBG:Hide()

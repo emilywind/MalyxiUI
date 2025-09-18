@@ -24,7 +24,7 @@ local function applySkin(aura)
   local isBuff = debuffColor:GenerateHexColor() == COLOR_WHITE:GenerateHexColor()
 
   if isBuff then
-    SetEuiBorderColor(border, COLOR_BLACK)
+    SetEuiBorderColor(border)
   else
     SetEuiBorderColor(border, debuffColor)
   end

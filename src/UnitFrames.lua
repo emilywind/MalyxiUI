@@ -1,6 +1,7 @@
 -------------------------------
 -- Class Colored Health Bars --
 -------------------------------
+---@param healthbar StatusBar
 local function setUnitColor(healthbar)
   local unit = healthbar.unit
   if not unit then return end
@@ -19,6 +20,7 @@ end
 ------------------------------------------
 -- Buffs/Debuffs on Target/Focus Frames --
 ------------------------------------------
+---@param aura Button
 local function applyAuraSkin(aura)
   local icon = aura.Icon
   StyleIcon(icon)
@@ -30,7 +32,7 @@ local function applyAuraSkin(aura)
     SetEuiBorderColor(border, GetVertexColor(aura.Border))
     aura.Border:SetAlpha(0)
   else
-    SetEuiBorderColor(border, COLOR_BLACK)
+    SetEuiBorderColor(border)
   end
 end
 
