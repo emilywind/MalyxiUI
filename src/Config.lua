@@ -166,7 +166,7 @@ local function setupEuiOptions()
   ---@param label string
   ---@param description string
   ---@param initialValue any
-  ---@param onChange fun(value: any)
+  ---@param onChange fun(value: boolean, self: CheckButton)
   ---@param relativeEl Frame
   ---@param frame Frame
   ---@param point1? string
@@ -180,7 +180,7 @@ local function setupEuiOptions()
     ---@param self CheckButton
     function(self)
       local tick = self:GetChecked()
-      onChange(tick)
+      onChange(tick, self)
       if tick then
         PlaySound(856) -- SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
       else
@@ -190,6 +190,7 @@ local function setupEuiOptions()
     check.label = _G[check:GetName() .. "Text"]
     check.label:SetText(label)
     check.tooltip = description
+    check.initialValue = initialValue
     check:SetChecked(initialValue)
     check:SetPoint(point1 or "TOPLEFT", relativeEl, point2 or "BOTTOMLEFT", x or 0, y or -8)
 
@@ -630,9 +631,13 @@ local function setupEuiOptions()
     "Enhance Nameplates",
     "Enable the customisation options below for nameplates.",
     EUIDB.skinNameplates,
-    function(value)
+    function(value, self)
       EUIDB.skinNameplates = value
-      Nameplate_Reload:Show()
+      if value ~= self.initialValue then
+        Main_Reload:Show()
+      else
+        Main_Reload:Hide()
+      end
       if value then
         EnableNameplateSettings()
       else
@@ -1005,9 +1010,13 @@ local function setupEuiOptions()
     "Enhance Tooltips",
     "Enable enhanced tooltips with additional information.",
     EUIDB.enhanceTooltips,
-    function(value)
+    function(value, self)
       EUIDB.enhanceTooltips = value
-      Tooltips_Reload:Show()
+      if value ~= self.initialValue then
+        Tooltips_Reload:Show()
+      else
+        Tooltips_Reload:Hide()
+      end
       if value then
         EnableTooltipSettings()
       else
