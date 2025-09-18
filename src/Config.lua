@@ -176,9 +176,11 @@ local function setupEuiOptions()
   ---@return CheckButton
   local function newCheckbox(label, description, initialValue, onChange, relativeEl, frame, point1, point2, x, y)
     local check = CreateFrame("CheckButton", "EUICheck" .. label, frame, "ChatConfigCheckButtonTemplate")
-    check:SetScript("OnClick", function(self)
+    check:SetScript("OnClick",
+    ---@param self CheckButton
+    function(self)
       local tick = self:GetChecked()
-      onChange(tick and true or false)
+      onChange(tick)
       if tick then
         PlaySound(856) -- SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
       else
