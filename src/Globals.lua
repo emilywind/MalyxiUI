@@ -5,16 +5,16 @@ MediaDir = AddonDir.."\\media"
 FontsDir = MediaDir.."\\fonts"
 TextureDir = MediaDir.."\\textures"
 
-COLOR_DARK = CreateColor(0.3, 0.3, 0.3)
-COLOR_BLACK = CreateColor(0, 0, 0)
-COLOR_WHITE = CreateColor(1, 1, 1)
-COLOR_LIGHT = CreateColor(0.8, 0.8, 0.8)
-COLOR_GREEN = CreateColor(0, 1, 0)
-COLOR_RED = CreateColor(1, 0, 0)
-COLOR_GREY = CreateColor(0.5, 0.5, 0.5)
-COLOR_BORDER = CreateColor(0.1, 0.1, 0.1)
-COLOR_CASTBAR_NO_INTERRUPT = CreateColor(1, 0, 0.01568627543747425)
-COLOR_CASTBAR_DELAYED_INTERRUPT = CreateColor(1, 0.4784314036369324, 0.9568628072738647)
+COLOR_DARK = CreateColorFromHexString('ff4d4d4d')
+COLOR_BLACK = CreateColorFromHexString('ff000000')
+COLOR_WHITE = CreateColorFromHexString('ffffffff')
+COLOR_LIGHT = CreateColorFromHexString('ffcccccc')
+COLOR_GREEN = CreateColorFromHexString('ff00ff00')
+COLOR_RED = CreateColorFromHexString('ffff0000')
+COLOR_GREY = CreateColorFromHexString('ff808080')
+COLOR_BORDER = CreateColorFromHexString('ff1a1a1a')
+COLOR_CASTBAR_NO_INTERRUPT = CreateColorFromHexString('ffff0004')
+COLOR_CASTBAR_DELAYED_INTERRUPT = CreateColorFromHexString('ffff7aa5')
 
 EUI_TEXTURES = {
   buttons = {
