@@ -598,11 +598,10 @@ local function setupEuiOptions()
   local skinNameplates = newCheckbox(
     "Enhance Nameplates",
     "Enable the customisation options below for nameplates.",
-    EUIDB.skinNameplates,
+    "skinNameplates",
     nameplateText,
     Nameplate_Content,
     function(value, initialValue)
-      EUIDB.skinNameplates = value
       if value ~= initialValue then
         Nameplate_Reload:Show()
       else
@@ -765,7 +764,7 @@ local function setupEuiOptions()
   local nameplateColorInterrupt = newCheckbox(
     "Color Castbars by Interrupt Availability",
     "Color castbars based upon interrupt availability. This allows you to track your interrupt cooldown without having to look elsewhere.",
-    EUIDB.nameplateCastbarColorInterrupt,
+    "nameplateCastbarColorInterrupt",
     nameplateFriendlyClickthrough,
     Nameplate_Content,
     RefreshNameplates
@@ -911,7 +910,6 @@ local function setupEuiOptions()
     tooltipText,
     EUI_Tooltips,
     function(value, initialValue)
-      EUIDB.enhanceTooltips = value
       if value ~= initialValue then
         Tooltips_Reload:Show()
       else
@@ -1148,7 +1146,6 @@ local function setupEuiOptions()
     classColor,
     EUI_CVars,
     function(value)
-      EUIDB.cUFDisplayPowerBars = value
       if not value then
         CUFPowerBarsHealerOnly:Disable()
       else
