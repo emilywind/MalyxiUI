@@ -914,10 +914,12 @@ local function setupEuiOptions()
   local enhanceTooltips = newCheckbox(
     "Enhance Tooltips",
     "Enable enhanced tooltips with additional information.",
-    EUIDB.enhanceTooltips,
-    function(value, self)
+    "enhanceTooltips",
+    tooltipText,
+    EUI_Tooltips,
+    function(value, initialValue)
       EUIDB.enhanceTooltips = value
-      if value ~= self.initialValue then
+      if value ~= initialValue then
         Tooltips_Reload:Show()
       else
         Tooltips_Reload:Hide()
@@ -927,20 +929,15 @@ local function setupEuiOptions()
       else
         DisableTooltipSettings()
       end
-    end,
-    tooltipText,
-    EUI_Tooltips
+    end
   )
   enhanceTooltips:SetPoint("TOPLEFT", tooltipText, "BOTTOMLEFT", 0, -16)
 
   local tooltipAnchor, tooltipAnchorDropdown = newDropdown(
     "Cursor Anchor (anchor tooltips to cursor out of combat)",
     { ["ANCHOR_CURSOR_LEFT"] = "Bottom Right", ["ANCHOR_CURSOR_RIGHT"] = "Bottom Left", ['DEFAULT'] = 'Disabled' },
-    EUIDB.tooltipAnchor,
+    "tooltipAnchor",
     100,
-    function(value)
-      EUIDB.tooltipAnchor = value
-    end,
     EUI_Tooltips
   )
   tooltipAnchor:SetPoint("TOPLEFT", enhanceTooltips, "BOTTOMLEFT", 0, -16)
@@ -948,10 +945,7 @@ local function setupEuiOptions()
   local tooltipSpecAndIlvl = newCheckbox(
     "Show Player Spec and Item Level",
     "Show item level in tooltips.",
-    EUIDB.tooltipSpecAndIlvl,
-    function(value)
-      EUIDB.tooltipSpecAndIlvl = value
-    end,
+    "tooltipSpecAndIlvl",
     tooltipAnchorDropdown,
     EUI_Tooltips
   )
@@ -959,10 +953,7 @@ local function setupEuiOptions()
   local showMount = newCheckbox(
     "Show Mount Information",
     "Show mount information in tooltips.",
-    EUIDB.tooltipShowMount,
-    function(value)
-      EUIDB.tooltipShowMount = value
-    end,
+    "tooltipShowMount",
     tooltipSpecAndIlvl,
     EUI_Tooltips
   )
@@ -970,10 +961,7 @@ local function setupEuiOptions()
   local classColoredName = newCheckbox(
     "Class Colored Names",
     "Color player names in tooltips by class.",
-    EUIDB.tooltipClassColoredName,
-    function(value)
-      EUIDB.tooltipClassColoredName = value
-    end,
+    "tooltipClassColoredName",
     showMount,
     EUI_Tooltips
   )
@@ -981,10 +969,7 @@ local function setupEuiOptions()
   local showMythicPlus = newCheckbox(
     "Show Mythic+ Information",
     "Show Mythic+ information in player tooltips.",
-    EUIDB.tooltipShowMythicPlus,
-    function(value)
-      EUIDB.tooltipShowMythicPlus = value
-    end,
+    "tooltipShowMythicPlus",
     classColoredName,
     EUI_Tooltips
   )
@@ -992,10 +977,7 @@ local function setupEuiOptions()
   local tooltipHideHealthBar = newCheckbox(
     "Hide Health Bar",
     "Hide the health bar in tooltips.",
-    EUIDB.tooltipHideHealthBar,
-    function(value)
-      EUIDB.tooltipHideHealthBar = value
-    end,
+    "tooltipHideHealthBar",
     showMythicPlus,
     EUI_Tooltips
   )
@@ -1003,10 +985,7 @@ local function setupEuiOptions()
   local tooltipShowSpellIds = newCheckbox(
     "Show Spell IDs",
     "Show spell IDs in tooltips.",
-    EUIDB.tooltipShowSpellIds,
-    function(value)
-      EUIDB.tooltipShowSpellIds = value
-    end,
+    "tooltipShowSpellIds",
     tooltipHideHealthBar,
     EUI_Tooltips
   )
@@ -1014,10 +993,7 @@ local function setupEuiOptions()
   local tooltipShowNpcID = newCheckbox(
     "Show NPC ID",
     "Show NPC ID in tooltips.",
-    EUIDB.tooltipShowNpcID,
-    function(value)
-      EUIDB.tooltipShowNpcID = value
-    end,
+    "tooltipShowNpcID",
     tooltipShowSpellIds,
     EUI_Tooltips
   )
@@ -1060,58 +1036,43 @@ local function setupEuiOptions()
   local hideHotkeys = newCheckbox(
     "Hide Hotkeys on Action Bars",
     "Hides keybinding text on your action bar buttons.",
-    EUIDB.hideHotkeys,
-    function(value)
-      EUIDB.hideHotkeys = value
-      StyleActionBars()
-    end,
+    "hideHotkeys",
     miscSectionText,
-    EUI_Misc
+    EUI_Misc,
+    StyleActionBars
   )
 
   local hideMacroText = newCheckbox(
     "Hide Macro Text on Action Bars",
     "Hides macro text on your action bar buttons.",
-    EUIDB.hideMacroText,
-    function(value)
-      EUIDB.hideMacroText = value
-      StyleActionBars()
-    end,
+    "hideMacroText",
     hideHotkeys,
-    EUI_Misc
+    EUI_Misc,
+    StyleActionBars
   )
 
   local hideMicroMenu = newCheckbox(
     'Hide Micro Menu',
     'Hides the micro menu, preserving the queue status icon',
-    EUIDB.hideMicroMenu,
-    function(value)
-      EUIDB.hideMicroMenu = value
-      SetMicroMenuVisibility()
-    end,
+    "hideMicroMenu",
     hideMacroText,
-    EUI_Misc
+    EUI_Misc,
+    SetMicroMenuVisibility
   )
 
   local hideBagBar = newCheckbox(
     'Hide Bag Bar',
     'Hides the bag bar',
-    EUIDB.hideBagBar,
-    function(value)
-      EUIDB.hideBagBar = value
-      SetBagBarVisibility()
-    end,
+    "hideBagBar",
     hideMicroMenu,
-    EUI_Misc
+    EUI_Misc,
+    SetBagBarVisibility
   )
 
   local autoSellGrey = newCheckbox(
     "Auto Sell Grey Items",
     "Automatically sell grey items when visiting a vendor.",
-    EUIDB.autoSellGrey,
-    function(value)
-      EUIDB.autoSellGrey = value
-    end,
+    "autoSellGrey",
     hideBagBar,
     EUI_Misc
   )
@@ -1119,11 +1080,8 @@ local function setupEuiOptions()
   local autoRepairOptions = newDropdown(
     "Auto Repair",
     { ["Off"] = "Off", ["Personal"] = "Personal", ["Guild"] = "Guild" },
-    EUIDB.autoRepair,
+    "autoRepair",
     80,
-    function(value)
-      EUIDB.autoRepair = value
-    end,
     autoSellGrey
   )
   autoRepairOptions:SetPoint("TOPLEFT", autoSellGrey, "BOTTOMRIGHT", -20, -6)
@@ -1131,26 +1089,20 @@ local function setupEuiOptions()
   local chatOnTop = newCheckbox(
     "Chat Edit Box on Top",
     "Moves the chat edit box to the top of the chat frame.",
-    EUIDB.chatTop,
-    function(value)
-      EUIDB.chatTop = value
-      ReloadChats()
-    end,
+    "chatTop",
     autoRepairOptions,
-    EUI_Misc
+    EUI_Misc,
+    ReloadChats
   )
   chatOnTop:SetPoint("TOPLEFT", autoRepairOptions, "BOTTOMLEFT", 0, -48)
 
   local chatFont, chatFontDropdown = newDropdown(
     "Chat Font",
     LSM_FONTS,
-    EUIDB.chatFont,
+    "chatFont",
     200,
-    function(value)
-      EUIDB.chatFont = value
-      ReloadChats()
-    end,
-    chatOnTop
+    chatOnTop,
+    ReloadChats
   )
   chatFont:SetPoint("TOPLEFT", chatOnTop, "BOTTOMLEFT", 0, -6)
 
@@ -1163,9 +1115,7 @@ local function setupEuiOptions()
     "Font size for Chat",
     chatFontDropdown,
     EUI_Misc,
-    function()
-      ReloadChats()
-    end
+    ReloadChats
   )
   chatFontSize:ClearAllPoints()
   chatFontSize:SetPoint("LEFT", chatFontDropdown, "RIGHT", 220, 0)
@@ -1173,10 +1123,7 @@ local function setupEuiOptions()
   local fasterLoot = newCheckbox(
     "Enable Faster Autoloot",
     "Enable faster autolooting of items. May cause the loot window not to appear.",
-    EUIDB.fasterLoot,
-    function(value)
-      EUIDB.fasterLoot = value
-    end,
+    "fasterLoot",
     chatFont,
     EUI_Misc
   )
@@ -1195,19 +1142,18 @@ local function setupEuiOptions()
   local classColor = newCheckbox(
     "Class Color in Raid and Arena Frames",
     "Enable class coloring in raid frames, raid-style party frames, and arena frames.",
-    EUIDB.cUFClassColoredHealth,
-    function(value)
-      EUIDB.cUFClassColoredHealth = value
-      UpdateCUFCVars()
-    end,
+    "cUFClassColoredHealth",
     cVarsSectionText,
-    EUI_CVars
+    EUI_CVars,
+    UpdateCUFCVars
   )
 
   local cUFDisplayPowerBars = newCheckbox(
     "Display Power Bars",
     "Enable power bars in raid and arena frames.",
-    EUIDB.cUFDisplayPowerBars,
+    "cUFDisplayPowerBars",
+    classColor,
+    EUI_CVars,
     function(value)
       EUIDB.cUFDisplayPowerBars = value
       if not value then
@@ -1216,21 +1162,16 @@ local function setupEuiOptions()
         CUFPowerBarsHealerOnly:Enable()
       end
       UpdateCUFCVars()
-    end,
-    classColor,
-    EUI_CVars
+    end
   )
 
   CUFPowerBarsHealerOnly = newCheckbox(
     "Healer Power Bars Only",
     "Only show power bars for healers in raid and arena frames.",
-    EUIDB.cUFPowerBarsHealerOnly,
-    function(value)
-      EUIDB.cUFPowerBarsHealerOnly = value
-      UpdateCUFCVars()
-    end,
+    "cUFPowerBarsHealerOnly",
     cUFDisplayPowerBars,
-    EUI_CVars
+    EUI_CVars,
+    UpdateCUFCVars
   )
   CUFPowerBarsHealerOnly:ClearAllPoints()
   CUFPowerBarsHealerOnly:SetPoint("LEFT", cUFDisplayPowerBars, "RIGHT", 130, 0)
@@ -1242,56 +1183,56 @@ local function setupEuiOptions()
   local nameplateShowAll = newCheckbox(
     "Always Show Nameplates",
     "Show nameplates for all units, not just ones in combat.",
-    EUIDB.nameplateShowAll,
+    "nameplateShowAll",
+    cUFDisplayPowerBars,
+    EUI_CVars,
     function(value)
       EUISetCVar("nameplateShowAll", value)
-    end,
-    cUFDisplayPowerBars,
-    EUI_CVars
+    end
   )
 
   local nameplateResourceOnTarget = newCheckbox(
     "Show Resource on Target Nameplate",
     "Show the special resource (holy power, combo points, chi, etc) on the nameplate of your current target.",
-    EUIDB.nameplateResourceOnTarget,
+    "nameplateResourceOnTarget",
+    nameplateShowAll,
+    EUI_CVars,
     function(value)
       EUISetCVar("nameplateResourceOnTarget", value)
-    end,
-    nameplateShowAll,
-    EUI_CVars
+    end
   )
 
   local nameplateShowFriends = newCheckbox(
     "Show Friendly Nameplates",
     "Show Nameplates for Friendly Units.",
-    EUIDB.nameplateShowFriends,
+    "nameplateShowFriends",
+    nameplateResourceOnTarget,
+    EUI_CVars,
     function(value)
       EUISetCVar("nameplateShowFriends", value)
-    end,
-    nameplateResourceOnTarget,
-    EUI_CVars
+    end
   )
 
   local nameplateShowEnemyMinions = newCheckbox(
     "Show Enemy Minions",
     "Show Nameplates for Enemy Minions (pets, guardians, and totems).",
-    EUIDB.nameplateShowEnemyMinions,
+    "nameplateShowEnemyMinions",
+    nameplateShowFriends,
+    EUI_CVars,
     function(value)
       EUISetCVar("nameplateShowEnemyMinions", value)
-    end,
-    nameplateShowFriends,
-    EUI_CVars
+    end
   )
 
   local autoLootDefault = newCheckbox(
     "Auto Loot",
     "Enable auto loot by default instead of having to press a key.",
-    EUIDB.autoLootDefault,
+    "autoLootDefault",
+    nameplateShowEnemyMinions,
+    EUI_CVars,
     function(value)
       EUISetCVar("autoLootDefault", value)
-    end,
-    nameplateShowEnemyMinions,
-    EUI_CVars
+    end
   )
 
   EUISetCVar("autoLootDefault")
