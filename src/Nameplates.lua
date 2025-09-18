@@ -147,7 +147,7 @@ OnPlayerLogin(function()
   end)
 
   ---@param frame Frame
-  local function updateName(frame)
+  local function updateNameplate(frame)
     local unitInfo = GetNameplateUnitInfo(frame)
     if not unitInfo.exists or frame:IsForbidden() or not frame.isNameplate then return end
 
@@ -246,12 +246,12 @@ OnPlayerLogin(function()
       frame.name:SetText(name)
     end
   end
-  hooksecurefunc("CompactUnitFrame_UpdateName", updateName)
+  hooksecurefunc("CompactUnitFrame_UpdateName", updateNameplate)
 
   function RefreshNameplates()
     for _, nameplate in pairs(GetAllNameplates()) do
       PartyMarker(nameplate)
-      updateName(nameplate)
+      updateNameplate(nameplate)
       updateHealth(nameplate)
       modifyNamePlates(nameplate)
     end
