@@ -133,4 +133,4 @@ function UpdateFonts()
   end
 end
 
-OnPlayerLogin(UpdateFonts)
+OnEvent("ADDON_LOADED", UpdateFonts)
