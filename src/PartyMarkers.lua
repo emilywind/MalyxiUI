@@ -1,5 +1,3 @@
----@return table<string, number>
-
 local specList = {}
 for classID = 1, GetNumClasses() do
   local class = select(2, GetClassInfo(classID))
