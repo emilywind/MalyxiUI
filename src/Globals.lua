@@ -524,6 +524,8 @@ function GetAllNameplates()
   return allNameplates
 end
 
+---@param destTable table
+---@param srcTable table
 function PushTableIntoTable(destTable, srcTable)
   for k, v in pairs(srcTable) do
     destTable[k] = v
