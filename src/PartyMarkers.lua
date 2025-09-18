@@ -50,7 +50,7 @@ local function getSpecID(frame)
 end
 
 ---@param frame Frame
-function PartyMarker(frame)
+local function updatePartyMarker(frame)
   if not frame.isNameplate or frame:IsForbidden() then return end
 
   local info = GetNameplateUnitInfo(frame)
@@ -120,12 +120,10 @@ function PartyMarker(frame)
   frame.RaidTargetFrame.RaidTargetIcon:SetAlpha(EUIDB.partyMarkerHideRaidmarker and 0 or 1)
 end
 
-hooksecurefunc("CompactUnitFrame_UpdateName", PartyMarker)
+hooksecurefunc("CompactUnitFrame_UpdateName", updatePartyMarker)
 
-local function refreshAllNameplates()
-  DoToAllNameplates(function(nameplate)
-    PartyMarker(nameplate)
-  end)
+function RefreshAllPartyMarkers()
+  DoToAllNameplates(updatePartyMarker)
 end
 
 -- Update in solo shuffle
@@ -145,16 +143,16 @@ OnEvents({
         self.eventRegistered = true
       end
     else
-      refreshAllNameplates()
+      RefreshAllPartyMarkers()
       C_Timer.After(1, function()
         if not InCombatLockdown() then
-          refreshAllNameplates()
+          RefreshAllPartyMarkers()
         end
       end)
     end
   elseif event == "PLAYER_REGEN_ENABLED" then
     self:UnregisterEvent("PLAYER_REGEN_ENABLED")
     self.eventRegistered = false
-    refreshAllNameplates()
+    RefreshAllPartyMarkers()
   end
 end)

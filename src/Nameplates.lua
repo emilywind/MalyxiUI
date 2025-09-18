@@ -247,7 +247,6 @@ OnPlayerLogin(function()
 
   function RefreshNameplates()
     DoToAllNameplates(function(nameplate)
-      PartyMarker(nameplate)
       updateNameplate(nameplate)
       updateHealth(nameplate)
       modifyNamePlates(nameplate)
