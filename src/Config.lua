@@ -634,9 +634,9 @@ local function setupEuiOptions()
     function(value, self)
       EUIDB.skinNameplates = value
       if value ~= self.initialValue then
-        Main_Reload:Show()
+        Nameplate_Reload:Show()
       else
-        Main_Reload:Hide()
+        Nameplate_Reload:Hide()
       end
       if value then
         EnableNameplateSettings()
