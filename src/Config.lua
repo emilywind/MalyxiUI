@@ -417,11 +417,10 @@ local function setupEuiOptions()
     EUI.panel,
     function(value)
       UpdateFontChooser()
-      UpdateFonts()
       if not value then
-        Main_Reload:Show()
+        RestoreDefaultFonts()
       else
-        Main_Reload:Hide()
+        UpdateFonts()
       end
     end
   )
@@ -1085,7 +1084,7 @@ local function setupEuiOptions()
 
   local partyMarkerText = EUI_Misc:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
   partyMarkerText:SetText("Party Markers")
-  partyMarkerText:SetPoint("TOPLEFT", fasterLoot, "BOTTOMLEFT", 0, -16)
+  partyMarkerText:SetPoint("TOPLEFT", fasterLoot, "BOTTOMLEFT", 0, -8)
 
   local partyMarker = newCheckbox(
     "Show Party Markers",
@@ -1232,7 +1231,6 @@ local function setupEuiOptions()
     ReloadUI()
   end)
 
-  Main_Reload = addReloadButton(EUI.panel)
   Nameplate_Reload = addReloadButton(Nameplate_Content)
   Tooltips_Reload = addReloadButton(EUI_Tooltips)
 
