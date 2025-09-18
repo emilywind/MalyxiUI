@@ -126,6 +126,7 @@ local function RefreshAllNameplates()
   end
 end
 
+-- Update in solo shuffle
 OnEvents({
   "ARENA_OPPONENT_UPDATE",
   "GROUP_ROSTER_UPDATE"
