@@ -319,7 +319,7 @@ OnPlayerLogin(function()
 		local unit = GetTooltipUnit()
 		local unitClassColor = GetUnitHealthColor(unit)
 
-	  self:SetStatusBarColor(unitClassColor:GetRGB())
+		SetStatusBarColor(self, unitClassColor)
 
 		local value = UnitHealth(unit)
 		local maxValue = UnitHealthMax(unit)

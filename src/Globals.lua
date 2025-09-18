@@ -10,7 +10,11 @@ COLOR_BLACK = CreateColor(0, 0, 0)
 COLOR_WHITE = CreateColor(1, 1, 1)
 COLOR_LIGHT = CreateColor(0.8, 0.8, 0.8)
 COLOR_GREEN = CreateColor(0, 1, 0)
+COLOR_RED = CreateColor(1, 0, 0)
+COLOR_GREY = CreateColor(0.5, 0.5, 0.5)
 COLOR_BORDER = CreateColor(0.1, 0.1, 0.1)
+COLOR_CASTBAR_NO_INTERRUPT = CreateColor(1, 0, 0.01568627543747425)
+COLOR_CASTBAR_DELAYED_INTERRUPT = CreateColor(1, 0.4784314036369324, 0.9568628072738647)
 
 EUI_TEXTURES = {
   buttons = {
@@ -256,6 +260,12 @@ function SetVertexColor(texture, color)
   texture:SetVertexColor(color:GetRGBA())
 end
 
+---@param bar StatusBar
+---@param color ColorMixin
+function SetStatusBarColor(bar, color)
+  bar:SetStatusBarColor(color:GetRGBA())
+end
+
 ---@param textObject FontString
 ---@param size? number
 ---@param outlinestyle? string
@@ -379,10 +389,6 @@ function GetUnitHealthColor(unit)
     return CreateColor(GameTooltip_UnitColor(unit))
   end
 end
-
-CASTBAR_NO_INTERRUPT_COLOR = { 1, 0, 0.01568627543747425 }
-
-CASTBAR_DELAYED_INTERRUPT_COLOR = { 1, 0.4784314036369324, 0.9568628072738647 }
 
 ---@param frame Frame
 ---@return table|nil

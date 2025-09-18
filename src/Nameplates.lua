@@ -75,9 +75,9 @@ OnPlayerLogin(function()
 
       if frame.optionTable.colorNameBySelection then
         if healthPercentage <= 100 and healthPercentage >= 30 then
-          healthBar:SetStatusBarColor(healthColor.r, healthColor.g, healthColor.b, 1)
+          SetStatusBarColor(healthBar, healthColor)
         elseif healthPercentage < 30 then -- Red color when below 30% on Personal Resource Bar
-          healthBar:SetStatusBarColor(1, 0, 0)
+          SetStatusBarColor(healthBar, COLOR_RED)
         end
       end
     end

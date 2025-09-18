@@ -11,9 +11,9 @@ local function setUnitColor(healthbar)
   local healthColor = GetUnitHealthColor(unit)
 
   if unitInfo.isPlayer and not unitInfo.isConnected then
-    healthbar:SetStatusBarColor(0.5, 0.5, 0.5)
+    SetStatusBarColor(healthbar, COLOR_GREY)
   else
-    healthbar:SetStatusBarColor(healthColor.r, healthColor.g, healthColor.b)
+    SetStatusBarColor(healthbar, healthColor)
   end
 end
 

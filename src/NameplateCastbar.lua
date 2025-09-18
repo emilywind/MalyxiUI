@@ -110,10 +110,10 @@ local function colorCastbarByInterrupt(castBar, unit)
 
   if cooldownRemaining > 0 and cooldownRemaining > castRemaining then
     castBarTexture:SetDesaturated(true)
-    castBar:SetStatusBarColor(unpack(CASTBAR_NO_INTERRUPT_COLOR))
+    SetStatusBarColor(castBar, COLOR_CASTBAR_NO_INTERRUPT)
   elseif cooldownRemaining > 0 and cooldownRemaining <= castRemaining then
     castBarTexture:SetDesaturated(true)
-    castBar:SetStatusBarColor(unpack(CASTBAR_DELAYED_INTERRUPT_COLOR))
+    SetStatusBarColor(castBar, COLOR_CASTBAR_DELAYED_INTERRUPT)
 
     if cooldownRemaining < castRemaining then
       local interruptPercent = (totalCastTime - castRemaining + cooldownRemaining) / totalCastTime
@@ -139,7 +139,7 @@ local function colorCastbarByInterrupt(castBar, unit)
       C_Timer.After(cooldownRemaining, function()
         if castBar then
           castBarTexture:SetDesaturated(false)
-          castBar:SetStatusBarColor(1, 1, 1)
+          SetStatusBarColor(castBar, COLOR_WHITE)
           castSpark:Hide()
         end
       end)
@@ -148,7 +148,7 @@ local function colorCastbarByInterrupt(castBar, unit)
     end
   else
     castBarTexture:SetDesaturated(false)
-    castBar:SetStatusBarColor(1, 1, 1)
+    SetStatusBarColor(castBar, COLOR_WHITE)
     castSpark:Hide()
   end
 end
