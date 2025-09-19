@@ -30,13 +30,6 @@ local function styleChat(frame)
     editBox:SetPoint("TOPRIGHT", ChatFrame1, "BOTTOMRIGHT", 10, -5)
   end
 
-  -- Hide textures
-  for j = 1, #CHAT_FRAME_TEXTURES do
-    if chatName .. CHAT_FRAME_TEXTURES[j] ~= chatName .. "Background" then
-      _G[chatName .. CHAT_FRAME_TEXTURES[j]]:SetTexture(nil)
-    end
-  end
-
   -- Removes Default ChatFrame Tabs texture
   local chatFrameTab = _G[format("ChatFrame%sTab", id)]
   chatFrameTab.Left:SetTexture(nil)
@@ -50,10 +43,6 @@ local function styleChat(frame)
   chatFrameTab.HighlightLeft:SetTexture(nil)
   chatFrameTab.HighlightMiddle:SetTexture(nil)
   chatFrameTab.HighlightRight:SetTexture(nil)
-
-  -- Hiding off the new chat tab selected feature
-  _G[format("ChatFrame%sButtonFrameMinimizeButton", id)]:Hide()
-  _G[format("ChatFrame%sButtonFrame", id)]:Hide()
 
   -- Hides off the retarded new circle around the editbox
   _G[format("ChatFrame%sEditBoxLeft", id)]:Hide()
