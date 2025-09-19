@@ -129,9 +129,9 @@ end)
 function UpdateTotemIndicatorSetting()
   totemNpcIDs = {}
 
-  if EUIDB.nameplateTotemIndicators == "none" then return end
-
-  PushTableIntoTable(totemNpcIDs, importantTotemNpcIDs)
+  if EUIDB.nameplateTotemIndicators == "important" or EUIDB.nameplateTotemIndicators == "all" then
+    PushTableIntoTable(totemNpcIDs, importantTotemNpcIDs)
+  end
 
   if EUIDB.nameplateTotemIndicators == "all" then
     PushTableIntoTable(totemNpcIDs, lessImportantTotemNpcIDs)
