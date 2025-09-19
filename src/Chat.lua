@@ -22,7 +22,7 @@ local function styleChat(frame)
 
   -- Move the chat edit box
   editBox:ClearAllPoints()
-  if (EUIDB.chatTop) then
+  if EUIDB.chatTop then
     editBox:SetPoint("BOTTOMLEFT", ChatFrame1, "TOPLEFT", -7, 25)
     editBox:SetPoint("BOTTOMRIGHT", ChatFrame1, "TOPRIGHT", 10, 25)
   else
