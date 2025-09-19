@@ -1,4 +1,5 @@
 local chatFrames = {}
+local defaultChatTextures = {}
 
 ---@param frame Frame
 local function styleChat(frame)
@@ -32,14 +33,27 @@ local function styleChat(frame)
 
   if not EUIDB.chatShowSidePanel then
     -- Hide leftside textures
-    for j = 1, #CHAT_FRAME_TEXTURES do
-      if chatName .. CHAT_FRAME_TEXTURES[j] ~= chatName .. "Background" then
-        _G[chatName .. CHAT_FRAME_TEXTURES[j]]:SetTexture(nil)
+    for i = 1, #CHAT_FRAME_TEXTURES do
+      local textureName = chatName .. CHAT_FRAME_TEXTURES[i]
+      if textureName:match('ButtonFrame') then
+        local chatTexture = _G[textureName]
+        if not defaultChatTextures[chatTexture] then
+          defaultChatTextures[chatTexture] = chatTexture:GetTexture()
+        end
+        chatTexture:SetTexture(nil)
       end
     end
     -- Hide the new chat tab selected feature
     _G[format("ChatFrame%sButtonFrameMinimizeButton", id)]:Hide()
     _G[format("ChatFrame%sButtonFrame", id)]:Hide()
+  else
+    _G[format("ChatFrame%sButtonFrameMinimizeButton", id)]:Show()
+    _G[format("ChatFrame%sButtonFrame", id)]:Show()
+
+    -- Restore leftside textures
+    for texture, texPath in pairs(defaultChatTextures) do
+      texture:SetTexture(texPath)
+    end
   end
 
   -- Removes Default ChatFrame Tabs texture
