@@ -68,6 +68,7 @@ EUIDBDefaults = {
   nameplateResourceOnTarget = true,
   nameplateShowAll = true,
   nameplateShowFriends = true,
+  nameplateHideFriendsPve = true, -- Dynamic CVar
   nameplateShowEnemyMinions = true,
 
   partyMarker = true,
@@ -1216,18 +1217,33 @@ local function setupEuiOptions()
     EUI_CVars,
     function(value)
       EUISetCVar("nameplateShowFriends", value)
+      UpdateFriendlyNameplateCVar()
     end
   )
+
+  local nameplateHideFriendsPve = newCheckbox(
+    "Hide Friendly Nameplates in PvE",
+    "Hide nameplates for friendly players when in PvE instances. Does not effect enemy nameplates, outdoor pve, or pvp.",
+    "nameplateHideFriendsPve",
+    nameplateShowFriends,
+    EUI_CVars
+  )
+
+  function UpdateFriendlyNameplateCVar()
+    if EUIDB.nameplateShowFriends then
+      nameplateHideFriendsPve:Enable()
+    else
+      nameplateHideFriendsPve:Disable()
+    end
+  end
+  UpdateFriendlyNameplateCVar()
 
   local nameplateShowEnemyMinions = newCheckbox(
     "Show Enemy Minions",
     "Show Nameplates for Enemy Minions (pets, guardians, and totems).",
     "nameplateShowEnemyMinions",
-    nameplateShowFriends,
-    EUI_CVars,
-    function(value)
-      EUISetCVar("nameplateShowEnemyMinions", value)
-    end
+    nameplateHideFriendsPve,
+    EUI_CVars
   )
 
   local autoLootDefault = newCheckbox(
