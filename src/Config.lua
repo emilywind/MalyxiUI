@@ -52,7 +52,6 @@ EUIDBDefaults = {
   nameplateHideCastText = false,
   nameplateShowLevel = true,
   nameplateHealthPercent = true,
-  nameplateTotemIndicators = 'important', -- 'all', 'important', or 'none'
   nameplateHideClassificationIcon = true,
   nameplateHideFriendlyHealthbars = true,
   nameplateHideFriendlyCastbars = true,
@@ -61,6 +60,10 @@ EUIDBDefaults = {
   nameplateShowTargetText = true,
   nameplatePetIndicator = true,
   nameplateFadeSecondaryPets = true,
+
+  -- Totem/Pet Indicators
+  nameplateTotemIndicators = 'important', -- 'all', 'important', or 'none'
+
  -- Nameplate CVars
   nameplateResourceOnTarget = true,
   nameplateShowAll = true,
@@ -714,8 +717,6 @@ local function setupEuiOptions()
     Nameplate_Content,
     RefreshNameplates
   )
-  arenaNumbers:ClearAllPoints()
-  arenaNumbers:SetPoint("TOPLEFT", nameplateShowHealth, "BOTTOMLEFT", 0, -48)
 
   local nameplateHideCastText = newCheckbox(
     "Hide Nameplate Cast Text",
@@ -1103,7 +1104,7 @@ local function setupEuiOptions()
     EUI_Misc,
     UpdateTotemIndicatorSetting
   )
-  nameplateTotemIndicators:SetPoint("TOPLEFT", fasterLoot, "BOTTOMLEFT", 0, -16)
+  nameplateTotemIndicators:SetPoint("TOPLEFT", fasterLoot, "BOTTOMLEFT", 0, -8)
 
   local partyMarkerText = EUI_Misc:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
   partyMarkerText:SetText("Party Markers")
