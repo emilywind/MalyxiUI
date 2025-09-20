@@ -94,7 +94,7 @@ local function nameplateTotem(np)
   end
 end
 
-OnEvent("NAME_PLATE_UNIT_ADDED", function(self, _, unit)
+OnEvent("NAME_PLATE_UNIT_ADDED", function(_, _, unit)
   local np = GetSafeNameplate(unit)
   nameplateTotem(np)
 end)
