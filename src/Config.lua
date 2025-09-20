@@ -706,26 +706,16 @@ local function setupEuiOptions()
     RefreshNameplates
   )
 
-  local nameplateTotemIndicators, nameplateTotemIndicatorsDropdown = newDropdown(
-    "Totem/Important Pet (Psyfiend, Demonic Tyrant, etc.) Indicators",
-    { ["none"] = "None", ["all"] = "All", ["important"] = "Important" },
-    "nameplateTotemIndicators",
-    120,
-    Nameplate_Content,
-    UpdateTotemIndicatorSetting
-  )
-  nameplateTotemIndicators:SetPoint("TOPLEFT", nameplateShowHealth, "BOTTOMLEFT", 0, -16)
-
   local arenaNumbers = newCheckbox(
     "Show Arena Numbers on nameplates in arenas",
     "Show Arena number (i.e. 1, 2, 3 etc) on top of nameplates in arenas instead of player names to assist with macro use awareness",
     "arenaNumbers",
-    nameplateTotemIndicators,
+    nameplateShowHealth,
     Nameplate_Content,
     RefreshNameplates
   )
   arenaNumbers:ClearAllPoints()
-  arenaNumbers:SetPoint("TOPLEFT", nameplateTotemIndicators, "BOTTOMLEFT", 0, -48)
+  arenaNumbers:SetPoint("TOPLEFT", nameplateShowHealth, "BOTTOMLEFT", 0, -48)
 
   local nameplateHideCastText = newCheckbox(
     "Hide Nameplate Cast Text",
@@ -830,7 +820,6 @@ local function setupEuiOptions()
     nameplateFriendlySmall:Disable()
     nameplateShowLevel:Disable()
     nameplateShowHealth:Disable()
-    nameplateTotemIndicatorsDropdown:Disable()
     arenaNumbers:Disable()
     nameplateHideCastText:Disable()
     nameplateHideFriendlyHealthbars:Disable()
@@ -852,7 +841,6 @@ local function setupEuiOptions()
     nameplateFriendlySmall:Enable()
     nameplateShowLevel:Enable()
     nameplateShowHealth:Enable()
-    nameplateTotemIndicatorsDropdown:Enable()
     arenaNumbers:Enable()
     nameplateHideCastText:Enable()
     nameplateHideFriendlyHealthbars:Enable()
@@ -1107,9 +1095,19 @@ local function setupEuiOptions()
     EUI_Misc
   )
 
+  local nameplateTotemIndicators = newDropdown(
+    "Totem/Important Pet (Psyfiend, Demonic Tyrant, etc.) Indicators",
+    { ["none"] = "None", ["all"] = "All", ["important"] = "Important" },
+    "nameplateTotemIndicators",
+    120,
+    EUI_Misc,
+    UpdateTotemIndicatorSetting
+  )
+  nameplateTotemIndicators:SetPoint("TOPLEFT", fasterLoot, "BOTTOMLEFT", 0, -16)
+
   local partyMarkerText = EUI_Misc:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
   partyMarkerText:SetText("Party Markers")
-  partyMarkerText:SetPoint("TOPLEFT", fasterLoot, "BOTTOMLEFT", 0, -8)
+  partyMarkerText:SetPoint("TOPLEFT", nameplateTotemIndicators, "BOTTOMLEFT", 0, -48)
 
   local partyMarker = newCheckbox(
     "Show Party Markers",
