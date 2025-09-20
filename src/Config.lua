@@ -1228,6 +1228,8 @@ local function setupEuiOptions()
     nameplateShowFriends,
     EUI_CVars
   )
+  nameplateHideFriendsPve:ClearAllPoints()
+  nameplateHideFriendsPve:SetPoint("LEFT", nameplateShowFriends, "RIGHT", 170, 0)
 
   function UpdateFriendlyNameplateCVar()
     if EUIDB.nameplateShowFriends then
@@ -1242,7 +1244,7 @@ local function setupEuiOptions()
     "Show Enemy Minions",
     "Show Nameplates for Enemy Minions (pets, guardians, and totems).",
     "nameplateShowEnemyMinions",
-    nameplateHideFriendsPve,
+    nameplateShowFriends,
     EUI_CVars
   )
 
