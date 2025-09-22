@@ -12,16 +12,8 @@ OnPlayerLogin(function()
     end)
   end
 
-  local timerBar = CreateFrame("StatusBar", "EmsUILFGStatusBar", LFGDungeonReadyPopup)
+  local timerBar = CreateTimerBar("EmsUILFGStatusBar", LFGDungeonReadyPopup)
   timerBar:SetFrameLevel(10) -- Ensure it appears above the popup
-  timerBar:SetPoint("TOP", LFGDungeonReadyPopup, "BOTTOM", 0, -5)
-  timerBar:SetSize(194, 14)
-
-  SkinStatusBar(timerBar)
-
-  timerBar.Text = timerBar:CreateFontString(nil, "OVERLAY")
-  timerBar.Text:SetFontObject(GameFontHighlight)
-  timerBar.Text:SetPoint("CENTER", timerBar, "CENTER")
 
   local timeLeft = 0
   local function barUpdate(self, elapsed)

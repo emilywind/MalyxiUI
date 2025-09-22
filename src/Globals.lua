@@ -320,6 +320,22 @@ function SkinStatusBar(bar)
   ApplyUIMode(border)
 end
 
+---@param name string
+---@param frame Frame
+function CreateTimerBar(name, frame)
+  local timerBar = CreateFrame("StatusBar", name, frame)
+  timerBar:SetPoint("TOP", frame, "BOTTOM", 0, -5)
+  timerBar:SetSize(194, 14)
+
+  SkinStatusBar(timerBar)
+
+  timerBar.Text = timerBar:CreateFontString(nil, "OVERLAY")
+  timerBar.Text:SetFontObject(GameFontHighlight)
+  timerBar.Text:SetPoint("CENTER", timerBar, "CENTER")
+
+  return timerBar
+end
+
 ---@param guid string
 ---@return number|nil
 function GetNPCIDFromGUID(guid)

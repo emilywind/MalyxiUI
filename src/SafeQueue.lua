@@ -57,15 +57,8 @@ SafeQueue:SetScript("OnUpdate", function()
 	if not PVPReadyDialog_Showing(queue) then return end
 
 	if not timerBar then
-		timerBar = CreateFrame("StatusBar", "EmsUISafeQueueStatusBar", PVPReadyDialog)
-		timerBar:SetPoint("TOP", PVPReadyDialog, "BOTTOM", 0, -5)
-		timerBar:SetSize(194, 14)
-
-		SkinStatusBar(timerBar)
-
-		timerBar.Text = timerBar:CreateFontString(nil, "OVERLAY")
-		timerBar.Text:SetFontObject(GameFontHighlight)
-		timerBar.Text:SetPoint("CENTER", timerBar, "CENTER")
+		timerBar = CreateTimerBar("EmsUISafeQueueStatusBar", PVPReadyDialog)
+		PVPReadyDialog.timerBar = timerBar
 	end
 
 	---@param self StatusBar
