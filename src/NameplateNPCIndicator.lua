@@ -105,7 +105,7 @@ OnEvents({
 ---@param event string
 ---@param ... any
 function(_, event, ...)
-  local unit = ...
+  local unit = ... -- Will not exist for COMBAT_LOG_EVENT_UNFILTERED
   local np = GetSafeNameplate(unit)
 
   if event == 'NAME_PLATE_UNIT_ADDED' then
