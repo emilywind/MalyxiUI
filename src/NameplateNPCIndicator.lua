@@ -123,12 +123,12 @@ OnEvent("COMBAT_LOG_EVENT_UNFILTERED", function()
   end
 end)
 
-function UpdateTotemIndicatorSetting()
+function UpdateNPCIndicatorSetting()
   npcIDs = {}
 
-  if EUIDB.nameplateTotemIndicators == "important" then
+  if EUIDB.nameplateNPCIndicators == "important" then
     npcIDs = importantNpcIDs
-  elseif EUIDB.nameplateTotemIndicators == "all" then
+  elseif EUIDB.nameplateNPCIndicators == "all" then
     npcIDs = allNpcIDs
   end
 
@@ -136,5 +136,5 @@ function UpdateTotemIndicatorSetting()
 end
 
 OnPlayerLogin(function()
-  UpdateTotemIndicatorSetting()
+  UpdateNPCIndicatorSetting()
 end)

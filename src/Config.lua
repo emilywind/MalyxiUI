@@ -62,7 +62,7 @@ EUIDBDefaults = {
   nameplateFadeSecondaryPets = true,
 
   -- Totem/Pet Indicators
-  nameplateTotemIndicators = 'important', -- 'all', 'important', or 'none'
+  nameplateNPCIndicators = 'important', -- 'all', 'important', or 'none'
 
  -- Nameplate CVars
   nameplateResourceOnTarget = true,
@@ -1097,19 +1097,19 @@ local function setupEuiOptions()
     EUI_Misc
   )
 
-  local nameplateTotemIndicators = newDropdown(
+  local nameplateNPCIndicators = newDropdown(
     "Totem/Important Pet (Psyfiend, Demonic Tyrant, etc.) Indicators",
     { ["none"] = "None", ["all"] = "All", ["important"] = "Important" },
-    "nameplateTotemIndicators",
+    "nameplateNPCIndicators",
     120,
     EUI_Misc,
-    UpdateTotemIndicatorSetting
+    UpdateNPCIndicatorSetting
   )
-  nameplateTotemIndicators:SetPoint("TOPLEFT", fasterLoot, "BOTTOMLEFT", 0, -8)
+  nameplateNPCIndicators:SetPoint("TOPLEFT", fasterLoot, "BOTTOMLEFT", 0, -8)
 
   local partyMarkerText = EUI_Misc:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
   partyMarkerText:SetText("Party Markers")
-  partyMarkerText:SetPoint("TOPLEFT", nameplateTotemIndicators, "BOTTOMLEFT", 0, -48)
+  partyMarkerText:SetPoint("TOPLEFT", nameplateNPCIndicators, "BOTTOMLEFT", 0, -48)
 
   local partyMarker = newCheckbox(
     "Show Party Markers",
