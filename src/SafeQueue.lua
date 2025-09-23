@@ -78,6 +78,4 @@ SafeQueue:SetScript("OnUpdate", function()
 		self.Text:SetFormattedText("%.1f", timeLeft)
 	end
 	timerBar:SetScript("OnUpdate", barUpdate)
-
-	PVPReadyDialog.timerBar = timerBar
 end)
