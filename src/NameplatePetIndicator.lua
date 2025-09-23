@@ -73,8 +73,8 @@ local function FadeNameplate(frame)
 end
 
 local function ShowIndicator(frame)
-  if not EUIDB.nameplatePetIndicator then return end
   frame:SetAlpha(1)
+  if not EUIDB.nameplatePetIndicator then return end
   if frame.petIndicator then
     frame.petIndicator:Show()
   end
