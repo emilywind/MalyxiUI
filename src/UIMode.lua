@@ -203,4 +203,5 @@ function UpdateUIMode()
   ApplyStaticUIMode()
   SkinVigorBar()
   SkinObjectiveTracker()
+  UpdateTimers()
 end

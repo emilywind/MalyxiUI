@@ -289,9 +289,16 @@ function ModifyFont(textObject, font, size, flags, color)
   textObject:SetFont(font or fontFile, size or currSize, flags or "THINOUTLINE")
 end
 
+local timerStatusBars = {}
 ---@param bar StatusBar
 function SkinTimerStatusBar(bar)
   if not bar then return end
+
+  local name = bar:GetName()
+
+  if not timerStatusBars[name] then
+    timerStatusBars[name] = bar
+  end
 
   if bar.BorderMid then
     bar.BorderMid:SetAlpha(0)
@@ -329,6 +336,12 @@ function SkinTimerStatusBar(bar)
   end
 
   ApplyUIMode(border)
+end
+
+function UpdateTimers()
+  for _, bar in pairs(timerStatusBars) do
+    SkinTimerStatusBar(bar)
+  end
 end
 
 ---@param name string
