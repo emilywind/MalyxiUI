@@ -57,28 +57,25 @@ SafeQueue:SetScript("OnUpdate", function()
 	local timerBar = PVPReadyDialog.timerBar
 	if not timerBar then
 		timerBar = CreateTimerBar("EmsUISafeQueueStatusBar", PVPReadyDialog)
-		PVPReadyDialog.timerBar = timerBar
-	end
 
-	---@param self StatusBar
-	local function barUpdate(self)
-		local timeLeft = GetBattlefieldPortExpiration(queue)
+		---@param self StatusBar
+		local function barUpdate(self)
+			local timeLeft = GetBattlefieldPortExpiration(queue)
 
-		if justPopped then
-			justPopped = false
-			timerBar:SetMinMaxValues(0, timeLeft)
+			if justPopped then
+				justPopped = false
+				timerBar:SetMinMaxValues(0, timeLeft)
+			end
+
+			if (timeLeft <= 0) then
+				justPopped = true
+			end
+
+			self:SetValue(timeLeft)
+			self.Text:SetFormattedText("%.1f", timeLeft)
 		end
 
-		if (timeLeft <= 0) then
-			justPopped = true
-		end
-
-		self:SetValue(timeLeft)
-		self.Text:SetFormattedText("%.1f", timeLeft)
-	end
-
-	if not timerBar.euiHooked then
 		timerBar:SetScript("OnUpdate", barUpdate)
-		timerBar.euiHooked = true
+		PVPReadyDialog.timerBar = timerBar
 	end
 end)
