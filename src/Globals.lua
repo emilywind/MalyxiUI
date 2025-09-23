@@ -44,6 +44,16 @@ EUI_TEXTURES = {
   },
 }
 
+EUI_FONTS = {
+  Andika = FontsDir .. "\\Andika.ttf",
+  Fira = FontsDir .. "\\FiraSans.ttf",
+  SourceSans = FontsDir .. "\\SourceSans3.ttf",
+  Marmelad = FontsDir .. "\\Marmelad.ttf",
+  Bangers = FontsDir .. "\\Bangers-Regular.ttf",
+}
+
+EUI_DAMAGE_FONT = FontsDir .. "\\Bangers-Regular.ttf"
+
 FABLED_CLASS_CIRCLES_DATA = {
   class = {
 		path = [[Interface\AddOns\EmsUI\media\textures\class\]],
@@ -119,6 +129,13 @@ FABLED_CLASS_CIRCLES_DATA = {
   },
 }
 
+CLASS_PORTRAIT_PACKS = {}
+local classInfo = FABLED_CLASS_CIRCLES_DATA.class
+
+for iconStyle, data in next, classInfo.styles do
+  CLASS_PORTRAIT_PACKS[format('%s%s', classInfo.path, iconStyle)] = format('%s (by %s)', data.name, data.artist)
+end
+
 HEALER_SPECS = {
   [105]  = true, --> druid resto
   [270]  = true, --> monk mw
@@ -128,13 +145,6 @@ HEALER_SPECS = {
   [264]  = true, --> shaman resto
   [1468] = true, --> preservation evoker
 }
-
-CLASS_PORTRAIT_PACKS = {}
-local classInfo = FABLED_CLASS_CIRCLES_DATA.class
-
-for iconStyle, data in next, classInfo.styles do
-  CLASS_PORTRAIT_PACKS[format('%s%s', classInfo.path, iconStyle)] = format('%s (by %s)', data.name, data.artist)
-end
 
 ---@param unit UnitToken
 ---@return ColorMixin|nil
@@ -191,16 +201,6 @@ end
 function OnPlayerLogin(callback)
   return OnEvent("PLAYER_LOGIN", callback)
 end
-
-EUI_FONTS = {
-  Andika = FontsDir.."\\Andika.ttf",
-  Fira = FontsDir.."\\FiraSans.ttf",
-  SourceSans = FontsDir.."\\SourceSans3.ttf",
-  Marmelad = FontsDir.."\\Marmelad.ttf",
-  Bangers = FontsDir.."\\Bangers-Regular.ttf",
-}
-
-EUI_DAMAGE_FONT = FontsDir.."\\Bangers-Regular.ttf"
 
 ---@param ic Texture
 function StyleIcon(ic)
