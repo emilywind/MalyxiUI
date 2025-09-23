@@ -35,7 +35,7 @@ local function autoSellGreyItems()
       if link then
         local itemLocation = ItemLocation:CreateFromBagAndSlot(bag, slot)
         local quality = C_Item.GetItemQuality(itemLocation)
-        if quality == 0 then
+        if quality == Enum.ItemQuality.Poor then
           C_Container.UseContainerItem(bag, slot)
         end
       end
