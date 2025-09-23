@@ -56,7 +56,6 @@ SafeQueue:SetScript("OnUpdate", function()
 
 	local timerBar = PVPReadyDialog.timerBar
 	if not timerBar then
-		print("Creating timer bar")
 		timerBar = CreateTimerBar("EmsUISafeQueueStatusBar", PVPReadyDialog, function(self)
 			local timeLeft = GetBattlefieldPortExpiration(queue)
 
