@@ -91,7 +91,7 @@ function PetIndicator(frame)
   local info = GetNameplateUnitInfo(frame)
   local instanceData = GetInstanceData()
 
-  if not info.isNpc or not EUIDB.skinNameplates then -- Pets are always NPCs, so no need to create the indicator if not an NPC
+  if not EUIDB.skinNameplates or not info.isNpc then -- Pets are always NPCs, so no need to create the indicator if not an NPC
     HideIndicator(frame)
     return
   end

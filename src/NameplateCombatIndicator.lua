@@ -17,7 +17,7 @@ function CombatIndicator(frame)
     StyleIcon(combatIndicator)
   end
 
-  local shouldShow = EUIDB.nameplateCombatIndicator ~= 'none' and not info.inCombat and info.canAttack and info.isPlayer
+  local shouldShow = EUIDB.skinNameplates and EUIDB.nameplateCombatIndicator ~= 'none' and not info.inCombat and info.canAttack and info.isPlayer
 
   local yPosAdjustment = EUIDB.nameplateCombatIndicator == 'sap' and 0 or 1
   combatIndicator:SetPoint("LEFT", frame.healthBar, "LEFT", 2, yPosAdjustment)
