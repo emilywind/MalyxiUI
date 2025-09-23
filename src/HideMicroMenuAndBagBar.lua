@@ -1,5 +1,6 @@
 function SetMicroMenuVisibility()
     local micromenuVisible = not EUIDB.hideMicroMenu
+
     for _, button in pairs({
         CharacterMicroButton, SpellbookMicroButton, TalentMicroButton,
         QuestLogMicroButton, GuildMicroButton, LFDMicroButton,
@@ -15,6 +16,7 @@ end
 
 function SetBagBarVisibility()
     local bagsVisible = not EUIDB.hideBagBar
+
     MainMenuBarBackpackButton:SetShown(bagsVisible)
     BagBarExpandToggle:SetShown(bagsVisible)
     for i = 0, 3 do
