@@ -875,7 +875,7 @@ local function setupEuiOptions()
     "enhanceTooltips",
     tooltipText,
     EUI_Tooltips,
-    function(value, initialValue)
+    function(value)
       if not value then
         Tooltips_Reload:Show()
       else
