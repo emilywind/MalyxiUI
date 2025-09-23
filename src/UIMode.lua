@@ -197,3 +197,9 @@ OnPlayerLogin(function()
     end)
   end
 end)
+
+function UpdateUIMode()
+  StyleActionBars()
+  ApplyStaticUIMode()
+  SkinVigorBar()
+end
