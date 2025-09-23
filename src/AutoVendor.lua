@@ -5,14 +5,14 @@ local function autoRepair()
   if cost > 0 then
     local costText = C_CurrencyInfo.GetCoinText(cost)
     local money = GetMoney()
-    if EUIDB.autoRepair == 'Guild' and IsInGuild() then
+    if EUIDB.autoRepair == 'Guild' and CanGuildBankRepair() then
       local guildMoney = GetGuildBankWithdrawMoney()
       local totalGuildMoney = GetGuildBankMoney()
       if guildMoney > totalGuildMoney then
         guildMoney = totalGuildMoney
       end
 
-      if guildMoney > cost and CanGuildBankRepair() then
+      if guildMoney > cost then
         RepairAllItems(1)
         print(format("|cfff07100Repair cost covered by G-Bank: %s|r", costText))
         return
