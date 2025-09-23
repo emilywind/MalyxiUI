@@ -11,7 +11,7 @@ local function hideObjectiveTracker()
   end
 end
 
-local function skinObjectiveTracker()
+function SkinObjectiveTracker()
   for _, objectiveTrackerFrame in pairs({
     AdventureObjectiveTracker,
     MonthlyActivitiesObjectiveTracker,
@@ -36,5 +36,5 @@ OnEvents({
     hideObjectiveTracker()
   end
 
-  skinObjectiveTracker()
+  SkinObjectiveTracker()
 end)
