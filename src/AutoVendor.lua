@@ -14,13 +14,13 @@ local function autoRepair()
 
       if guildMoney > cost and CanGuildBankRepair() then
         RepairAllItems(1)
-        print(format("|cfff07100Repair cost covered by G-Bank: " .. costText .. "|r"))
+        print(format("|cfff07100Repair cost covered by G-Bank: %s|r", costText))
         return
       end
     end
     if money > cost then
       RepairAllItems()
-      print(format("|cffead000Repair cost: " .. costText .. "|r"))
+      print(format("|cffead000Repair cost: %s|r", costText))
     else
       print("Not enough gold to cover the repair cost.")
     end
