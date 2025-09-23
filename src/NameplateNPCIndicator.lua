@@ -109,9 +109,9 @@ function(_, event, ...)
   local np = GetSafeNameplate(unit)
 
   if event == 'NAME_PLATE_UNIT_ADDED' then
-    nameplateTotem(np)
+    if np then nameplateTotem(np) end
   elseif event == 'NAME_PLATE_UNIT_REMOVED' then
-    if np.npcIcon then
+    if np and np.npcIcon then
       np.npcIcon:Hide()
     end
   elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then
