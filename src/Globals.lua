@@ -52,8 +52,6 @@ EUI_FONTS = {
   Bangers = FontsDir .. "\\Bangers-Regular.ttf",
 }
 
-EUI_DAMAGE_FONT = FontsDir .. "\\Bangers-Regular.ttf"
-
 FABLED_CLASS_CIRCLES_DATA = {
   class = {
 		path = [[Interface\AddOns\EmsUI\media\textures\class\]],

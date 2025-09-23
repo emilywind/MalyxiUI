@@ -1,15 +1,13 @@
 -- Media
 local LSM = LibStub("LibSharedMedia-3.0")
 
-LSM:Register ("statusbar", "Em's Dragonflight Status Bar", [[Interface\AddOns\EmsUI\media\textures\status-bar.tga]])
-LSM:Register ('statusbar', "RillyClean Status Bar", [[Interface\AddOns\EmsUI\media\textures\rc-status-bar.tga]])
-LSM:Register ('statusbar', "Em's Blizz Inspired Bar", [[Interface\AddOns\EmsUI\media\textures\blizz-inspired.tga]])
+LSM:Register("statusbar", "Em's Dragonflight Status Bar", [[Interface\AddOns\EmsUI\media\textures\status-bar.tga]])
+LSM:Register('statusbar', "RillyClean Status Bar", [[Interface\AddOns\EmsUI\media\textures\rc-status-bar.tga]])
+LSM:Register('statusbar', "Em's Blizz Inspired Bar", [[Interface\AddOns\EmsUI\media\textures\blizz-inspired.tga]])
 
-LSM:Register ("font", "Andika", [[Interface\AddOns\EmsUI\media\fonts\Andika.ttf]])
-LSM:Register ("font", "Marmelad", [[Interface\AddOns\EmsUI\media\fonts\Marmelad.ttf]])
-LSM:Register ("font", "Bangers", [[Interface\AddOns\EmsUI\media\fonts\Bangers-Regular.ttf]])
-LSM:Register ("font", "FiraSans", [[Interface\AddOns\EmsUI\media\fonts\FiraSans.ttf]])
-LSM:Register ("font", "SourceSans3", [[Interface\AddOns\EmsUI\media\fonts\SourceSans3.ttf]])
+for name, fontPath in pairs(EUI_FONTS) do
+  LSM:Register("font", name, fontPath)
+end
 
 LSM:Register("sound", "airforcebase", [[Interface\Addons\EmsUI\media\sound\airforcebase.ogg]])
 LSM:Register("sound", "garou-specialko", [[Interface\Addons\EmsUI\media\sound\garouspecialko.ogg]])
