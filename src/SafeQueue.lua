@@ -29,7 +29,7 @@ local function printTime()
 	DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99Em's UI|r: " .. str)
 end
 
-SafeQueue = OnEvent("UPDATE_BATTLEFIELD_STATUS", function()
+OnEvent("UPDATE_BATTLEFIELD_STATUS", function()
 	local queued = false
 	for i = 1, GetMaxBattlefieldID() do
 		local status = GetBattlefieldStatus(i)
@@ -51,12 +51,8 @@ SafeQueue = OnEvent("UPDATE_BATTLEFIELD_STATUS", function()
 	if not queued and queueTime[1] then queueTime = {} end
 end)
 
-SafeQueue:SetScript("OnUpdate", function()
-	if not PVPReadyDialog_Showing(queue) then return end
-
-	local timerBar = PVPReadyDialog.timerBar
-	if not timerBar then
-		timerBar = CreateTimerBar("EmsUISafeQueueStatusBar", PVPReadyDialog, function(self)
+OnPlayerLogin(function()
+	CreateTimerBar("EmsUISafeQueueStatusBar", PVPReadyDialog, function(self)
 			local timeLeft = GetBattlefieldPortExpiration(queue)
 
 			if justPopped then
@@ -71,7 +67,4 @@ SafeQueue:SetScript("OnUpdate", function()
 			self:SetValue(timeLeft)
 			self.Text:SetFormattedText("%.1f", timeLeft)
 		end)
-
-		PVPReadyDialog.timerBar = timerBar
-	end
 end)
