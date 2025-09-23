@@ -325,7 +325,6 @@ function SkinTimerStatusBar(bar)
 
   ApplyUIMode(background)
 
-  -- Border
   local border = bar.border
   if not border then
     border = bar:CreateTexture(nil, "BACKGROUND")
