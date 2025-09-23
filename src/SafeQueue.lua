@@ -52,10 +52,9 @@ SafeQueue = OnEvent("UPDATE_BATTLEFIELD_STATUS", function()
 end)
 
 SafeQueue:SetScript("OnUpdate", function()
-	local timerBar = PVPReadyDialog.timerBar
-
 	if not PVPReadyDialog_Showing(queue) then return end
 
+	local timerBar = PVPReadyDialog.timerBar
 	if not timerBar then
 		timerBar = CreateTimerBar("EmsUISafeQueueStatusBar", PVPReadyDialog)
 		PVPReadyDialog.timerBar = timerBar
