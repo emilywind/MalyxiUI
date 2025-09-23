@@ -18,8 +18,9 @@ function GetTooltipUnit()
 	return unit
 end
 
-OnPlayerLogin(function()
-	if not EUIDB.enhanceTooltips then return end
+local initTooltips = false
+function InitTooltips()
+	if initTooltips or not EUIDB.enhanceTooltips then return end
 
 	-- Tooltips anchored on mouse
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", function(self, parent)
@@ -330,4 +331,8 @@ OnPlayerLogin(function()
     local textString = self.TextString
 		textString:SetText('(' .. percent .. '%) ' .. AbbreviateLargeNumbers(value) .. ' / ' .. AbbreviateLargeNumbers(maxValue))
 	end)
-end)
+
+	initTooltips = true
+end
+
+OnPlayerLogin(InitTooltips)

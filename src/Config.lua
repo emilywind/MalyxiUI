@@ -615,14 +615,15 @@ local function setupEuiOptions()
     "skinNameplates",
     nameplateText,
     Nameplate_Content,
-    function(value, initialValue)
-      if value ~= initialValue then
+    function(value)
+      if not value then
         Nameplate_Reload:Show()
       else
         Nameplate_Reload:Hide()
       end
       if value then
         EnableNameplateSettings()
+        InitNameplates()
       else
         DisableNameplateSettings()
       end
@@ -873,13 +874,14 @@ local function setupEuiOptions()
     tooltipText,
     EUI_Tooltips,
     function(value, initialValue)
-      if value ~= initialValue then
+      if not value then
         Tooltips_Reload:Show()
       else
         Tooltips_Reload:Hide()
       end
       if value then
         EnableTooltipSettings()
+        InitTooltips()
       else
         DisableTooltipSettings()
       end

@@ -167,12 +167,16 @@ local function updateNameplate(frame)
   end
 end
 
-OnPlayerLogin(function()
-  hooksecurefunc(NamePlateDriverFrame, "AcquireUnitFrame", function(_, nameplate) -- This needs to be run for party markers to work
-    if (nameplate.UnitFrame) then
-      nameplate.UnitFrame.isNameplate = true
-    end
-  end)
+local initNameplates = false
+function InitNameplates()
+  if initNameplates then return end
+
+  hooksecurefunc(NamePlateDriverFrame, "AcquireUnitFrame",
+    function(_, nameplate)                                                        -- This needs to be run for party markers to work
+      if (nameplate.UnitFrame) then
+        nameplate.UnitFrame.isNameplate = true
+      end
+    end)
 
   if not EUIDB.skinNameplates then return end
 
@@ -209,6 +213,7 @@ OnPlayerLogin(function()
       C_NamePlate.SetNamePlateFriendlySize(defaultFriendlyWidth, defaultFriendlyHeight)
     end
   end
+
   SetFriendlyNameplateSize()
 
   hooksecurefunc("CompactUnitFrame_UpdateHealth", updateHealth)
@@ -244,7 +249,11 @@ OnPlayerLogin(function()
   end)
 
   hooksecurefunc("CompactUnitFrame_UpdateName", updateNameplate)
-end)
+
+  initNameplates = true
+end
+
+OnPlayerLogin(InitNameplates)
 
 function RefreshNameplates()
   DoToNameplates(function(nameplate)
