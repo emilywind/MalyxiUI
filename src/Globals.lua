@@ -1,10 +1,5 @@
 SQUARE_TEXTURE = [[Interface\BUTTONS\WHITE8X8]]
 
-AddonDir = [[Interface\AddOns\EmsUI]]
-MediaDir = AddonDir..[[\media]]
-FontsDir = MediaDir..[[\fonts]]
-TextureDir = MediaDir..[[\textures]]
-
 COLOR_DARK = CreateColorFromHexString('ff4d4d4d')
 COLOR_BLACK = CreateColorFromHexString('ff000000')
 COLOR_WHITE = CreateColorFromHexString('ffffffff')
@@ -15,6 +10,19 @@ COLOR_GREY = CreateColorFromHexString('ff808080')
 COLOR_BORDER = CreateColorFromHexString('ff1a1a1a')
 COLOR_CASTBAR_NO_INTERRUPT = CreateColorFromHexString('ffff0004')
 COLOR_CASTBAR_DELAYED_INTERRUPT = CreateColorFromHexString('ffff7aa5')
+
+AddonDir = [[Interface\AddOns\EmsUI]]
+MediaDir = AddonDir .. [[\media]]
+FontsDir = MediaDir .. [[\fonts]]
+TextureDir = MediaDir .. [[\textures]]
+
+EUI_FONTS = {
+  Andika = FontsDir .. [[\Andika.ttf]],
+  Fira = FontsDir .. [[\FiraSans.ttf"]],
+  SourceSans = FontsDir .. [[\SourceSans3.ttf]],
+  Marmelad = FontsDir .. [[\Marmelad.ttf]],
+  Bangers = FontsDir .. [[\Bangers-Regular.ttf]],
+}
 
 EUI_TEXTURES = {
   buttons = {
@@ -42,14 +50,6 @@ EUI_TEXTURES = {
     portraitRoles = TextureDir..[[\lfgframe\UI-LFG-ICON-PORTRAITROLES.tga]],
     roles = TextureDir..[[\lfgframe\UI-LFG-ICON-ROLES.tga]]
   },
-}
-
-EUI_FONTS = {
-  Andika = FontsDir .. [[\Andika.ttf]],
-  Fira = FontsDir .. [[\FiraSans.ttf"]],
-  SourceSans = FontsDir .. [[\SourceSans3.ttf]],
-  Marmelad = FontsDir .. [[\Marmelad.ttf]],
-  Bangers = FontsDir .. [[\Bangers-Regular.ttf]],
 }
 
 FABLED_CLASS_CIRCLES_DATA = {
