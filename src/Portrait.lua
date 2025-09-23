@@ -8,7 +8,8 @@ local euiPortraits = {}
 
 ---@param frame Frame
 local function updateEUIPortrait(frame)
-  if not frame or not frame.portrait then return end
+  local portrait = frame.portrait
+  if not frame or not portrait then return end
 
   local unit = frame.unit
   if not euiPortraits[unit] then
@@ -19,7 +20,6 @@ local function updateEUIPortrait(frame)
 
   local portraitModel = frame.portraitModel
   local portraitClass = frame.portraitClass
-  local portrait = frame.portrait
 
   portrait:Show()
 
@@ -35,10 +35,10 @@ local function updateEUIPortrait(frame)
   if EUIDB.portraitStyle == "default" then return end
 
   if not frame.portraitBG then
-    local portraitBG = CreateFrame("Frame", nil, frame)
+    local portraitBG = CreateFrame("Frame", "PortraitBackground", frame)
     portraitBG:SetFrameStrata("BACKGROUND")
     portraitBG:SetAllPoints(frame.portrait)
-    local backLayer = portraitBG:CreateTexture("backLayer", "BACKGROUND")
+    local backLayer = portraitBG:CreateTexture("PortraitBackgroundTexture", "BACKGROUND")
     backLayer:SetTexture(EUI_TEXTURES.circleTexture)
     SetVertexColor(backLayer, COLOR_BLACK)
     backLayer:SetAllPoints(portraitBG)
@@ -49,7 +49,7 @@ local function updateEUIPortrait(frame)
   if EUIDB.portraitStyle == "class" and info.classFileName then
     if not portraitClass then
       local mask = portrait:GetMaskTexture(1)
-      portraitClass = frame:CreateTexture(nil, "ARTWORK")
+      portraitClass = frame:CreateTexture("PortraitClass", "ARTWORK")
       portraitClass:SetAllPoints(portrait)
       portraitClass:AddMaskTexture(mask)
       frame.portraitClass = portraitClass
