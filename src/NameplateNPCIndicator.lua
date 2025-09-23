@@ -69,12 +69,12 @@ local function nameplateTotem(np)
 
   if not unitInfo.exists then return end
 
-  local iconFrame = np.totemIcon
+  local iconFrame = np.npcIcon
 
   if unitInfo.isNpc and unitInfo.npcID and npcIDs[unitInfo.npcID] then
     if not iconFrame then
       iconFrame = createIcon(np)
-      np.totemIcon = iconFrame
+      np.npcIcon = iconFrame
     end
 
     iconFrame:Show()
@@ -105,14 +105,14 @@ OnEvents({
 ---@param event string
 ---@param ... any
 function(_, event, ...)
-  local unit = ... -- Will not exist for COMBAT_LOG_EVENT_UNFILTERED
+  local unit = ... -- Will not be unit for COMBAT_LOG_EVENT_UNFILTERED
   local np = GetSafeNameplate(unit)
 
   if event == 'NAME_PLATE_UNIT_ADDED' then
-    if np then nameplateTotem(np) end
+    nameplateTotem(np)
   elseif event == 'NAME_PLATE_UNIT_REMOVED' then
-    if np and np.totemIcon then
-      np.totemIcon:Hide()
+    if np.npcIcon then
+      np.npcIcon:Hide()
     end
   elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then
     local _, subevent, _, _, _, _, _, destGUID = CombatLogGetCurrentEventInfo()
