@@ -1,4 +1,3 @@
--- Media
 local LSM = LibStub("LibSharedMedia-3.0")
 
 LSM:Register("statusbar", "Em's Dragonflight Status Bar", [[Interface\AddOns\EmsUI\media\textures\status-bar.tga]])
