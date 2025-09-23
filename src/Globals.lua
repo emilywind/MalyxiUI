@@ -307,13 +307,24 @@ function SkinStatusBar(bar)
     bar.BarFrame:Hide()
   end
 
+  local background = bar.background
+  if not background then
+    background = bar:CreateTexture(nil, "BACKGROUND")
+    background:SetAtlas('UI-CastingBar-Background')
+    background:SetPoint("TOPLEFT", bar, "TOPLEFT", -1, 1)
+    background:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", 1, -1)
+    bar.background = background
+  end
+
+  ApplyUIMode(background)
+
   -- Border
   local border = bar.border
   if not border then
     border = bar:CreateTexture(nil, "BACKGROUND")
-    border:SetAtlas('ui-castingbar-background')
-    border:SetPoint("TOPLEFT", bar, "TOPLEFT", -2, 2)
-    border:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", 2, -2)
+    border:SetAtlas('UI-CastingBar-Frame')
+    border:SetPoint("TOPLEFT", bar, "TOPLEFT", -3, 3)
+    border:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", 3, -3)
     bar.border = border
   end
 
