@@ -5,12 +5,11 @@ OnPlayerLogin(function()
   local inQueue = false
 
   -- Queue Status Icon
-  ---@param frame Frame
   ---@param layoutName string
   ---@param point string
   ---@param x number
   ---@param y number
-  local function queueIconPos(frame, layoutName, point, x, y)
+  local function queueIconPos(_, layoutName, point, x, y)
     db.queueicon.point = point
     db.queueicon.x = x
     db.queueicon.y = y
@@ -48,12 +47,11 @@ OnPlayerLogin(function()
     QueueStatusButton:SetPoint(db.queueicon.point, UIParent, db.queueicon.point, db.queueicon.x, db.queueicon.y)
   end)
 
-  ---@param frame Frame
   ---@param layoutName string
   ---@param point string
   ---@param x number
   ---@param y number
-  local function statsFramePos(frame, layoutName, point, x, y)
+  local function statsFramePos(_, layoutName, point, x, y)
     db.statsframe.point = point
     db.statsframe.x = x
     db.statsframe.y = y
