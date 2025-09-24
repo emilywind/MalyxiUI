@@ -3,27 +3,13 @@ OnPlayerLogin(function()
 
   local inQueue = false
 
-  ---@param layoutName? string
-  ---@return table
-  local function getLayoutDB(layoutName)
-    layoutName = layoutName or EditModeManagerFrame:GetActiveLayoutInfo().layoutName
-    local layout = EUIDB.layouts[layoutName]
-
-    if not layout then
-      layout = CopyTable(EUIDB.defaultLayout)
-      EUIDB.layouts[layoutName] = layout
-    end
-
-    return layout
-  end
-
   -- Queue Status Icon
   ---@param layoutName string
   ---@param point string
   ---@param x number
   ---@param y number
   local function queueIconPos(_, layoutName, point, x, y)
-    local layout = getLayoutDB(layoutName)
+    local layout = GetLayoutDB(layoutName)
 
     layout.queueicon.point = point
     layout.queueicon.x = x
@@ -47,17 +33,10 @@ OnPlayerLogin(function()
     end
   end)
 
-  LEM:RegisterCallback('layout',
-  ---@param layoutName string
-  function(layoutName)
-    local layout = getLayoutDB()
-    QueueStatusButton:SetPoint(layout.queueicon.point, UIParent, layout.queueicon.point, layout.queueicon.x, layout.queueicon.y)
-  end)
-
   hooksecurefunc(QueueStatusButton, "UpdatePosition", function()
     if C_AddOns.IsAddOnLoaded("EditModeExpanded") then return end
 
-    local layout = getLayoutDB()
+    local layout = GetLayoutDB()
 
     QueueStatusButton:SetParent(UIParent)
     QueueStatusButton:SetFrameLevel(1)
@@ -70,7 +49,7 @@ OnPlayerLogin(function()
   ---@param x number
   ---@param y number
   local function statsFramePos(_, layoutName, point, x, y)
-    local layout = getLayoutDB(layoutName)
+    local layout = GetLayoutDB(layoutName)
 
     layout.statsframe.point = point
     layout.statsframe.x = x
@@ -78,4 +57,17 @@ OnPlayerLogin(function()
   end
 
   LEM:AddFrame(StatsFrame, statsFramePos)
+
+  LEM:RegisterCallback('layout',
+    ---@param layoutName string
+    function(layoutName)
+      local layout = GetLayoutDB(layoutName)
+      QueueStatusButton:ClearAllPoints()
+      QueueStatusButton:SetPoint(layout.queueicon.point, UIParent, layout.queueicon.point, layout.queueicon.x,
+        layout.queueicon.y)
+      StatsFrame:ClearAllPoints()
+      StatsFrame:SetPoint(layout.statsframe.point, UIParent, layout.statsframe.point, layout.statsframe.x,
+        layout.statsframe.y)
+    end
+  )
 end)
