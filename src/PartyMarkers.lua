@@ -32,9 +32,7 @@ local function getSpecID(frame)
 
   local tooltipData = C_TooltipInfo.GetUnit(unitInfo.id)
   local tooltipGUID = tooltipData.guid
-  if not tooltipGUID then
-    return
-  end
+  if not tooltipGUID then return end
 
   for _, line in ipairs(tooltipData.lines) do
     if line and line.type == Enum.TooltipDataLineType.None and line.leftText and line.leftText ~= "" then
