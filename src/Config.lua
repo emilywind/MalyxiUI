@@ -87,19 +87,23 @@ EUIDBDefaults = {
   -- Castbar Settings
   castBarScale = 1, -- Scale of the castbars for Target/Focus/Arena
 
-  queueicon = {
-    point = 'BOTTOMRIGHT',
-    x = -330,
-    y = 5,
+  layouts = {},
+
+  defaultLayout = {
+    queueicon = {
+      point = 'BOTTOMRIGHT',
+      x = -330,
+      y = 5,
+    },
+    statsframe = {
+      point = 'BOTTOMLEFT',
+      x = 5,
+      y = 3
+    },
   },
 
   enableStatsFrame = false,
   enableStatsSpeed = false,
-  statsframe = {
-    point = 'BOTTOMLEFT',
-    x = 5,
-    y = 3
-  },
 
   -- Automation
   autoRepair = 'Personal', -- 'Off', 'Guild', or 'Personal'

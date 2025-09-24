@@ -1,8 +1,21 @@
 OnPlayerLogin(function()
   local LEM = LibStub('LibEditMode')
 
-  local db = EUIDB
   local inQueue = false
+
+  ---@param layoutName? string
+  ---@return table
+  local function getLayoutDB(layoutName)
+    layoutName = layoutName or EditModeManagerFrame:GetActiveLayoutInfo().layoutName
+    local layout = EUIDB.layouts[layoutName]
+
+    if not layout then
+      layout = CopyTable(EUIDB.defaultLayout)
+      EUIDB.layouts[layoutName] = layout
+    end
+
+    return layout
+  end
 
   -- Queue Status Icon
   ---@param layoutName string
@@ -10,9 +23,11 @@ OnPlayerLogin(function()
   ---@param x number
   ---@param y number
   local function queueIconPos(_, layoutName, point, x, y)
-    db.queueicon.point = point
-    db.queueicon.x = x
-    db.queueicon.y = y
+    local layout = getLayoutDB(layoutName)
+
+    layout.queueicon.point = point
+    layout.queueicon.x = x
+    layout.queueicon.y = y
   end
 
   LEM:AddFrame(QueueStatusButton, queueIconPos)
@@ -35,16 +50,19 @@ OnPlayerLogin(function()
   LEM:RegisterCallback('layout',
   ---@param layoutName string
   function(layoutName)
-    QueueStatusButton:SetPoint(db.queueicon.point, UIParent, db.queueicon.point, db.queueicon.x, db.queueicon.y)
+    local layout = getLayoutDB()
+    QueueStatusButton:SetPoint(layout.queueicon.point, UIParent, layout.queueicon.point, layout.queueicon.x, layout.queueicon.y)
   end)
 
   hooksecurefunc(QueueStatusButton, "UpdatePosition", function()
     if C_AddOns.IsAddOnLoaded("EditModeExpanded") then return end
 
+    local layout = getLayoutDB()
+
     QueueStatusButton:SetParent(UIParent)
     QueueStatusButton:SetFrameLevel(1)
     QueueStatusButton:ClearAllPoints()
-    QueueStatusButton:SetPoint(db.queueicon.point, UIParent, db.queueicon.point, db.queueicon.x, db.queueicon.y)
+    QueueStatusButton:SetPoint(layout.queueicon.point, UIParent, layout.queueicon.point, layout.queueicon.x, layout.queueicon.y)
   end)
 
   ---@param layoutName string
@@ -52,9 +70,11 @@ OnPlayerLogin(function()
   ---@param x number
   ---@param y number
   local function statsFramePos(_, layoutName, point, x, y)
-    db.statsframe.point = point
-    db.statsframe.x = x
-    db.statsframe.y = y
+    local layout = getLayoutDB(layoutName)
+
+    layout.statsframe.point = point
+    layout.statsframe.x = x
+    layout.statsframe.y = y
   end
 
   LEM:AddFrame(StatsFrame, statsFramePos)

@@ -1,11 +1,11 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
   <Include file="Globals.lua" />
   <Include file="Media.lua" />
+  <Include file="Config.lua" />
   <Include file="Fonts.lua" />
   <Include file="Stats.lua" />
   <Include file="DynamicCVars.lua" />
   <Include file="EditMode.lua" />
-  <Include file="Config.lua" />
   <Include file="Actionbars.lua" />
   <Include file="Castbars.lua" />
   <Include file="TimerTracker.lua" />
