@@ -32,7 +32,7 @@ local function getSpecID(frame)
 
   local tooltipData = C_TooltipInfo.GetUnit(unitInfo.id)
   local tooltipGUID = tooltipData.guid
-  if not tooltipData or not tooltipGUID or not tooltipData.lines then
+  if not tooltipGUID or not tooltipData.lines then
     return
   end
 
