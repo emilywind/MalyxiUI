@@ -517,7 +517,7 @@ end
 
 ---@param layoutName? string
 ---@return table
-function GetLayoutDB(layoutName)
+function GetDBLayout(layoutName)
   layoutName = layoutName or EditModeManagerFrame:GetActiveLayoutInfo().layoutName
   local layout = EUIDB.layouts[layoutName]
 

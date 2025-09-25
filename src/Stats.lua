@@ -2,7 +2,7 @@ OnPlayerLogin(function()
   StatsFrame = CreateFrame("Frame", "StatsFrame", UIParent)
   StatsFrame:ClearAllPoints()
 
-  local layout = GetLayoutDB()
+  local layout = GetDBLayout()
   StatsFrame:SetPoint(layout.statsframe.point, UIParent, layout.statsframe.point, layout.statsframe.x, layout.statsframe.y)
 
   local fontSize = 13

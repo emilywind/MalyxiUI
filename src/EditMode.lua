@@ -9,7 +9,7 @@ OnPlayerLogin(function()
   ---@param x number
   ---@param y number
   local function queueIconPos(_, layoutName, point, x, y)
-    local layout = GetLayoutDB(layoutName)
+    local layout = GetDBLayout(layoutName)
 
     layout.queueicon.point = point
     layout.queueicon.x = x
@@ -36,7 +36,7 @@ OnPlayerLogin(function()
   hooksecurefunc(QueueStatusButton, "UpdatePosition", function()
     if C_AddOns.IsAddOnLoaded("EditModeExpanded") then return end
 
-    local layout = GetLayoutDB()
+    local layout = GetDBLayout()
 
     QueueStatusButton:SetParent(UIParent)
     QueueStatusButton:SetFrameLevel(1)
@@ -49,7 +49,7 @@ OnPlayerLogin(function()
   ---@param x number
   ---@param y number
   local function statsFramePos(_, layoutName, point, x, y)
-    local layout = GetLayoutDB(layoutName)
+    local layout = GetDBLayout(layoutName)
 
     layout.statsframe.point = point
     layout.statsframe.x = x
@@ -61,7 +61,7 @@ OnPlayerLogin(function()
   LEM:RegisterCallback('layout',
     ---@param layoutName string
     function(layoutName)
-      local layout = GetLayoutDB(layoutName)
+      local layout = GetDBLayout(layoutName)
       QueueStatusButton:ClearAllPoints()
       QueueStatusButton:SetPoint(layout.queueicon.point, UIParent, layout.queueicon.point, layout.queueicon.x,
         layout.queueicon.y)
