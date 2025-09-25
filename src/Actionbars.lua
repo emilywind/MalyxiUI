@@ -11,16 +11,7 @@ local function styleActionButton(bu)
     na:Show()
   end
 
-  local nt = bu:GetNormalTexture()
-
-  if not nt then return end
-
-  ApplyUIMode(nt)
-end
-
----@param self Button
-local function updateHotkey(self)
-  local ho = _G[self:GetName() .. "HotKey"]
+  local ho = _G[name .. "HotKey"]
   local text = ho:GetText()
 
   if EUIDB.hideHotkeys and ho:IsShown() then
@@ -28,6 +19,12 @@ local function updateHotkey(self)
   elseif not EUIDB.hideHotkeys and not ho:IsShown() and text and text ~= "●" then
     ho:Show()
   end
+
+  local nt = bu:GetNormalTexture()
+
+  if not nt then return end
+
+  ApplyUIMode(nt)
 end
 
 local function skinSpellFlyout()
@@ -89,14 +86,8 @@ function DoToActionButtons(func, allButtons)
   func(ExtraActionButton1)
 end
 
-local function updateHotkeys()
-  DoToActionButtons(updateHotkey, true)
-end
-
 function StyleActionBars()
   DoToActionButtons(styleActionButton, true)
-
-  updateHotkeys()
 end
 
 OnEvents({
@@ -105,7 +96,7 @@ OnEvents({
   "EDIT_MODE_LAYOUTS_UPDATED"
 }, function(_, event)
   if event == "PLAYER_LOGIN" then
-    OnEvent("UPDATE_BINDINGS", updateHotkeys)
+    OnEvent("UPDATE_BINDINGS", StyleActionBars)
 
     SpellFlyout:HookScript("OnSizeChanged", skinSpellFlyout)
   end
