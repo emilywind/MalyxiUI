@@ -1292,11 +1292,11 @@ local function setupEuiOptions()
   ----------------------
   -- Game Menu Button --
   ----------------------
-  local function EmsUIGameMenuButton(self)
+  local function emsUIGameMenuButton(self)
     self:AddSection()
     self:AddButton("Em's UI", openEuiConfig)
   end
-  hooksecurefunc(GameMenuFrame, "InitButtons", EmsUIGameMenuButton)
+  hooksecurefunc(GameMenuFrame, "InitButtons", emsUIGameMenuButton)
 end
 
 OnPlayerLogin(setupEuiOptions)
