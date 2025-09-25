@@ -132,7 +132,7 @@ local function copyTable(src, dst)
       newTable[k] = copyTable(v, dstVal)
     elseif type(v) ~= type(dstVal) then
       newTable[k] = v
-    elseif dstVal then
+    elseif dstVal ~= nil then
       newTable[k] = dstVal
     end
   end
