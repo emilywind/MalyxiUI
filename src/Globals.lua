@@ -515,10 +515,13 @@ function PushTableIntoTable(destTable, srcTable)
   end
 end
 
----@param layoutName? string
+function GetLayoutName()
+  return EditModeManagerFrame:GetActiveLayoutInfo().layoutName
+end
+
 ---@return table
-function GetDBLayout(layoutName)
-  layoutName = layoutName or EditModeManagerFrame:GetActiveLayoutInfo().layoutName
+function GetDBLayout()
+  local layoutName = GetLayoutName()
   local layout = EUIDB.layouts[layoutName]
 
   if not layout then
@@ -527,4 +530,10 @@ function GetDBLayout(layoutName)
   end
 
   return layout
+end
+
+---@param data table
+function SaveDBLayout(data)
+  local layoutName = GetLayoutName()
+  EUIDB.layouts[layoutName] = data
 end

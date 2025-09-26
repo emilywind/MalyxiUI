@@ -4,16 +4,17 @@ OnPlayerLogin(function()
   local inQueue = false
 
   -- Queue Status Icon
-  ---@param layoutName string
   ---@param point string
   ---@param x number
   ---@param y number
-  local function queueIconPos(_, layoutName, point, x, y)
-    local layout = GetDBLayout(layoutName)
+  local function queueIconPos(_, _, point, x, y)
+    local layout = GetDBLayout()
 
     layout.queueicon.point = point
     layout.queueicon.x = x
     layout.queueicon.y = y
+
+    SaveDBLayout(layout)
   end
 
   LEM:AddFrame(QueueStatusButton, queueIconPos)
@@ -44,30 +45,28 @@ OnPlayerLogin(function()
     QueueStatusButton:SetPoint(layout.queueicon.point, UIParent, layout.queueicon.point, layout.queueicon.x, layout.queueicon.y)
   end)
 
-  ---@param layoutName string
   ---@param point string
   ---@param x number
   ---@param y number
-  local function statsFramePos(_, layoutName, point, x, y)
-    local layout = GetDBLayout(layoutName)
+  local function statsFramePos(_, _, point, x, y)
+    local layout = GetDBLayout()
 
     layout.statsframe.point = point
     layout.statsframe.x = x
     layout.statsframe.y = y
+
+    SaveDBLayout(layout)
   end
 
   LEM:AddFrame(StatsFrame, statsFramePos)
 
-  LEM:RegisterCallback('layout',
-    ---@param layoutName string
-    function(layoutName)
-      local layout = GetDBLayout(layoutName)
-      QueueStatusButton:ClearAllPoints()
-      QueueStatusButton:SetPoint(layout.queueicon.point, UIParent, layout.queueicon.point, layout.queueicon.x,
-        layout.queueicon.y)
-      StatsFrame:ClearAllPoints()
-      StatsFrame:SetPoint(layout.statsframe.point, UIParent, layout.statsframe.point, layout.statsframe.x,
-        layout.statsframe.y)
-    end
-  )
+  LEM:RegisterCallback('layout', function()
+    local layout = GetDBLayout()
+    QueueStatusButton:ClearAllPoints()
+    QueueStatusButton:SetPoint(layout.queueicon.point, UIParent, layout.queueicon.point, layout.queueicon.x,
+      layout.queueicon.y)
+    StatsFrame:ClearAllPoints()
+    StatsFrame:SetPoint(layout.statsframe.point, UIParent, layout.statsframe.point, layout.statsframe.x,
+      layout.statsframe.y)
+  end)
 end)
