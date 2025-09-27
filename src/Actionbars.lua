@@ -87,6 +87,25 @@ function DoToActionButtons(func, allButtons)
 end
 
 function StyleActionBars()
+  for _, texture in pairs({
+    MainMenuBar.EndCaps.LeftEndCap,
+    MainMenuBar.BorderArt,
+    MainMenuBar.EndCaps.RightEndCap,
+    ActionButton1.RightDivider,
+    ActionButton2.RightDivider,
+    ActionButton3.RightDivider,
+    ActionButton4.RightDivider,
+    ActionButton5.RightDivider,
+    ActionButton6.RightDivider,
+    ActionButton7.RightDivider,
+    ActionButton8.RightDivider,
+    ActionButton9.RightDivider,
+    ActionButton10.RightDivider,
+    ActionButton11.RightDivider,
+  }) do
+    ApplyUIMode(texture)
+  end
+
   DoToActionButtons(styleActionButton, true)
 end
 
