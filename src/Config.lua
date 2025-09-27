@@ -120,9 +120,11 @@ if not EUIDB then -- Put this here to get correct typing on this
 end
 
 ---@param src table
----@param dst table
+---@param dst? table
 ---@return table
 local function copyTable(src, dst)
+  if type(dst) ~= "table" then dst = {} end
+
   for k, v in pairs(src) do
     local dstVal = dst[k]
     if type(v) == "table" then
@@ -1276,7 +1278,7 @@ local function setupEuiOptions()
   resetDefaults:SetSize(120,22)
   resetDefaults:SetText("Reset to Defaults")
   resetDefaults:SetScript("OnClick", function()
-    EUIDB = copyTable(EUIDBDefaults, {})
+    EUIDB = copyTable(EUIDBDefaults)
     ReloadUI()
   end)
 
