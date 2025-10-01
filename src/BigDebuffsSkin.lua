@@ -5,6 +5,8 @@ OnPlayerLogin(function()
     local nameplate = GetSafeNameplate(unit)
     if not nameplate or nameplate:IsForbidden() then return end
 
-    ApplyEuiBackdrop(nameplate.BigDebuffs)
+    if nameplate.BigDebuffs then
+      ApplyEuiBackdrop(nameplate.BigDebuffs)
+    end
   end)
 end)
