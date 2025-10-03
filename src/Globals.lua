@@ -266,12 +266,10 @@ end
 
 ---@param textObject FontString
 ---@param size? number
----@param outlinestyle? string
-function SetDefaultFont(textObject, size, outlinestyle)
+---@param flags? string
+function SetDefaultFont(textObject, size, flags)
   if not textObject then return end
-  local currSize = select(2, textObject:GetFont())
-
-  textObject:SetFont(EUIDB.font, size or currSize, outlinestyle or "THINOUTLINE")
+  ModifyFont(textObject, EUIDB.font, size, flags)
 end
 
 ---@param textObject FontString
