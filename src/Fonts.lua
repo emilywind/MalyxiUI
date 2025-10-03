@@ -7,6 +7,7 @@ local defaultFonts = {
 }
 
 ---@param fontObject Font
+---@param font string
 local function updateFontObject(fontObject, font)
   local _, size, flags = fontObject:GetFont()
   fontObject:SetFont(font, size, flags)
