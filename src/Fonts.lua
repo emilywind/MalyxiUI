@@ -125,9 +125,9 @@ local fontObjects = {
   Game15Font_Shadow
 }
 
-for _, FontObject in pairs(fontObjects) do
-  local font = FontObject:GetFont()
-  defaultFonts[FontObject] = font
+for _, fontObject in pairs(fontObjects) do
+  local font = fontObject:GetFont()
+  defaultFonts[fontObject] = font
 end
 
 function UpdateFonts()
@@ -144,19 +144,19 @@ function UpdateFonts()
   NAMEPLATE_FONT = EUIDB.font
   NAMEPLATE_SPELLCAST_FONT = EUIDB.font
 
-  for _, FontObject in pairs(fontObjects) do
-    updateFontObject(FontObject, EUIDB.font)
+  for _, fontObject in pairs(fontObjects) do
+    updateFontObject(fontObject, EUIDB.font)
   end
 end
 
 OnEvent("ADDON_LOADED", UpdateFonts)
 
 function RestoreDefaultFonts()
-  for FontObject, font in pairs(defaultFonts) do
-    if type(FontObject) ~= "string" then
-      updateFontObject(FontObject, font)
+  for fontObject, font in pairs(defaultFonts) do
+    if type(fontObject) ~= "string" then
+      updateFontObject(fontObject, font)
     else
-      _G[FontObject] = font
+      _G[fontObject] = font
     end
   end
 
