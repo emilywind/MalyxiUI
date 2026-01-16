@@ -1,6 +1,6 @@
 ## Interface: 110105, 110107, 110100, 110200, 110205, 110207
-## Title: Em's UI
-## Notes: Simple skinnning modifications and quality of life features for the default interface to make it nicer looking and more user-friendly.
+## Title: Malyxi UI
+## Notes: Simple skinnning modifications and quality of life features for the default interface to make it nicer looking and more user-friendly. Gives a great rank 1 gladiator arena UI experience without the bloat of a full UI replacement.
 ## Author: Emily
 ## Version: 7.4.0
 ## SavedVariables: EUIDB
