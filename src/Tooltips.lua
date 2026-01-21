@@ -326,14 +326,14 @@ function InitTooltips()
 
 		SetStatusBarColor(self, unitClassColor)
 
-		local value = UnitHealth(unit)
-		local maxValue = UnitHealthMax(unit)
+		-- local value = UnitHealth(unit)
+		-- local maxValue = UnitHealthMax(unit)
 
-    if value == 0 and maxValue == 0 then return end
-    local percent = math.floor(value / maxValue * 100)
+    -- if value == 0 and maxValue == 0 then return end
+    -- local percent = math.floor(value / maxValue * 100)
 
-    local textString = self.TextString
-		textString:SetText('(' .. percent .. '%) ' .. AbbreviateLargeNumbers(value) .. ' / ' .. AbbreviateLargeNumbers(maxValue))
+    -- local textString = self.TextString
+		-- textString:SetText('(' .. percent .. '%) ' .. AbbreviateLargeNumbers(value) .. ' / ' .. AbbreviateLargeNumbers(maxValue))
 	end)
 
 	initTooltips = true
