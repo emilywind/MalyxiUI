@@ -1294,11 +1294,11 @@ local function setupEuiOptions()
   ----------------------
   -- Game Menu Button --
   ----------------------
-  local function emsUIGameMenuButton(self)
-    self:AddSection()
-    self:AddButton("Malyxi UI", openEuiConfig)
-  end
-  hooksecurefunc(GameMenuFrame, "InitButtons", emsUIGameMenuButton)
+  -- local function emsUIGameMenuButton(self)
+  --   self:AddSection()
+  --   self:AddButton("Malyxi UI", openEuiConfig)
+  -- end
+  -- hooksecurefunc(GameMenuFrame, "InitButtons", emsUIGameMenuButton)
 end
 
 OnPlayerLogin(setupEuiOptions)
