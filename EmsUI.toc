@@ -1,4 +1,4 @@
-## Interface: 110105, 110107, 110100, 110200, 110205, 110207
+## Interface: 110207, 120000, 120001
 ## Title: Malyxi UI
 ## Notes: Simple skinnning modifications and quality of life features for the default interface to make it nicer looking and more user-friendly. Gives a great rank 1 gladiator arena UI experience without the bloat of a full UI replacement.
 ## Author: Emily
@@ -23,4 +23,4 @@
 ## Category-zhTW: 使用者介面
 
 lib\embeds.xml
-src\EmsUI.xml
+src\MalyxiUI.xml

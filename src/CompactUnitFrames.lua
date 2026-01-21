@@ -24,10 +24,6 @@ local function updateTextures(self)
       powerBar:SetStatusBarTexture(EUIDB.statusBarTex)
       powerBar:GetStatusBarTexture():SetDrawLayer("BORDER")
 
-      self.vertLeftBorder:Hide()
-      self.vertRightBorder:Hide()
-      self.horizTopBorder:Hide()
-      self.horizBottomBorder:Hide()
       self.background:SetTexture(SQUARE_TEXTURE)
       self.background:SetVertexColor(0.15, 0.15, 0.15, 0.9)
 
