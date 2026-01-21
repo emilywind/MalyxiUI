@@ -2,7 +2,7 @@
 ## Title: Malyxi UI
 ## Notes: Simple skinnning modifications and quality of life features for the default interface to make it nicer looking and more user-friendly. Gives a great rank 1 gladiator arena UI experience without the bloat of a full UI replacement.
 ## Author: Emily
-## Version: 8.0.0
+## Version: 8.0.0b
 ## SavedVariables: EUIDB
 ## IconTexture: Interface\Addons\EmsUI\media\icons\EmsUI
 ## Email: emlywind@gmail.com
