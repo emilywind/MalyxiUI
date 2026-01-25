@@ -1,7 +1,7 @@
 ---@param aura Button
 local function applySkin(aura)
   local duration = aura.Duration
-  if duration and not duration:HasSecretValues() then
+  if duration then
     local point, relativeTo, relativePoint, xOfs = duration:GetPoint()
     local yOfs = point == "TOP" and -3 or 3
     duration:SetPoint(point, relativeTo, relativePoint, xOfs, yOfs)
