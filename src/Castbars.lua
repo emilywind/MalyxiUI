@@ -81,10 +81,12 @@ end)
 ---@param self Frame
 ---@param elapsed number
 local function castBarUpdateTimer(self, elapsed)
+  local maxValue = self.maxValue or 0
+  local value = maxValue - (self.value or 0)
   if not self.timer then return end
   if self.update and self.update < elapsed then
     if self.casting then
-      self.timer:SetText(format("%.1f", max(self.maxValue - self.value, 0)))
+      self.timer:SetText(format("%.1f", max(value, 0)))
     elseif self.channeling then
       self.timer:SetText(format("%.1f", max(self.value, 0)))
     else
