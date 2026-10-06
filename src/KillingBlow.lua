@@ -166,7 +166,7 @@ end
 function frame:PARTY_KILL(attackerGUID, targetGUID)
   if issecretvalue(attackerGUID) or issecretvalue(targetGUID) then
     if not inInstancedPvP then
-      CheckKillingBlowsIncreased()
+      PreviousKillingBlows = GetKillingBlows()
       return
     end
 
