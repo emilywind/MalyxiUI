@@ -55,6 +55,7 @@ frame:Hide()
 
 local texture = frame:CreateTexture()
 texture:SetAllPoints()
+texture:SetTexture(KB_TEXTURE)
 
 local group = texture:CreateAnimationGroup()
 
@@ -85,16 +86,13 @@ end)
 ------------
 -- Events --
 ------------
-local PLAYER_GUID = UnitGUID("player")
-
 -- Thanks to ErnestasBaltinas' HK Sounds for this method of tracking killing blows
-local TOTAL_KILLING_BLOWS_ACHIEVEMENT_ID = 1487
-
 local FirstLoad = true
 local PreviousKillingBlows = 0
+local inInstancedPvP = false
 
 local function GetKillingBlows()
-  local _, _, _, killingBlows = GetAchievementCriteriaInfoByID(TOTAL_KILLING_BLOWS_ACHIEVEMENT_ID, 0)
+  local  _, _, _, _, _, _, _, _, killingBlows = GetAchievementCriteriaInfoByID(1487, 0)
   return killingBlows
 end
 
@@ -112,16 +110,12 @@ local function KillingBlow()
   frame:Show()
 end
 
-local inInstancedPvP = false
-
 function frame:RegisterCombatLogEvents()
   frame:RegisterEvent("PARTY_KILL")
-  frame:RegisterEvent("PLAYER_PVP_KILLS_CHANGED")
 end
 
 function frame:UnregisterCombatLogEvents()
   frame:UnregisterEvent("PARTY_KILL")
-  frame:UnregisterEvent("PLAYER_PVP_KILLS_CHANGED")
 end
 
 function ModifyKillingBlowSetting(value)
@@ -141,7 +135,6 @@ frame:SetScript("OnEvent", function(self, event, ...)
 end)
 
 function frame:PLAYER_LOGIN()
-  PLAYER_GUID = UnitGUID("player")
   if EUIDB.showKillingBlows then
     frame:RegisterCombatLogEvents()
   end
@@ -150,7 +143,6 @@ end
 function frame:PLAYER_ENTERING_WORLD()
   if FirstLoad then
     FirstLoad = false
-    texture:SetTexture(KB_TEXTURE)
 
     PreviousKillingBlows = GetKillingBlows()
   end
@@ -163,41 +155,34 @@ function frame:PLAYER_ENTERING_WORLD()
   end
 end
 
-function frame:PARTY_KILL(attackerGUID, targetGUID)
-  -- If we're in instanced PvP, the kill should be handled by PLAYER_PVP_KILLS_CHANGED
-  if inInstancedPvP then
-    return
-  end
-
-  -- If the player's total killing blows hasn't increased, return now
-  local killingBlowsIncreased = CheckKillingBlowsIncreased()
-  if not killingBlowsIncreased then
-    return
-  end
-
-  -- If attacker is secret or not the player or their pet, return now
-  if not canaccessvalue(attackerGUID) or (attackerGUID ~= PLAYER_GUID and UnitTokenFromGUID(attackerGUID) ~= "pet") then
-    return
-  end
-
-  -- If we're only recording player kills and the target is secret or not a player, return now
-  if PLAYER_KILLS_ONLY and (not canaccessvalue(targetGUID) or not targetGUID:find("^Player%-")) then
-    return
-  end
-
-  KillingBlow()
+local function KillerIsSelf(guid)
+  return (guid == UnitGUID("player") or UnitTokenFromGUID(guid) == "pet")
 end
 
-function frame:PLAYER_PVP_KILLS_CHANGED()
-  -- If we're not in instanced PvP, the kill should be handled by PARTY_KILL
-  if not inInstancedPvP then
-    return
-  end
+local function TargetIsPlayer(guid)
+  return (type(guid) == "string" and guid:find("^Player%-") ~= nil) or false
+end
 
-  -- If the player's total killing blows hasn't increased, return now
-  local killingBlowsIncreased = CheckKillingBlowsIncreased()
-  if not killingBlowsIncreased then
-    return
+function frame:PARTY_KILL(attackerGUID, targetGUID)
+  if issecretvalue(attackerGUID) or issecretvalue(targetGUID) then
+    if not inInstancedPvP then
+      CheckKillingBlowsIncreased()
+      return
+    end
+
+    if not CheckKillingBlowsIncreased() then
+      return
+    end
+  else
+  -- If attacker is not the player or their pet, return now
+    if not KillerIsSelf(attackerGUID) then
+      return
+    end
+
+    -- If we're only recording player kills and the target is secret or not a player, return now
+    if PLAYER_KILLS_ONLY and not TargetIsPlayer(targetGUID) then
+      return
+    end
   end
 
   KillingBlow()
