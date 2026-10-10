@@ -491,19 +491,19 @@ local function setupEuiOptions()
   pvpText:SetText("PvP")
   pvpText:SetPoint("TOPLEFT", enableDamageFont, "BOTTOMLEFT", 0, -16)
 
-  local enableSpellNotifications = newCheckbox(
-    "Spell Notifications",
-    "Show notifications when spells are interrupted, purged, stolen, reflected, and etc.",
-    "enableSpellNotifications",
-    pvpText,
-    EUI.panel
-  )
+  -- local enableSpellNotifications = newCheckbox(
+  --   "Spell Notifications",
+  --   "Show notifications when spells are interrupted, purged, stolen, reflected, and etc.",
+  --   "enableSpellNotifications",
+  --   pvpText,
+  --   EUI.panel
+  -- )
 
   local dampeningDisplay = newCheckbox(
     "Dampening Display",
     "Display Dampening % under remaining time at the top of the screen in arenas.",
     "dampeningDisplay",
-    enableSpellNotifications,
+    pvpText,
     EUI.panel
   )
 
