@@ -9,7 +9,7 @@
 
 -- create new library
 local LIB_NAME = "LibFroznFunctions-1.0";
-local LIB_MINOR = 64; -- bump on changes
+local LIB_MINOR = 67; -- bump on changes
 
 if (not LibStub) then
 	error(LIB_NAME .. " requires LibStub.");
@@ -2617,6 +2617,19 @@ end
 -- @param  frameReference  reference frame
 -- @return left offset, right offset. nil, nil if no valid anchor point is supplied.
 function LibFroznFunctions:GetOffsetsForAnchorPoint(anchorPoint, anchorFrame, targetFrame, referenceFrame)
+	-- check if insecure interaction with the frames is currently forbidden
+	if (anchorFrame:IsForbidden()) or (targetFrame:IsForbidden()) or (referenceFrame:IsForbidden()) then
+		return nil, nil;
+	end
+	
+	-- check if anchor frame is currently protected
+	local success = pcall(anchorFrame.GetLeft, anchorFrame);
+	
+	if (not success) then
+		return nil, nil;
+	end
+	
+	-- get offsets for anchor point between two frames
 	local effectiveScaleAnchorFrame = anchorFrame:GetEffectiveScale();
 	local effectiveScaleTargetFrame = targetFrame:GetEffectiveScale();
 	local effectiveScaleReferenceFrame = referenceFrame:GetEffectiveScale();
@@ -2626,32 +2639,149 @@ function LibFroznFunctions:GetOffsetsForAnchorPoint(anchorPoint, anchorFrame, ta
 	local totalEffectiveScaleTargetFrame = effectiveScaleTargetFrame / UIScale;
 	local totalEffectiveScaleReferenceFrame = effectiveScaleReferenceFrame / UIScale;
 	
+	local anchorFrameGetLeft, anchorFrameGetRight, anchorFrameGetTop, anchorFrameGetBottom;
+	local anchorFrameLeftPos, anchorFrameRightPos, anchorFrameTopPos, anchorFrameBottomPos;
+	local referenceFrameGetLeft, referenceFrameGetRight, referenceFrameGetTop, referenceFrameGetBottom;
+	local referenceFrameLeftPos, referenceFrameRightPos, referenceFrameTopPos, referenceFrameBottomPos;
+	
 	if (anchorPoint == "TOPLEFT") then
-		return ((anchorFrame:GetLeft() * totalEffectiveScaleAnchorFrame) - (referenceFrame:GetLeft() * totalEffectiveScaleReferenceFrame)) / totalEffectiveScaleTargetFrame, ((anchorFrame:GetTop() * totalEffectiveScaleAnchorFrame) - (referenceFrame:GetTop() * totalEffectiveScaleReferenceFrame)) / totalEffectiveScaleTargetFrame;
-	end
-	if (anchorPoint == "TOPRIGHT") then
-		return ((anchorFrame:GetRight() * totalEffectiveScaleAnchorFrame) - (referenceFrame:GetRight() * totalEffectiveScaleReferenceFrame)) / totalEffectiveScaleTargetFrame, ((anchorFrame:GetTop() * totalEffectiveScaleAnchorFrame) - (referenceFrame:GetTop() * totalEffectiveScaleReferenceFrame)) / totalEffectiveScaleTargetFrame;
-	end
-	if (anchorPoint == "BOTTOMLEFT") then
-		return ((anchorFrame:GetLeft() * totalEffectiveScaleAnchorFrame) - (referenceFrame:GetLeft() * totalEffectiveScaleReferenceFrame)) / totalEffectiveScaleTargetFrame, ((anchorFrame:GetBottom() * totalEffectiveScaleAnchorFrame) - (referenceFrame:GetBottom() * totalEffectiveScaleReferenceFrame)) / totalEffectiveScaleTargetFrame;
-	end
-	if (anchorPoint == "BOTTOMRIGHT") then
-		return ((anchorFrame:GetRight() * totalEffectiveScaleAnchorFrame) - (referenceFrame:GetRight() * totalEffectiveScaleReferenceFrame)) / totalEffectiveScaleTargetFrame, ((anchorFrame:GetBottom() * totalEffectiveScaleAnchorFrame) - (referenceFrame:GetBottom() * totalEffectiveScaleReferenceFrame)) / totalEffectiveScaleTargetFrame;
-	end
-	if (anchorPoint == "TOP") then
-		return ((((anchorFrame:GetLeft() + anchorFrame:GetRight()) * totalEffectiveScaleAnchorFrame) - ((referenceFrame:GetLeft() + referenceFrame:GetRight()) * totalEffectiveScaleReferenceFrame)) / 2) / totalEffectiveScaleTargetFrame, ((anchorFrame:GetTop() * totalEffectiveScaleAnchorFrame) - (referenceFrame:GetTop() * totalEffectiveScaleReferenceFrame)) / totalEffectiveScaleTargetFrame;
-	end
-	if (anchorPoint == "BOTTOM") then
-		return ((((anchorFrame:GetLeft() + anchorFrame:GetRight()) * totalEffectiveScaleAnchorFrame) - ((referenceFrame:GetLeft() + referenceFrame:GetRight()) * totalEffectiveScaleReferenceFrame)) / 2) / totalEffectiveScaleTargetFrame, ((anchorFrame:GetBottom() * totalEffectiveScaleAnchorFrame) - (referenceFrame:GetBottom() * totalEffectiveScaleReferenceFrame)) / totalEffectiveScaleTargetFrame;
-	end
-	if (anchorPoint == "LEFT") then
-		return ((anchorFrame:GetLeft() * totalEffectiveScaleAnchorFrame) - (referenceFrame:GetLeft() * totalEffectiveScaleReferenceFrame)) / totalEffectiveScaleTargetFrame, ((((anchorFrame:GetTop() + anchorFrame:GetBottom()) * totalEffectiveScaleAnchorFrame) - ((referenceFrame:GetTop() + referenceFrame:GetBottom()) * totalEffectiveScaleReferenceFrame)) / 2) / totalEffectiveScaleTargetFrame;
-	end
-	if (anchorPoint == "RIGHT") then
-		return ((anchorFrame:GetRight() * totalEffectiveScaleAnchorFrame) - (referenceFrame:GetRight() * totalEffectiveScaleReferenceFrame)) / totalEffectiveScaleTargetFrame, ((((anchorFrame:GetTop() + anchorFrame:GetBottom()) * totalEffectiveScaleAnchorFrame) - ((referenceFrame:GetTop() + referenceFrame:GetBottom()) * totalEffectiveScaleReferenceFrame)) / 2) / totalEffectiveScaleTargetFrame;
-	end
-	if (anchorPoint == "CENTER") then
-		return ((((anchorFrame:GetLeft() + anchorFrame:GetRight()) * totalEffectiveScaleAnchorFrame) - ((referenceFrame:GetLeft() + referenceFrame:GetRight()) * totalEffectiveScaleReferenceFrame)) / 2) / totalEffectiveScaleTargetFrame, ((((anchorFrame:GetTop() + anchorFrame:GetBottom()) * totalEffectiveScaleAnchorFrame) - ((referenceFrame:GetTop() + referenceFrame:GetBottom()) * totalEffectiveScaleReferenceFrame)) / 2) / totalEffectiveScaleTargetFrame;
+		anchorFrameGetLeft = anchorFrame:GetLeft();
+		anchorFrameGetTop = anchorFrame:GetTop();
+		referenceFrameGetLeft = referenceFrame:GetLeft();
+		referenceFrameGetTop = referenceFrame:GetTop();
+		
+		anchorFrameLeftPos = (anchorFrameGetLeft ~= nil) and (not self:IsSecretValue(anchorFrameGetLeft)) and (anchorFrameGetLeft * totalEffectiveScaleAnchorFrame);
+		anchorFrameTopPos = (anchorFrameGetTop ~= nil) and (not self:IsSecretValue(anchorFrameGetTop)) and (anchorFrameGetTop * totalEffectiveScaleAnchorFrame);
+		referenceFrameLeftPos = (referenceFrameGetLeft ~= nil) and (not self:IsSecretValue(referenceFrameGetLeft)) and (referenceFrameGetLeft * totalEffectiveScaleReferenceFrame);
+		referenceFrameTopPos = (referenceFrameGetTop ~= nil) and (not self:IsSecretValue(referenceFrameGetTop)) and (referenceFrameGetTop * totalEffectiveScaleReferenceFrame);
+		
+		if (anchorFrameLeftPos) and (anchorFrameTopPos) and (referenceFrameLeftPos) and (referenceFrameTopPos) then
+			return (anchorFrameLeftPos - referenceFrameLeftPos) / totalEffectiveScaleTargetFrame, (anchorFrameTopPos - referenceFrameTopPos) / totalEffectiveScaleTargetFrame;
+		end
+	elseif (anchorPoint == "TOPRIGHT") then
+		anchorFrameGetRight = anchorFrame:GetRight();
+		anchorFrameGetTop = anchorFrame:GetTop();
+		referenceFrameGetRight = referenceFrame:GetRight();
+		referenceFrameGetTop = referenceFrame:GetTop();
+		
+		anchorFrameRightPos = (anchorFrameGetRight ~= nil) and (not self:IsSecretValue(anchorFrameGetRight)) and (anchorFrameGetRight * totalEffectiveScaleAnchorFrame);
+		anchorFrameTopPos = (anchorFrameGetTop ~= nil) and (not self:IsSecretValue(anchorFrameGetTop)) and (anchorFrameGetTop * totalEffectiveScaleAnchorFrame);
+		referenceFrameRightPos = (referenceFrameGetRight ~= nil) and (not self:IsSecretValue(referenceFrameGetRight)) and (referenceFrameGetRight * totalEffectiveScaleReferenceFrame);
+		referenceFrameTopPos = (referenceFrameGetTop ~= nil) and (not self:IsSecretValue(referenceFrameGetTop)) and (referenceFrameGetTop * totalEffectiveScaleReferenceFrame);
+		
+		if (anchorFrameRightPos) and (anchorFrameTopPos) and (referenceFrameRightPos) and (referenceFrameTopPos) then
+			return (anchorFrameRightPos - referenceFrameRightPos) / totalEffectiveScaleTargetFrame, (anchorFrameTopPos - referenceFrameTopPos) / totalEffectiveScaleTargetFrame;
+		end
+	elseif (anchorPoint == "BOTTOMLEFT") then
+		anchorFrameGetLeft = anchorFrame:GetLeft();
+		anchorFrameGetBottom = anchorFrame:GetBottom();
+		referenceFrameGetLeft = referenceFrame:GetLeft();
+		referenceFrameGetBottom = referenceFrame:GetBottom();
+		
+		anchorFrameLeftPos = (anchorFrameGetLeft ~= nil) and (not self:IsSecretValue(anchorFrameGetLeft)) and (anchorFrameGetLeft * totalEffectiveScaleAnchorFrame);
+		anchorFrameBottomPos = (anchorFrameGetBottom ~= nil) and (not self:IsSecretValue(anchorFrameGetBottom)) and (anchorFrameGetBottom * totalEffectiveScaleAnchorFrame);
+		referenceFrameLeftPos = (referenceFrameGetLeft ~= nil) and (not self:IsSecretValue(referenceFrameGetLeft)) and (referenceFrameGetLeft * totalEffectiveScaleReferenceFrame);
+		referenceFrameBottomPos = (referenceFrameGetBottom ~= nil) and (not self:IsSecretValue(referenceFrameGetBottom)) and (referenceFrameGetBottom * totalEffectiveScaleReferenceFrame);
+		
+		if (anchorFrameLeftPos) and (anchorFrameBottomPos) and (referenceFrameLeftPos) and (referenceFrameBottomPos) then
+			return (anchorFrameLeftPos - referenceFrameLeftPos) / totalEffectiveScaleTargetFrame, (anchorFrameBottomPos - referenceFrameBottomPos) / totalEffectiveScaleTargetFrame;
+		end
+	elseif (anchorPoint == "BOTTOMRIGHT") then
+		anchorFrameGetRight = anchorFrame:GetRight();
+		anchorFrameGetBottom = anchorFrame:GetBottom();
+		referenceFrameGetRight = referenceFrame:GetRight();
+		referenceFrameGetBottom = referenceFrame:GetBottom();
+		
+		anchorFrameRightPos = (anchorFrameGetRight ~= nil) and (not self:IsSecretValue(anchorFrameGetRight)) and (anchorFrameGetRight * totalEffectiveScaleAnchorFrame);
+		anchorFrameBottomPos = (anchorFrameGetBottom ~= nil) and (not self:IsSecretValue(anchorFrameGetBottom)) and (anchorFrameGetBottom * totalEffectiveScaleAnchorFrame);
+		referenceFrameRightPos = (referenceFrameGetRight ~= nil) and (not self:IsSecretValue(referenceFrameGetRight)) and (referenceFrameGetRight * totalEffectiveScaleReferenceFrame);
+		referenceFrameBottomPos = (referenceFrameGetBottom ~= nil) and (not self:IsSecretValue(referenceFrameGetBottom)) and (referenceFrameGetBottom * totalEffectiveScaleReferenceFrame);
+		
+		if (anchorFrameRightPos) and (anchorFrameBottomPos) and (referenceFrameRightPos) and (referenceFrameBottomPos) then
+			return (anchorFrameRightPos - referenceFrameRightPos) / totalEffectiveScaleTargetFrame, (anchorFrameBottomPos - referenceFrameBottomPos) / totalEffectiveScaleTargetFrame;
+		end
+	elseif (anchorPoint == "TOP") then
+		anchorFrameGetLeft = anchorFrame:GetLeft();
+		anchorFrameGetRight = anchorFrame:GetRight();
+		anchorFrameGetTop = anchorFrame:GetTop();
+		referenceFrameGetLeft = referenceFrame:GetLeft();
+		referenceFrameGetRight = referenceFrame:GetRight();
+		referenceFrameGetTop = referenceFrame:GetTop();
+		
+		anchorFrameLeftRightPos = (anchorFrameGetLeft ~= nil) and (not self:IsSecretValue(anchorFrameGetLeft)) and (anchorFrameGetRight ~= nil) and (not self:IsSecretValue(anchorFrameGetRight)) and ((anchorFrameGetLeft + anchorFrameGetRight) * totalEffectiveScaleAnchorFrame);
+		anchorFrameTopPos = (anchorFrameGetTop ~= nil) and (not self:IsSecretValue(anchorFrameGetTop)) and (anchorFrameGetTop * totalEffectiveScaleAnchorFrame);
+		referenceFrameLeftRightPos = (referenceFrameGetLeft ~= nil) and (not self:IsSecretValue(referenceFrameGetLeft)) and (referenceFrameGetRight ~= nil) and (not self:IsSecretValue(referenceFrameGetRight)) and ((referenceFrameGetLeft + referenceFrameGetRight) * totalEffectiveScaleReferenceFrame);
+		referenceFrameTopPos = (referenceFrameGetTop ~= nil) and (not self:IsSecretValue(referenceFrameGetTop)) and (referenceFrameGetTop * totalEffectiveScaleReferenceFrame);
+		
+		if (anchorFrameLeftRightPos) and (anchorFrameTopPos) and (referenceFrameLeftRightPos) and (referenceFrameTopPos) then
+			return ((anchorFrameLeftRightPos - referenceFrameLeftRightPos) / 2) / totalEffectiveScaleTargetFrame, (anchorFrameTopPos - referenceFrameTopPos) / totalEffectiveScaleTargetFrame;
+		end
+	elseif (anchorPoint == "BOTTOM") then
+		anchorFrameGetLeft = anchorFrame:GetLeft();
+		anchorFrameGetRight = anchorFrame:GetRight();
+		anchorFrameGetBottom = anchorFrame:GetBottom();
+		referenceFrameGetLeft = referenceFrame:GetLeft();
+		referenceFrameGetRight = referenceFrame:GetRight();
+		referenceFrameGetBottom = referenceFrame:GetBottom();
+		
+		anchorFrameLeftRightPos = (anchorFrameGetLeft ~= nil) and (not self:IsSecretValue(anchorFrameGetLeft)) and (anchorFrameGetRight ~= nil) and (not self:IsSecretValue(anchorFrameGetRight)) and ((anchorFrameGetLeft + anchorFrameGetRight) * totalEffectiveScaleAnchorFrame);
+		anchorFrameBottomPos = (anchorFrameGetBottom ~= nil) and (not self:IsSecretValue(anchorFrameGetBottom)) and (anchorFrameGetBottom * totalEffectiveScaleAnchorFrame);
+		referenceFrameLeftRightPos = (referenceFrameGetLeft ~= nil) and (not self:IsSecretValue(referenceFrameGetLeft)) and (referenceFrameGetRight ~= nil) and (not self:IsSecretValue(referenceFrameGetRight)) and ((referenceFrameGetLeft + referenceFrameGetRight) * totalEffectiveScaleReferenceFrame);
+		referenceFrameBottomPos = (referenceFrameGetBottom ~= nil) and (not self:IsSecretValue(referenceFrameGetBottom)) and (referenceFrameGetBottom * totalEffectiveScaleReferenceFrame);
+		
+		if (anchorFrameLeftRightPos) and (anchorFrameBottomPos) and (referenceFrameLeftRightPos) and (referenceFrameBottomPos) then
+			return ((anchorFrameLeftRightPos - referenceFrameLeftRightPos) / 2) / totalEffectiveScaleTargetFrame, (anchorFrameBottomPos - referenceFrameBottomPos) / totalEffectiveScaleTargetFrame;
+		end
+	elseif (anchorPoint == "LEFT") then
+		anchorFrameGetLeft = anchorFrame:GetLeft();
+		anchorFrameGetTop = anchorFrame:GetTop();
+		anchorFrameGetBottom = anchorFrame:GetBottom();
+		referenceFrameGetLeft = referenceFrame:GetLeft();
+		referenceFrameGetTop = referenceFrame:GetTop();
+		referenceFrameGetBottom = referenceFrame:GetBottom();
+		
+		anchorFrameLeftPos = (anchorFrameGetLeft ~= nil) and (not self:IsSecretValue(anchorFrameGetLeft)) and (anchorFrameGetLeft * totalEffectiveScaleAnchorFrame);
+		anchorFrameTopBottomPos = (anchorFrameGetTop ~= nil) and (not self:IsSecretValue(anchorFrameGetTop)) and (anchorFrameGetBottom ~= nil) and (not self:IsSecretValue(anchorFrameGetBottom)) and ((anchorFrameGetTop + anchorFrameGetBottom) * totalEffectiveScaleAnchorFrame);
+		referenceFrameLeftPos = (referenceFrameGetLeft ~= nil) and (not self:IsSecretValue(referenceFrameGetLeft)) and (referenceFrameGetLeft * totalEffectiveScaleReferenceFrame);
+		referenceFrameTopBottomPos = (referenceFrameGetTop ~= nil) and (not self:IsSecretValue(referenceFrameGetTop)) and (referenceFrameGetBottom ~= nil) and (not self:IsSecretValue(referenceFrameGetBottom)) and ((referenceFrameGetTop + referenceFrameGetBottom) * totalEffectiveScaleReferenceFrame);
+		
+		if (anchorFrameLeftPos) and (anchorFrameTopBottomPos) and (referenceFrameLeftPos) and (referenceFrameTopBottomPos) then
+			return (anchorFrameLeftPos - referenceFrameLeftPos) / totalEffectiveScaleTargetFrame, ((anchorFrameTopBottomPos - referenceFrameTopBottomPos) / 2) / totalEffectiveScaleTargetFrame;
+		end
+	elseif (anchorPoint == "RIGHT") then
+		anchorFrameGetRight = anchorFrame:GetRight();
+		anchorFrameGetTop = anchorFrame:GetTop();
+		anchorFrameGetBottom = anchorFrame:GetBottom();
+		referenceFrameGetRight = referenceFrame:GetRight();
+		referenceFrameGetTop = referenceFrame:GetTop();
+		referenceFrameGetBottom = referenceFrame:GetBottom();
+		
+		anchorFrameRightPos = (anchorFrameGetRight ~= nil) and (not self:IsSecretValue(anchorFrameGetRight)) and (anchorFrameGetRight * totalEffectiveScaleAnchorFrame);
+		anchorFrameTopBottomPos = (anchorFrameGetTop ~= nil) and (not self:IsSecretValue(anchorFrameGetTop)) and (anchorFrameGetBottom ~= nil) and (not self:IsSecretValue(anchorFrameGetBottom)) and ((anchorFrameGetTop + anchorFrameGetBottom) * totalEffectiveScaleAnchorFrame);
+		referenceFrameRightPos = (referenceFrameGetRight ~= nil) and (not self:IsSecretValue(referenceFrameGetRight)) and (referenceFrameGetRight * totalEffectiveScaleReferenceFrame);
+		referenceFrameTopBottomPos = (referenceFrameGetTop ~= nil) and (not self:IsSecretValue(referenceFrameGetTop)) and (referenceFrameGetBottom ~= nil) and (not self:IsSecretValue(referenceFrameGetBottom)) and ((referenceFrameGetTop + referenceFrameGetBottom) * totalEffectiveScaleReferenceFrame);
+		
+		if (anchorFrameRightPos) and (anchorFrameTopBottomPos) and (referenceFrameRightPos) and (referenceFrameTopBottomPos) then
+			return (anchorFrameRightPos - referenceFrameRightPos) / totalEffectiveScaleTargetFrame, ((anchorFrameTopBottomPos - referenceFrameTopBottomPos) / 2) / totalEffectiveScaleTargetFrame;
+		end
+	elseif (anchorPoint == "CENTER") then
+		anchorFrameGetLeft = anchorFrame:GetLeft();
+		anchorFrameGetRight = anchorFrame:GetRight();
+		anchorFrameGetTop = anchorFrame:GetTop();
+		anchorFrameGetBottom = anchorFrame:GetBottom();
+		referenceFrameGetLeft = referenceFrame:GetLeft();
+		referenceFrameGetRight = referenceFrame:GetRight();
+		referenceFrameGetTop = referenceFrame:GetTop();
+		referenceFrameGetBottom = referenceFrame:GetBottom();
+		
+		anchorFrameLeftRightPos = (anchorFrameGetLeft ~= nil) and (not self:IsSecretValue(anchorFrameGetLeft)) and (anchorFrameGetRight ~= nil) and (not self:IsSecretValue(anchorFrameGetRight)) and ((anchorFrameGetLeft + anchorFrameGetRight) * totalEffectiveScaleAnchorFrame);
+		anchorFrameTopBottomPos = (anchorFrameGetTop ~= nil) and (not self:IsSecretValue(anchorFrameGetTop)) and (anchorFrameGetBottom ~= nil) and (not self:IsSecretValue(anchorFrameGetBottom)) and ((anchorFrameGetTop + anchorFrameGetBottom) * totalEffectiveScaleAnchorFrame);
+		referenceFrameLeftRightPos = (referenceFrameGetLeft ~= nil) and (not self:IsSecretValue(referenceFrameGetLeft)) and (referenceFrameGetRight ~= nil) and (not self:IsSecretValue(referenceFrameGetRight)) and ((referenceFrameGetLeft + referenceFrameGetRight) * totalEffectiveScaleReferenceFrame);
+		referenceFrameTopBottomPos = (referenceFrameGetTop ~= nil) and (not self:IsSecretValue(referenceFrameGetTop)) and (referenceFrameGetBottom ~= nil) and (not self:IsSecretValue(referenceFrameGetBottom)) and ((referenceFrameGetTop + referenceFrameGetBottom) * totalEffectiveScaleReferenceFrame);
+		
+		if (anchorFrameLeftRightPos) and (anchorFrameTopBottomPos) and (referenceFrameLeftRightPos) and (referenceFrameTopBottomPos) then
+			return ((anchorFrameLeftRightPos - referenceFrameLeftRightPos) / 2) / totalEffectiveScaleTargetFrame, ((anchorFrameTopBottomPos - referenceFrameTopBottomPos) / 2) / totalEffectiveScaleTargetFrame;
+		end
 	end
 	
 	return nil, nil;
@@ -2925,7 +3055,7 @@ function LibFroznFunctions:IsFrameBackInFrameChain(referenceFrame, framesAndName
 			return false;
 		end
 		
-		if (type(currentFrame.GetParent) ~= "function") then
+		if (type(currentFrame.GetParent) ~= "function") or (currentFrame:IsForbidden()) then
 			return false;
 		end
 		
@@ -2936,7 +3066,7 @@ function LibFroznFunctions:IsFrameBackInFrameChain(referenceFrame, framesAndName
 	return false;
 end
 
--- show popup with text
+-- show popup with text and edit box
 --
 -- @param params               parameters
 --          .prompt              prompt to show
@@ -2953,14 +3083,14 @@ end
 --          .onAcceptHandler     optional. handler for OnAccept event (button pressed) of popup. parameters: self, data
 local SPWT_GameDialogResizeHooked = {};
 
-function LibFroznFunctions:ShowPopupWithText(params)
+function LibFroznFunctions:ShowPopupWithTextAndEditBox(params)
 	-- no params
 	if (not params) then
 		return;
 	end
 	
 	-- create initial popup config
-	local popupName = LIB_NAME .. "-" .. LIB_MINOR .. "_ShowPopupWithText";
+	local popupName = LIB_NAME .. "-" .. LIB_MINOR .. "_ShowPopupWithTextAndEditBox";
 	
 	if (not StaticPopupDialogs[popupName]) then
 		local editBoxOnEscapePressed = StaticPopup_StandardEditBoxOnEscapePressed or function(self, data)
@@ -3089,7 +3219,8 @@ function LibFroznFunctions:ShowPopupWithText(params)
 				
 				editBoxOnEscapePressed(editBox, data);
 			end,
-			hideOnEscape = 1
+			hideOnEscape = 1,
+			whileDead = 1
 		};
 		
 		if (StaticPopup_AddDefinition) then -- since tww 11.2.0
@@ -3124,69 +3255,53 @@ end
 
 -- check if the mouse cursor is hovering over the WorldFrame
 --
--- hint: temporary workaround for blizzard bug in classic era 1.15.7, see https://github.com/frozn/TipTac/issues/386: GetMouseFoci() doesn't return the WorldFrame any more since patch 1.15.7
---
 -- @return true if the mouse cursor is hovering over the WorldFrame, false otherwise.
-local frameForWorldFrameIsMouseMotionFocus;
 
--- create frame for "create frame for WorldFrame is mouse motion focus on player login"
-local frameForCreateFrameForWorldFrameIsMouseMotionFocusOnPlayerLogin;
-
-if (LibFroznFunctions.isWoWFlavor.ClassicEra) then
-	frameForCreateFrameForWorldFrameIsMouseMotionFocusOnPlayerLogin = CreateFrame("Frame", LIB_NAME .. "-" .. LIB_MINOR .. "_CreateFrameForWorldFrameIsMouseMotionFocusOnPlayerLogin");
-	frameForCreateFrameForWorldFrameIsMouseMotionFocusOnPlayerLogin:Hide();
-
-	frameForCreateFrameForWorldFrameIsMouseMotionFocusOnPlayerLogin:SetScript("OnEvent", function(self, event, ...)
-		self[event](self, event, ...);
-	end);
-	
-	function frameForCreateFrameForWorldFrameIsMouseMotionFocusOnPlayerLogin:PLAYER_LOGIN()
-		-- create frame for "WorldFrame is mouse motion focus"
-		if (not frameForWorldFrameIsMouseMotionFocus) then
-			frameForWorldFrameIsMouseMotionFocus = CreateFrame("Frame", LIB_NAME .. "-" .. LIB_MINOR .. "_WorldFrameIsMouseMotionFocus");
-			
-			frameForWorldFrameIsMouseMotionFocus:SetFrameStrata("BACKGROUND");
-			frameForWorldFrameIsMouseMotionFocus:SetFrameLevel(0);
-			frameForWorldFrameIsMouseMotionFocus:SetAllPoints(WorldFrame);
-			
-			frameForWorldFrameIsMouseMotionFocus:EnableMouseMotion(true);
-			frameForWorldFrameIsMouseMotionFocus:SetPropagateMouseMotion(true);
-			frameForWorldFrameIsMouseMotionFocus:SetPropagateMouseClicks(true);
-			
-			WorldFrame:HookScript("OnShow", function()
-				frameForWorldFrameIsMouseMotionFocus:Show();
-			end);
-			
-			WorldFrame:HookScript("OnHide", function()
-				frameForWorldFrameIsMouseMotionFocus:Hide();
-			end);
-			
-			frameForWorldFrameIsMouseMotionFocus:SetShown(WorldFrame:IsShown());
-		end
+-- make shure that the WorldFrame can receive mouse hover events on player login. needed because <Frame>:IsMouseMotionFocus() doesn't work directly after first enabling of mouse motion events.
+local function WorldFrameEnableMouseMotionFn()
+	if (not WorldFrame:IsForbidden()) and ((not WorldFrame:IsProtected()) or (not InCombatLockdown())) and (not WorldFrame:IsMouseMotionEnabled()) then
+		WorldFrame:EnableMouseMotion(true);
 	end
-	
-	frameForCreateFrameForWorldFrameIsMouseMotionFocusOnPlayerLogin:RegisterEvent("PLAYER_LOGIN");
 end
 
-function LibFroznFunctions:WorldFrameIsMouseMotionFocus()
-	local WorldFrame = WorldFrame;
+local frameForWorldFrameIsMouseMotionFocusOnPlayerLogin = CreateFrame("Frame", LIB_NAME .. "-" .. LIB_MINOR .. "_WorldFrameIsMouseMotionFocus");
+frameForWorldFrameIsMouseMotionFocusOnPlayerLogin:Hide();
+
+frameForWorldFrameIsMouseMotionFocusOnPlayerLogin:SetScript("OnEvent", function(self, event, ...)
+	self[event](self, event, ...);
+end);
+
+function frameForWorldFrameIsMouseMotionFocusOnPlayerLogin:PLAYER_LOGIN(event)
+	-- prevent execution if the highest LIB_MINOR is greater than the current LIB_MINOR
+	local highest_LIB_MINOR = LibStub.minors[LIB_NAME];
 	
-	if (self.isWoWFlavor.ClassicEra) then
-		if (frameForWorldFrameIsMouseMotionFocus) then
-			WorldFrame = frameForWorldFrameIsMouseMotionFocus;
-		end
-	else
-		-- make shure that the WorldFrame can receive mouse hover events
-		if (not WorldFrame:IsForbidden()) and ((not WorldFrame:IsProtected()) or (not InCombatLockdown())) and (not WorldFrame:IsMouseMotionEnabled()) then
-			WorldFrame:EnableMouseMotion(true);
-		end
+	if (highest_LIB_MINOR) and (highest_LIB_MINOR > LIB_MINOR) then
+		-- cleanup
+		self:UnregisterEvent(event);
+		self[event] = nil;
 		
-		-- check if the mouse cursor is hovering over the WorldFrame
-		local mouseFocus = self:GetMouseFocus();
-		
-		if (mouseFocus == WorldFrame) then
-			return true;
-		end
+		return;
+	end
+	
+	-- make shure that the WorldFrame can receive mouse hover events
+	WorldFrameEnableMouseMotionFn();
+	
+	-- cleanup
+	self:UnregisterEvent(event);
+	self[event] = nil;
+end
+
+frameForWorldFrameIsMouseMotionFocusOnPlayerLogin:RegisterEvent("PLAYER_LOGIN");
+
+function LibFroznFunctions:WorldFrameIsMouseMotionFocus()
+	-- make shure that the WorldFrame can receive mouse hover events
+	WorldFrameEnableMouseMotionFn();
+	
+	-- check if the mouse cursor is hovering over the WorldFrame
+	local mouseFocus = self:GetMouseFocus();
+	
+	if (mouseFocus == WorldFrame) then
+		return true;
 	end
 	
 	return WorldFrame:IsMouseMotionFocus(); -- checking "mouseFocus == WorldFrame" alone doesn't work in cases if there is a fullscreen frame above the world frame, e.g. from addon "OPie".
@@ -3617,6 +3732,11 @@ function LibFroznFunctions:FontExists(fontFile)
 		return false;
 	end
 	
+	-- use blizzard function, since mn 12.0.7
+	if (C_UIFileAsset) and (C_UIFileAsset.GetFileID) then
+		return (C_UIFileAsset.GetFileID(fontFile) ~= nil);
+	end
+	
 	-- check if font file equals original test font file
 	local originalTestFontFile = "Fonts\\ARIALN.TTF";
 	
@@ -3651,6 +3771,11 @@ function LibFroznFunctions:TextureExists(textureFile)
 	-- invalid texture file
 	if (type(textureFile) ~= "string") and (type(textureFile) ~= "number") then
 		return false;
+	end
+	
+	-- use blizzard function, since mn 12.0.7
+	if (C_UIFileAsset) and (C_UIFileAsset.GetFileID) then
+		return (C_UIFileAsset.GetFileID(textureFile) ~= nil);
 	end
 	
 	-- create frame
@@ -3784,7 +3909,7 @@ function LibFroznFunctions:GetUnitIDFromGUID(unitGUID)
 	
 	if (numMembers > 0) then
 		for i = 1, numMembers do
-			checkUnitID = (inRaid and "raid" .. i or "party" .. i);
+			checkUnitID = (isInRaid and "raid" .. i or "party" .. i);
 			
 			if (UnitGUID(checkUnitID) == unitGUID) then
 				return checkUnitID, unitName;
@@ -3850,7 +3975,9 @@ function LibFroznFunctions:GetUnitReactionIndex(unitID)
 			return LFF_UNIT_REACTION_INDEX.neutral; -- 4 = Neutral
 		end
 		
-		if (UnitIsPVP(unitID)) and (not UnitIsPVPSanctuary(unitID)) and (not UnitIsPVPSanctuary("player")) then
+		local unitIsPVP = UnitIsPVP(unitID);
+		
+		if (not self:IsSecretValue(unitIsPVP)) and (unitIsPVP) and (not UnitIsPVPSanctuary(unitID)) and (not UnitIsPVPSanctuary("player")) then
 			return LFF_UNIT_REACTION_INDEX.friendlyPvPPlayer; -- 6 = Friendly PvP Player
 		end
 		
@@ -4051,7 +4178,7 @@ function LibFroznFunctions:CreateUnitRecord(unitID)
 	unitRecord.nameWithNormalizedForeignRealmName = GetUnitName(unitID, true);
 	unitRecord.normalizedForeignRealmName = (normalizedForeignRealmName) and (normalizedForeignRealmName ~= "") and (normalizedForeignRealmName);
 	unitRecord.normalizedRealmName = (unitRecord.normalizedForeignRealmName) or (GetNormalizedRealmName());
-	unitRecord.fullPlayerName = FULL_PLAYER_NAME:format(unitRecord.name, unitRecord.normalizedRealmName);
+	unitRecord.fullPlayerName = (unitRecord.normalizedRealmName) and (FULL_PLAYER_NAME:format(unitRecord.name, unitRecord.normalizedRealmName)) or (unitRecord.name);
 	
 	unitRecord.sex = UnitSex(unitID);
 	unitRecord.className, unitRecord.classFile, unitRecord.classID = UnitClass(unitID);
@@ -4156,7 +4283,7 @@ function LibFroznFunctions:UpdateUnitRecord(unitRecord, newUnitID)
 	end
 end
 
--- returns the buffs/debuffs for the unit
+-- returns the buffs/debuffs for the unit by index
 --
 -- @param  unitID  unit id, e.g. "player", "target" or "mouseover"
 -- @param  index   index of an aura to query
@@ -4174,7 +4301,7 @@ function LibFroznFunctions:GetAuraDataByIndex(unitID, index, filter)
 			return nil;
 		end
 		
-		-- returns the buffs/debuffs for the unit
+		-- returns the buffs/debuffs for the unit by index
 		return C_UnitAuras.GetAuraDataByIndex(unitID, index, filter);
 	end
 	
@@ -4215,6 +4342,40 @@ function LibFroznFunctions:GetAuraDataByIndex(unitID, index, filter)
 		charges = nil,
 		maxCharges = nil
 	};
+end
+
+-- returns the buffs/debuffs for the unit by auraInstanceID
+--
+-- @param  unitID          unit id, e.g. "player", "target" or "mouseover"
+-- @param  auraInstanceID  aurainstanceID of an aura to query
+-- @return aura infos as a table of type AuraData
+function LibFroznFunctions:GetAuraDataByAuraInstanceID(unitID, auraInstanceID)
+	-- check if unit id is restricted for addons
+	local success = pcall(C_UnitAuras.GetAuraDataByAuraInstanceID, unitID, auraInstanceID);
+	
+	if (not success) then
+		return nil;
+	end
+	
+	-- returns the buffs/debuffs for the unit by auraInstanceID
+	return C_UnitAuras.GetAuraDataByAuraInstanceID(unitID, auraInstanceID);
+end
+
+-- returns the formatted number of applications of an aura for the unit by auraInstanceID
+--
+-- @param  unitID          unit id, e.g. "player", "target" or "mouseover"
+-- @param  auraInstanceID  aurainstanceID of an aura to query
+-- @return formatted number of applications of an aura
+function LibFroznFunctions:GetAuraApplicationDisplayCount(unitID, auraInstanceID)
+	-- check if unit id is restricted for addons
+	local success = pcall(C_UnitAuras.GetAuraApplicationDisplayCount, unitID, auraInstanceID);
+	
+	if (not success) then
+		return nil;
+	end
+	
+	-- returns the formatted number of applications of an aura for the unit by auraInstanceID
+	return C_UnitAuras.GetAuraApplicationDisplayCount(unitID, auraInstanceID);
 end
 
 -- iterate through unit's auras
@@ -4429,11 +4590,10 @@ end
 -- @return playerGuildClubMemberInfo, nil otherwise.
 local frameForGroupRosterUpdate, playerGuildClubIDCache;
 local playerGuildClubMemberInfosCache = {};
-local eventsForGroupRosterUpdateRegistered = false;
 
 function LibFroznFunctions:GetPlayerGuildClubMemberInfo(unitGUID)
 	-- register events for guild roster update
-	if (not eventsForGroupRosterUpdateRegistered) then
+	if (not frameForGroupRosterUpdate) then
 		-- cache the player guild club member infos
 		local function cachePlayerGuildClubMemberInfosFn()
 			-- clear player guild club member infos in cache
@@ -4495,7 +4655,6 @@ function LibFroznFunctions:GetPlayerGuildClubMemberInfo(unitGUID)
 		frameForGroupRosterUpdate:RegisterEvent("PLAYER_LOGIN");
 		frameForGroupRosterUpdate:RegisterEvent("PLAYER_GUILD_UPDATE");
 		frameForGroupRosterUpdate:RegisterEvent("GUILD_ROSTER_UPDATE");
-		eventsForGroupRosterUpdateRegistered = true;
 	end
 	
 	-- no unit guid
@@ -4562,10 +4721,17 @@ function LibFroznFunctions:InspectUnit(unitID, callbackForInspectData, removeCal
 		self:RemoveCallbackFromQueuedInspectCallbacks(callbackForInspectData);
 	end
 	
-	-- no unit id or not a player
-	local isValidUnitID = (unitID) and (UnitIsPlayer(unitID));
+	-- no valid unit id, no unit id or not a player
+	local isValidUnitID = (not LibFroznFunctions:IsSecretValue(unitID)) and (unitID) and (UnitIsPlayer(unitID));
 	
 	if (not isValidUnitID) then
+		return;
+	end
+	
+	-- unknown if it's the or a player unit
+	local isSelf = UnitIsUnit(unitID, "player");
+	
+	if (self:IsSecretValue(isSelf)) then
 		return;
 	end
 	
@@ -4611,16 +4777,16 @@ function frameForDelayedInspection:GetUnitCacheRecord(unitID, unitGUID)
 	
 	-- get record in unit cache
 	local unitCacheRecord = unitCache[unitGUID];
+	
+	-- create/update record in unit cache if a valid unit id is available
 	local isValidUnitID = (not LibFroznFunctions:IsSecretValue(unitID)) and (unitID) and (UnitIsPlayer(unitID));
 	
-	if (unitCacheRecord) then
-		-- update record in unit cache if a valid unit id is available
-		if (isValidUnitID) then
+	if (isValidUnitID) then
+		if (unitCacheRecord) then
+			-- update record in unit cache
 			unitCacheRecord = LibFroznFunctions:GetUnitRecordFromCache(unitID);
-		end
-	else
-		-- create record in unit cache if a valid unit id is available
-		if (isValidUnitID) then
+		else
+			-- create record in unit cache
 			unitCacheRecord = frameForDelayedInspection:CreateUnitCacheRecord(unitID, unitGUID);
 		end
 	end
@@ -4658,8 +4824,8 @@ end
 -- @param  unitID  unit id, e.g. "player", "target" or "mouseover"
 -- @return true if inspection is possible, false otherwise.
 function LibFroznFunctions:CanInspect(unitID)
-	-- no unit id or not a player
-	local isValidUnitID = (unitID) and (UnitIsPlayer(unitID));
+	-- no valid unit id, no unit id or not a player
+	local isValidUnitID = (not LibFroznFunctions:IsSecretValue(unitID)) and (unitID) and (UnitIsPlayer(unitID));
 	
 	if (not isValidUnitID) then
 		return false;
@@ -4897,8 +5063,8 @@ LFF_TALENTS = {
 };
 
 function LibFroznFunctions:AreTalentsAvailable(unitID, isSelf)
-	-- no unit id or not a player
-	local isValidUnitID = (unitID) and (UnitIsPlayer(unitID));
+	-- no valid unit id, no unit id or not a player
+	local isValidUnitID = (not LibFroznFunctions:IsSecretValue(unitID)) and (unitID) and (UnitIsPlayer(unitID));
 	
 	if (not isValidUnitID) then
 		return;
@@ -5053,8 +5219,8 @@ LFF_AVERAGE_ITEM_LEVEL = {
 };
 
 function LibFroznFunctions:IsAverageItemLevelAvailable(unitID)
-	-- no unit id or not a player
-	local isValidUnitID = (unitID) and (UnitIsPlayer(unitID));
+	-- no valid unit id, no unit id or not a player
+	local isValidUnitID = (not LibFroznFunctions:IsSecretValue(unitID)) and (unitID) and (UnitIsPlayer(unitID));
 	
 	if (not isValidUnitID) then
 		return;
