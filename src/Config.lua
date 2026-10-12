@@ -104,6 +104,7 @@ EUIDBDefaults = {
   chatFont = EUI_FONTS.Andika,
   chatFontSize = 14,
   chatShowSidePanel = false,
+  chatShowSocialButton = false,
 }
 
 if not EUIDB then -- Put this here to get correct typing on this
@@ -1097,11 +1098,20 @@ local function setupEuiOptions()
   chatShowSidePanel:ClearAllPoints()
   chatShowSidePanel:SetPoint("TOPLEFT", chatFont, "BOTTOMLEFT", 0, -48)
 
+  local chatShowSocialButton = newCheckbox(
+    "Show Social Button",
+    "Show the social button on the chat frame.",
+    "chatShowSocialButton",
+    chatShowSidePanel,
+    EUI_Misc,
+    ShowHideQuickJoinToastButton
+  )
+
   local fasterLoot = newCheckbox(
     "Enable Faster Autoloot",
     "Enable faster autolooting of items. May cause the loot window not to appear.",
     "fasterLoot",
-    chatShowSidePanel,
+    chatShowSocialButton,
     EUI_Misc
   )
 

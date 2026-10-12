@@ -1,6 +1,8 @@
 local chatFrames = {}
 local defaultChatTextures = {}
 
+local socialButtonShowFunction = QuickJoinToastButton.Show
+
 ---@param frame Frame
 local function styleChat(frame)
   local id = frame:GetID()
@@ -127,6 +129,16 @@ local function styleChat(frame)
   chat:SetFont(EUIDB.chatFont, fontSize, "")
 end
 
+ShowHideQuickJoinToastButton = function()
+  if EUIDB.chatShowSocialButton then
+    QuickJoinToastButton.Show = socialButtonShowFunction
+    QuickJoinToastButton:Show()
+  else
+    QuickJoinToastButton:Hide()
+    QuickJoinToastButton.Show = function() end
+  end
+end
+
 OnPlayerLogin(function()
   if C_AddOns.IsAddOnLoaded('Prat-3.0') or C_AddOns.IsAddOnLoaded('BasicChatMods') then return end
 
@@ -200,9 +212,7 @@ OnPlayerLogin(function()
     styleChat(frame)
   end
 
-  -- Hide quick Join
-  QuickJoinToastButton:Hide()
-  QuickJoinToastButton.Show = function() end
+  ShowHideQuickJoinToastButton()
 end)
 
 function ReloadChats()
