@@ -16,13 +16,7 @@ local function updateEUIPortrait(frame)
     euiPortraits[unit] = frame
   end
 
-  if issecretvalue(unit) then
-    portrait:Show()
-    return
-  end
-
   local info = GetUnitInfo(unit)
-  if not info.exists then return end
 
   local portraitModel = frame.portraitModel
   local portraitClass = frame.portraitClass
@@ -38,7 +32,7 @@ local function updateEUIPortrait(frame)
     portraitClass:Hide()
   end
 
-  if EUIDB.portraitStyle == "default" then return end
+  if not info.exists or EUIDB.portraitStyle == "default" then return end
 
   if not frame.portraitBG then
     local portraitBG = CreateFrame("Frame", "PortraitBackground", frame)
