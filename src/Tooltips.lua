@@ -133,13 +133,13 @@ function InitTooltips()
 			if (not issecretvalue(gttLineText) and type(gttLineText) == "string") then
 				local isGttLineTextUnitPopupRightClick = (gttLineText == UNIT_POPUP_RIGHT_CLICK)
 				local isSpecLine = unitInfo.className and
-				(specNames:Contains(gttLineText:match("^(.+) " .. unitInfo.className .. "$")))
+				(not issecretvalue(unitInfo.className) and specNames:Contains(gttLineText:match("^(.+) " .. unitInfo.className .. "$")))
 
 				if isGttLineTextUnitPopupRightClick or
 						(gttLineText == FACTION_ALLIANCE or gttLineText == FACTION_HORDE or gttLineText == FACTION_NEUTRAL) or
 						(gttLineText == PVP_ENABLED) or
 						(hideCreatureTypeIfNoCreatureFamily and gttLineText == unitInfo.type) or
-						(hideSpecializationAndClassText and (gttLineText == unitInfo.className or isSpecLine)) then
+						(hideSpecializationAndClassText and (not issecretvalue(unitInfo.className) and gttLineText == unitInfo.className or isSpecLine)) then
 					gttLine:SetText(nil)
 
 					if (isGttLineTextUnitPopupRightClick) and (i > 1) then
