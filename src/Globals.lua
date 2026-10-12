@@ -21,7 +21,7 @@ SoundDir = MediaDir .. [[\sound]]
 
 EUI_FONTS = {
   Andika = FontsDir .. [[\Andika.ttf]],
-  Fira = FontsDir .. [[\FiraSans.ttf"]],
+  Fira = FontsDir .. [[\FiraSans.ttf]],
   SourceSans = FontsDir .. [[\SourceSans3.ttf]],
   Marmelad = FontsDir .. [[\Marmelad.ttf]],
   Bangers = FontsDir .. [[\Bangers-Regular.ttf]],
