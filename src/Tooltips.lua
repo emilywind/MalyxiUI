@@ -275,7 +275,9 @@ function InitTooltips()
 				guildLine:SetText(trimmedGuild .. ' (' .. trimmedRank .. ')')
 			end
 
-      playerInfoLine:SetText(level .. ' ' .. race .. ' ' .. unitClassColor:WrapTextInColorCode((issecretvalue(unitInfo.className) and "") or unitInfo.className))
+			if not issecretvalue(unitInfo.className) then
+				playerInfoLine:SetText(level .. ' ' .. race .. ' ' .. unitClassColor:WrapTextInColorCode(unitInfo.className))
+			end
 
 			-- Mount
 			if EUIDB.tooltipShowMount then
