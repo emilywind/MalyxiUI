@@ -32,7 +32,7 @@ local function updateEUIPortrait(frame)
     portraitClass:Hide()
   end
 
-  if not info.exists or EUIDB.portraitStyle == "default" then return end
+  if not info.exists or issecretvalue(info.guid) or EUIDB.portraitStyle == "default" then return end
 
   if not frame.portraitBG then
     local portraitBG = CreateFrame("Frame", "PortraitBackground", frame)
@@ -93,13 +93,6 @@ local function updateEUIPortrait(frame)
       portraitFG.forelayer = foreground
       frame.portraitFG = portraitFG
     end
-
-    if issecretvalue(info.guid) then
-      frame.portraitFG:Hide()
-      portraitModel:Hide()
-      portrait:Show()
-      return
-    end -- Don't update portrait if it's a secret value, otherwise it'll cause taint issues in the unit frame
 
     frame.portraitFG:Show()
 
