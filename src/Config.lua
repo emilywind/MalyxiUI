@@ -80,7 +80,7 @@ EUIDBDefaults = {
   partyMarkerHealer = true,
   partyMarkerHideRaidmarker = true,
 
-  portraitStyle = "3D", -- 3D, 2D, or class (for class icons)
+  portraitStyle = "3D", -- 3D, default, or class (for class icons)
   classPortraitPack = EUI_TEXTURES.classCircles,
 
   -- PvP Settings
