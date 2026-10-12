@@ -32,7 +32,14 @@ local function updateEUIPortrait(frame)
     portraitClass:Hide()
   end
 
-  if not info.exists or issecretvalue(info.guid) or EUIDB.portraitStyle == "default" then return end
+  if
+    not info.exists
+    or (EUIDB.portraitStyle == "3D" and issecretvalue(info.guid))
+    or (EUIDB.portraitStyle == "class" and issecretvalue(info.classFileName))
+    or EUIDB.portraitStyle == "default"
+  then
+    return
+  end
 
   if not frame.portraitBG then
     local portraitBG = CreateFrame("Frame", "PortraitBackground", frame)
