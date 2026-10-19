@@ -313,7 +313,9 @@
         "DefaultTooltipMixin",
         "EditModeSystemSettingsDialog",
         "COMBATLOG_OBJECT_CONTROL_PLAYER",
-        "AnchorUtil"
+        "AnchorUtil",
+        "CreateFramePool",
+        "CurveConstants"
     ],
     "Lua.diagnostics.disable": [
         "cast-local-type",
