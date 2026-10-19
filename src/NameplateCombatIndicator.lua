@@ -2,6 +2,8 @@
 function CombatIndicator(frame)
   local info = GetNameplateUnitInfo(frame)
 
+  if not info.exists then return end
+
   local combatIndicator = frame.combatIndicator
   if not combatIndicator then
     combatIndicator = frame.healthBar:CreateTexture(nil, "OVERLAY")
@@ -33,6 +35,8 @@ function CombatIndicator(frame)
 end
 
 OnEvent("UNIT_FLAGS", function(_, _, unit)
+  if unit == 'targettarget' then return end
+
   local frame = GetSafeNameplate(unit)
   if frame then CombatIndicator(frame) end
 end)

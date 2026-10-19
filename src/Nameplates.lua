@@ -1,20 +1,5 @@
 local SetCVar = C_CVar.SetCVar
 
----@param table table
----@param member string
----@param bool boolean
-local function setValue(table, member, bool)
-  if bool then
-    TextureLoadingGroupMixin.AddTexture(
-      { textures = table }, member
-    )
-  else
-    TextureLoadingGroupMixin.RemoveTexture(
-      { textures = table }, member
-    )
-  end
-end
-
 ---@param frame Frame
 local function updateHealth(frame)
   if frame:IsForbidden() or not frame.isNameplate then return end
@@ -22,7 +7,7 @@ local function updateHealth(frame)
   local unit = GetNameplateUnit(frame)
 
   local healthBar = frame.healthBar
-  local healthPercentage = ceil((UnitHealth(unit) / UnitHealthMax(unit) * 100))
+  local healthPercentage = UnitHealthPercent(unit, true)
   local isPersonal = GetSafeNameplate(unit) == GetSafeNameplate("player")
   local healthColor = GetUnitHealthColor(unit)
 
@@ -58,14 +43,43 @@ local function updateHealth(frame)
   end
 end
 
+function MUI.RepositionName(frame)
+  local info = GetNameplateUnitInfo(frame)
+  local function RepositionName(frame)
+    if frame:IsForbidden() or not info.exists or frame.name.changing then return end
+    frame.name.changing = true
+
+    frame.name:ClearAllPoints()
+    frame.name:SetPoint("BOTTOM", frame.healthBar, "TOP", 0, 4)
+    frame.name.changing = false
+  end
+  if not frame.nameHooked then
+    hooksecurefunc(frame.name, "SetPoint", function()
+      RepositionName(frame)
+    end)
+
+    frame.nameHooked = true
+  end
+  RepositionName(frame)
+
+  if not frame.newNameParent then
+    frame.newNameParent = CreateFrame("Frame", nil, frame)
+    frame.newNameParent:SetAllPoints(frame)
+    frame.newNameParent:SetFrameStrata("HIGH")
+  end
+  frame.name:SetParent(frame.newNameParent)
+  frame.name:SetDrawLayer("OVERLAY", 7)
+end
+
 ---@param frame Frame
 local function modifyNamePlates(frame)
   if frame:IsForbidden() or not frame.isNameplate then return end
 
-  local healthBar = frame.healthBar
-  healthBar:SetStatusBarTexture(EUIDB.statusBarTex)
-  healthBar.myHealPrediction:SetTexture(EUIDB.statusBarTex)
+  -- local healthBar = frame.healthBar
+  -- healthBar:SetStatusBarTexture(EUIDB.statusBarTex)
+  -- healthBar.myHealPrediction:SetTexture(EUIDB.statusBarTex)
 
+  MUI.RepositionName(frame)
   ModifyFont(frame.name, EUIDB.nameplateFont, EUIDB.nameplateNameFontSize)
 
   if frame.ClassificationFrame then
@@ -162,7 +176,7 @@ local function updateNameplate(frame)
     local name = unitInfo.name
     if not EUIDB.nameplateHideServerNames and unitInfo.realm then
       name = name .. " - " .. unitInfo.realm
-    elseif EUIDB.nameplateAbbrevNames and not unitInfo.isPlayer then
+    elseif EUIDB.nameplateAbbrevNames and not unitInfo.isPlayer and not issecretvalue(name) then
       name = (string.len(name) > 20) and string.gsub(name, "%s?(.[\128-\191]*)%S+%s", "%1. ") or name
     end
 
@@ -176,12 +190,11 @@ function InitNameplates()
   if initNameplates then return end
 
   if not hookedAcquireUnitFrame then
-    hooksecurefunc(NamePlateDriverFrame, "AcquireUnitFrame",
-      ---@param nameplate Frame
-      function(_, nameplate) -- This needs to be run for party markers to work
-        if (nameplate.UnitFrame) then
-          nameplate.UnitFrame.isNameplate = true
-        end
+    hooksecurefunc(NamePlateDriverFrame, "OnNamePlateAdded",
+      ---@param unit string
+      function(_, unit) -- This needs to be run for party markers to work
+        local nameplate = GetSafeNameplate(unit)
+        if nameplate then nameplate.isNameplate = true end
       end
     )
     hookedAcquireUnitFrame = true
@@ -225,26 +238,8 @@ function InitNameplates()
 
   -- SetFriendlyNameplateSize()
 
-  hooksecurefunc("CompactUnitFrame_UpdateHealth", updateHealth)
+  -- hooksecurefunc("CompactUnitFrame_UpdateHealth", updateHealth)
   hooksecurefunc("CompactUnitFrame_UpdateName", modifyNamePlates)
-
-  -- hooksecurefunc(
-  --   NamePlateDriverFrame,
-  --   'GetNamePlateTypeFromUnit',
-  --   function(_, unit)
-  --     local isFriend = UnitIsFriend("player", unit)
-  --     local instanceInfo = GetInstanceData()
-  --     if not isFriend or not instanceInfo.isInPvE then
-  --       setValue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar', false)
-  --     else
-  --       if EUIDB.nameplateHideFriendlyHealthbars then
-  --         setValue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar', true)
-  --       else
-  --         setValue(DefaultCompactNamePlateFrameSetUpOptions, 'hideHealthbar', false)
-  --       end
-  --     end
-  --   end
-  -- )
 
   OnEvents({
     "NAME_PLATE_UNIT_ADDED",
