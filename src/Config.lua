@@ -133,6 +133,8 @@ OnPlayerLogin(function()
   EUIDB = copyTable(EUIDBDefaults, EUIDB)
 end)
 
+BlizzCategoryId = nil
+
 ---@param table table
 ---@return table
 local function tableToWowDropdown(table)
@@ -151,14 +153,14 @@ end
 local makePanel = function(frameName, mainpanel, panelName)
   local panel = CreateFrame("Frame", frameName, mainpanel)
   panel.name, panel.parent = panelName, name
-  local category = Settings.GetCategory("MalyxiUI")
+  local category = Settings.GetCategory(BlizzCategoryId)
   Settings.RegisterCanvasLayoutSubcategory(category, panel, panelName)
 
   return panel
 end
 
 local function openEuiConfig()
-  Settings.OpenToCategory('MalyxiUI')
+  Settings.OpenToCategory(BlizzCategoryId)
 end
 
 local function setupEuiOptions()
@@ -166,9 +168,9 @@ local function setupEuiOptions()
   LSM_FONTS = tableToWowDropdown(LSM:HashTable('font'))
   -- Creation of the options menu
   EUI.panel = CreateFrame( "Frame", "euiPanel", UIParent )
-  EUI.panel.name = "MalyxiUI";
+  EUI.panel.name = "MalyxiUI"
   local category = Settings.RegisterCanvasLayoutCategory(EUI.panel, "Malyxi UI")
-  category.ID = "MalyxiUI"
+  BlizzCategoryId = category.ID
   Settings.RegisterAddOnCategory(category)
 
   ---@param label string
@@ -1307,11 +1309,11 @@ local function setupEuiOptions()
   ----------------------
   -- Game Menu Button --
   ----------------------
-  -- local function MalyxiUIGameMenuButton(self)
-  --   self:AddSection()
-  --   self:AddButton("Malyxi UI", openEuiConfig)
-  -- end
-  -- hooksecurefunc(GameMenuFrame, "InitButtons", MalyxiUIGameMenuButton)
+  local function MalyxiUIGameMenuButton(self)
+    self:AddSection()
+    self:AddButton("Malyxi UI", openEuiConfig)
+  end
+  hooksecurefunc(GameMenuFrame, "InitButtons", MalyxiUIGameMenuButton)
 end
 
 OnPlayerLogin(setupEuiOptions)
