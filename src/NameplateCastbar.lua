@@ -199,7 +199,7 @@ local function updateCastTimer(frame, castBar, unit)
   end
 end
 
-local function UpdateNameplateTargetText(frame, unit)
+local function updateNameplateTargetText(frame, unit)
   local targetText = frame.TargetText
 
   if not EUIDB.nameplateShowTargetText then
@@ -241,32 +241,30 @@ local function UpdateNameplateTargetText(frame, unit)
   end
 end
 
-hooksecurefunc(CastingBarMixin, "OnEvent", function(self)
-  if not EUIDB.skinNameplates then return end
+function HookCastbarOnEvent(frame)
+  if not frame or not frame.castBar then return end
+  if frame.hookedCastbarOnEvent then return end
+  frame.castBar:HookScript("OnEvent", function(castBar, event)
+    if not EUIDB.skinNameplates then return end
 
-  local unit = self.unit
-  if not unit or not unit:find("nameplate") then return end
+    local unitInfo = GetNameplateUnitInfo(frame)
 
-  local frame = GetSafeNameplate(unit)
-  if not frame then return end
-  if unit == "player" then return end
+    if EUIDB.nameplateHideFriendlyCastbars and unitInfo.isFriend then
+      castBar:Hide()
+      return
+    end
 
-  local castBar = frame.castBar
+    if EUIDB.nameplateHideCastText then
+      castBar.Text:Hide()
+    elseif not castBar.Text:IsShown() then
+      castBar.Text:Show()
+    end
 
-  if EUIDB.nameplateHideFriendlyCastbars and UnitIsFriend("player", unit) then
-    castBar:Hide()
-    return
-  end
+    skinCastbar(frame)
 
-  if EUIDB.nameplateHideCastText then
-    castBar.Text:Hide()
-  elseif not castBar.Text:IsShown() then
-    castBar.Text:Show()
-  end
+    updateCastTimer(frame, castBar, unitInfo.id)
 
-  skinCastbar(frame)
-
-  updateCastTimer(frame, castBar, unit)
-
-  UpdateNameplateTargetText(frame, unit)
-end)
+    updateNameplateTargetText(frame, unitInfo.id)
+  end)
+  frame.hookedCastbarOnEvent = true
+end

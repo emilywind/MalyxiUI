@@ -454,13 +454,50 @@ function GetNameplateUnitInfo(frame)
   return GetUnitInfo(unit)
 end
 
+local unsafeUnits = {}
+for i = 1, 40 do
+  unsafeUnits["boss" .. i] = true
+  unsafeUnits["boss" .. i .. "target"] = true
+  unsafeUnits["boss" .. i .. "targettarget"] = true
+  unsafeUnits["raid" .. i] = true
+  unsafeUnits["raidpet" .. i] = true
+  unsafeUnits["raidpet" .. i .. "target"] = true
+  unsafeUnits["raidpet" .. i .. "targettarget"] = true
+  unsafeUnits["raid" .. i .. "target"] = true
+  unsafeUnits["raid" .. i .. "targettarget"] = true
+  unsafeUnits["nameplate" .. i .. "target"] = true
+  unsafeUnits["nameplate" .. i .. "targettarget"] = true
+end
+for i = 1, 5 do
+  unsafeUnits["party" .. i] = true
+  unsafeUnits["party" .. i .. "target"] = true
+  unsafeUnits["party" .. i .. "targettarget"] = true
+  unsafeUnits["partypet" .. i] = true
+  unsafeUnits["partypet" .. i .. "target"] = true
+  unsafeUnits["partypet" .. i .. "targettarget"] = true
+end
+for i = 1, 5 do
+  unsafeUnits["arena" .. i] = true
+  unsafeUnits["arena" .. i .. "target"] = true
+  unsafeUnits["arena" .. i .. "targettarget"] = true
+  unsafeUnits["arenapet" .. i] = true
+  unsafeUnits["arenapet" .. i .. "target"] = true
+  unsafeUnits["arenapet" .. i .. "targettarget"] = true
+end
+unsafeUnits["targettarget"] = true
+unsafeUnits["focustarget"] = true
+
 ---@param unit UnitToken
----@return Frame|nil
+---@return Frame|nil, NamePlateFrame | nil
 function GetSafeNameplate(unit)
-  if not unit then return end
+  if not unit or unsafeUnits[unit] then return end
   local nameplate = C_NamePlate.GetNamePlateForUnit(unit, issecure())
 
-  return (nameplate and nameplate.UnitFrame) or nil
+  if not nameplate or not nameplate.UnitFrame then return nil, nil end
+
+  nameplate.UnitFrame.isNameplate = true
+
+  return nameplate.UnitFrame, nameplate
 end
 
 function GetInstanceData()
@@ -501,11 +538,11 @@ function EUISetCVar(cvarName, value, settingNil)
   return C_CVar.SetCVar(cvarName, (value == true and 1) or (value == false and 0) or value)
 end
 
----@param func fun(frame: Frame)
+---@param func fun(frame: Frame, nameplate: NamePlateFrame)
 function DoToNameplates(func)
   for _, frame in pairs(C_NamePlate.GetNamePlates()) do
     if frame.UnitFrame then
-      func(frame.UnitFrame)
+      func(frame.UnitFrame, frame)
     end
   end
 end

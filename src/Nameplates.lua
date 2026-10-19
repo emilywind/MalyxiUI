@@ -7,25 +7,6 @@ local function updateHealth(frame)
   local unit = GetNameplateUnit(frame)
 
   local healthBar = frame.healthBar
-  local healthPercentage = UnitHealthPercent(unit, true)
-  local isPersonal = GetSafeNameplate(unit) == GetSafeNameplate("player")
-  local healthColor = GetUnitHealthColor(unit)
-
-  if isPersonal then
-    healthBar:SetStatusBarTexture(EUIDB.statusBarTex)
-    healthBar.myHealPrediction:SetTexture(EUIDB.statusBarTex)
-    ClassNameplateManaBarFrame:SetStatusBarTexture(EUIDB.statusBarTex)
-    ClassNameplateManaBarFrame.FeedbackFrame.BarTexture:SetTexture(EUIDB.statusBarTex)
-    ClassNameplateManaBarFrame.FeedbackFrame.LossGlowTexture:SetTexture(EUIDB.statusBarTex)
-
-    if frame.optionTable.colorNameBySelection then
-      if healthPercentage <= 100 and healthPercentage >= 30 then
-        SetStatusBarColor(healthBar, healthColor)
-      elseif healthPercentage < 30 then   -- Red color when below 30% on Personal Resource Bar
-        SetStatusBarColor(healthBar, COLOR_RED)
-      end
-    end
-  end
 
   local hPercFrame = frame.healthPercentage
   if not hPercFrame then
@@ -33,14 +14,54 @@ local function updateHealth(frame)
     hPercFrame:SetTextColor(1, 1, 1)
     hPercFrame:SetPoint("CENTER", frame.healthBar, "CENTER", 0, 0)
     frame.healthPercentage = hPercFrame
+    ModifyFont(hPercFrame, EUIDB.nameplateFont)
   end
-  ModifyFont(hPercFrame, EUIDB.nameplateFont)
 
-  if EUIDB.nameplateHealthPercent and healthPercentage ~= 100 then
-    hPercFrame:SetText(healthPercentage .. '%')
+  if frame:IsForbidden() then return end
+  if not unit then return end
+  local percent = UnitHealthPercent(unit, true, CurveConstants.ScaleTo100) or 0
+  local healthPercentage = string.format("%.0f", percent)
+
+  if EUIDB.nameplateHealthPercent then
+    hPercFrame:SetText(healthPercentage .. "%")
+    hPercFrame:SetAlpha(1)
   else
     hPercFrame:SetText('')
+    hPercFrame:SetAlpha(0)
   end
+end
+
+local ClickAreaFramePool = CreateFramePool("Frame")
+local NameplateClickAreas = {}
+
+local function updateClickableArea(nameplate)
+  if not (nameplate and nameplate:CanChangeHitTestPoints()) then return end
+
+  local frame = nameplate.UnitFrame
+  local info = GetNameplateUnitInfo(frame)
+  if not info.exists then return end
+
+  local clickableArea = NameplateClickAreas[nameplate:GetName()]
+  if not clickableArea then
+    clickableArea = ClickAreaFramePool:Acquire()
+    clickableArea:SetParent(nameplate)
+    NameplateClickAreas[nameplate:GetName()] = clickableArea
+  end
+
+  clickableArea:Show()
+  clickableArea:ClearAllPoints()
+
+  local isClickthroughFriend = info.isFriend and EUIDB.nameplateFriendlyClickthrough
+
+  if isClickthroughFriend then
+    clickableArea:SetPoint("TOPLEFT", frame.HealthBarsContainer, "CENTER", 0, 0)
+    clickableArea:SetPoint("BOTTOMRIGHT", frame.HealthBarsContainer, "CENTER", 0, 0)
+    else
+      clickableArea:SetPoint("TOPLEFT", frame.HealthBarsContainer, "TOPLEFT", -9,  24)
+      clickableArea:SetPoint("BOTTOMRIGHT", frame.HealthBarsContainer, "BOTTOMRIGHT",  9,  -16)
+  end
+
+  nameplate:SetAllHitTestPoints(clickableArea)
 end
 
 function MUI.RepositionName(frame)
@@ -72,7 +93,7 @@ function MUI.RepositionName(frame)
 end
 
 ---@param frame Frame
-local function modifyNamePlates(frame)
+local function modifyNamePlate(frame)
   if frame:IsForbidden() or not frame.isNameplate then return end
 
   -- local healthBar = frame.healthBar
@@ -185,20 +206,21 @@ local function updateNameplate(frame)
 end
 
 local initNameplates = false
-local hookedAcquireUnitFrame = false
 function InitNameplates()
   if initNameplates then return end
 
-  if not hookedAcquireUnitFrame then
-    hooksecurefunc(NamePlateDriverFrame, "OnNamePlateAdded",
-      ---@param unit string
-      function(_, unit) -- This needs to be run for party markers to work
-        local nameplate = GetSafeNameplate(unit)
-        if nameplate then nameplate.isNameplate = true end
-      end
-    )
-    hookedAcquireUnitFrame = true
-  end
+  -- hooksecurefunc(NamePlateDriverFrame, "OnNamePlateAdded",
+  --   ---@param unit string
+  --   function(_, unit) -- This needs to be run for party markers to work
+  --     if issecretvalue(unit) or not unit:find("nameplate") then return end
+  --     local nameplate = GetSafeNameplate(unit)
+  --     if nameplate then
+  --       updateNameplate(nameplate)
+  --       updateHealth(nameplate)
+  --       modifyNamePlate(nameplate)
+  --     end
+  --   end
+  -- )
 
   -- Keep nameplates on screen
   SetCVar("nameplateOtherBottomInset", 0.1)
@@ -206,48 +228,28 @@ function InitNameplates()
 
   if not EUIDB.skinNameplates then return end
 
-  -- local cVars = {
-  --   nameplateGlobalScale = 1,
-  --   nameplateMinScale = 1,
-  --   nameplateMaxScale = 1,
-  --   nameplateSelectedScale = 1.2,
-  --   namePlateVerticalScale = 2.7,
-  --   nameplateHorizontalScale = 1.4,
-  -- }
-
-  -- for cVar, value in pairs(cVars) do
-  --   SetCVar(cVar, value)
-  -- end
-
   EUISetCVar("nameplateResourceOnTarget")
   EUISetCVar("nameplateShowAll")
   EUISetCVar("nameplateShowFriends")
   EUISetCVar("nameplateShowEnemyMinions")
 
-  -- C_NamePlate.SetNamePlateFriendlyClickThrough(EUIDB.nameplateFriendlyClickthrough)
-
-  -- local defaultFriendlyWidth, defaultFriendlyHeight = C_NamePlate.GetNamePlateFriendlySize()
-
-  -- function SetFriendlyNameplateSize()
-  --   if EUIDB.nameplateFriendlySmall then
-  --     C_NamePlate.SetNamePlateFriendlySize((0.7 * defaultFriendlyWidth), defaultFriendlyHeight)
-  --   else
-  --     C_NamePlate.SetNamePlateFriendlySize(defaultFriendlyWidth, defaultFriendlyHeight)
-  --   end
-  -- end
-
-  -- SetFriendlyNameplateSize()
-
-  -- hooksecurefunc("CompactUnitFrame_UpdateHealth", updateHealth)
-  hooksecurefunc("CompactUnitFrame_UpdateName", modifyNamePlates)
+  hooksecurefunc("CompactUnitFrame_UpdateHealth", updateHealth)
 
   OnEvents({
     "NAME_PLATE_UNIT_ADDED",
     "NAME_PLATE_UNIT_REMOVED",
-  }, function(_, _, unit)
-    local frame = GetSafeNameplate(unit)
+  }, function(_, event, unit)
+    local frame, nameplate = GetSafeNameplate(unit)
     if not frame then return end
 
+    if event == "NAME_PLATE_UNIT_ADDED" then
+      modifyNamePlate(frame)
+      updateNameplate(frame)
+      updateHealth(frame)
+      HookCastbarOnEvent(frame)
+    end
+
+    updateClickableArea(nameplate)
     PetIndicator(frame)
     CombatIndicator(frame)
   end)
@@ -260,9 +262,10 @@ end
 OnPlayerLogin(InitNameplates)
 
 function RefreshNameplates()
-  DoToNameplates(function(nameplate)
-    updateNameplate(nameplate)
-    updateHealth(nameplate)
-    modifyNamePlates(nameplate)
+  DoToNameplates(function(frame, nameplate)
+    modifyNamePlate(frame)
+    updateNameplate(frame)
+    updateHealth(frame)
+    updateClickableArea(nameplate)
   end)
 end
