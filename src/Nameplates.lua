@@ -257,6 +257,8 @@ function InitNameplates()
   EUISetCVar("nameplateShowAll")
   EUISetCVar("nameplateShowFriends")
   EUISetCVar("nameplateShowEnemyMinions")
+  EUISetCVar("nameplateMinScale")
+  EUISetCVar("nameplateMaxScale")
 
   hooksecurefunc("CompactUnitFrame_UpdateHealth", updateHealth)
 
