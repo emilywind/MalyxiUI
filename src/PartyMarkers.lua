@@ -91,8 +91,7 @@ local function updatePartyMarker(frame)
   partyMarker:SetAlpha(1)
 
   partyMarker:SetScale(EUIDB.partyMarkerScale)
-  partyMarker.icon:SetWidth(120)
-  partyMarker.icon:SetHeight(120)
+  partyMarker.icon:SetSize(120, 120)
   partyMarker.healerIcon:SetScale(EUIDB.partyMarkerScale)
 
   partyMarker:SetPoint("BOTTOM", frame.name, "TOP", 0, -26)
