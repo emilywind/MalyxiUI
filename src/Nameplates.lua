@@ -293,5 +293,7 @@ function RefreshNameplates()
     updateHealth(frame)
     updateClickableArea(nameplate)
     HookCastbarOnEvent(frame)
+    PetIndicator(frame)
+    CombatIndicator(frame)
   end)
 end
