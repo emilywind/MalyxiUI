@@ -126,7 +126,9 @@ local function modifyNamePlate(frame)
 
   setNameplateBarSizes(frame)
   MUI.RepositionName(frame)
-  ModifyFont(frame.name, EUIDB.nameplateFont, EUIDB.nameplateNameFontSize, "THICKOUTLINE")
+  local unitInfo = GetNameplateUnitInfo(frame)
+  ModifyFont(frame.name, EUIDB.nameplateFont, (EUIDB.nameplateNameFontSize + (unitInfo.isFriend and unitInfo.isPlayer and 4 or 0)),
+  "THICKOUTLINE")
 
   if frame.ClassificationFrame then
     frame.ClassificationFrame:SetPoint('CENTER', frame.healthBar, 'LEFT', 0, 0)
