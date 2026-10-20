@@ -70,6 +70,10 @@ local function getKnownInterruptSpells()
     end
   end
 
+  if next(knownInterruptSpells) == nil then
+    interruptReady = nil
+  end
+
   return knownInterruptSpells
 end
 
@@ -122,12 +126,75 @@ function UpdateCastbarInterruptStatus()
 end
 
 ---@param frame Frame
+local function adjustCustomBorderShield(frame)
+  if frame:IsForbidden() or not frame.castBarIconFrame then return end
+  local shield = frame.castBar.BorderShield
+  shield:ClearAllPoints()
+  shield:SetPoint("TOPLEFT", frame.castBarIconFrame, "TOPLEFT", -4.5, 4)
+  shield:SetPoint("BOTTOMRIGHT", frame.castBarIconFrame, "BOTTOMRIGHT", 4.5, -7.5)
+end
+
+---@param frame Frame
+local function setupMidnightCastbarIcon(frame)
+  --if not BetterBlizzPlatesDB.enableCastbarCustomization then return end
+  if frame.castBarIconFrame then return end
+  frame.castBarIconFrame = CreateFrame("Frame", nil, frame.castBar)
+  frame.castBarIconFrame:SetFrameStrata("HIGH")
+  frame.castBarIconFrame:SetFrameLevel(frame.castBar:GetFrameLevel()+1)
+
+  frame.castBarIconFrame:SetSize(EUIDB.nameplateCastbarHeight, EUIDB.nameplateCastbarHeight)
+  frame.castBarIconFrame:SetPoint("CENTER", frame.castBar, "LEFT", -18, 0)
+
+  frame.castBarIconFrame.Icon = frame.castBarIconFrame:CreateTexture(nil, "OVERLAY", nil, 2)
+  frame.castBarIconFrame.Icon:SetAllPoints(frame.castBarIconFrame)
+
+  local currentTexture = frame.castBar.Icon:GetTexture()
+  if currentTexture then
+    frame.castBarIconFrame.Icon:SetTexture(currentTexture)
+  end
+  ApplyEuiBackdrop(frame.castBarIconFrame.Icon, frame.castBar)
+
+  frame.castBar.Icon:SetAlpha(0)
+  frame.castBar.Text:SetParent(frame.castBar)
+  frame.castBar.Text:SetDrawLayer("OVERLAY", 7)
+  frame.castBar.BorderShield:SetParent(frame.castBarIconFrame)
+
+  hooksecurefunc(frame.castBar.Icon, "SetTexture", function(_, texture)
+    if frame:IsForbidden() then return end
+    frame.castBarIconFrame.Icon:SetTexture(texture)
+  end)
+
+  hooksecurefunc(frame.castBar.Icon, "SetShown", function(self, shown)
+    if frame:IsForbidden() then return end
+    self:Hide()
+    if frame.castBar:IsShown() then
+      frame.castBarIconFrame.Icon:SetShown(shown)
+      frame.castBarIconFrame.Icon.euiBorder:SetShown(shown)
+    end
+    adjustCustomBorderShield(frame)
+  end)
+
+  hooksecurefunc(frame.castBar.BorderShield, "SetPoint", function(self)
+    if frame:IsForbidden() then return end
+    if self.changingIconPos then return end
+    self.changingIconPos = true
+    adjustCustomBorderShield(frame)
+    self.changingIconPos = nil
+  end)
+
+  adjustCustomBorderShield(frame)
+end
+
+---@param frame Frame
 local function skinCastbar(frame)
   local castBar = frame.castBar
-  if not castBar then return end
-  if castBar:IsForbidden() then return end
+  if not castBar or castBar:IsForbidden() then return end
 
-  ApplyEuiBackdrop(castBar.Icon, castBar)
+  castBar.Spark:SetSize(4, EUIDB.nameplateCastbarHeight) --4 width, 5 height original
+  castBar.Text:ClearAllPoints()
+  castBar.Text:SetPoint("CENTER", castBar, "CENTER")
+  castBar.Text:SetFont(EUIDB.font, 12, "OUTLINE")
+
   local timer = castBar.timer
   if not timer then
     timer = castBar:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
@@ -136,6 +203,8 @@ local function skinCastbar(frame)
   end
   ModifyFont(castBar.Text, EUIDB.nameplateFont)
   ModifyFont(timer, EUIDB.nameplateFont, 11, "THINOUTLINE", COLOR_WHITE)
+
+  setupMidnightCastbarIcon(frame)
 end
 
 local function updateCastTimer(frame, castBar, unit)
@@ -200,13 +269,15 @@ local function updateNameplateTargetText(frame, unit)
 end
 
 function HookCastbarOnEvent(frame)
-  if not frame or frame.hookedCastbarOnEvent then return end
+  if not frame then return end
   if not frame.castBar then
     frame.castBar = frame.CastBarsContainer.castBar
   end
-  frame.castBar:HookScript("OnEvent", function(castBar, event)
-    if not EUIDB.skinNameplates then return end
 
+  skinCastbar(frame)
+
+  if frame.hookedCastbarOnEvent then return end
+  frame.castBar:HookScript("OnEvent", function(castBar, event)
     local unitInfo = GetNameplateUnitInfo(frame)
 
     if EUIDB.nameplateHideFriendlyCastbars and unitInfo.isFriend then
@@ -219,8 +290,6 @@ function HookCastbarOnEvent(frame)
     elseif not castBar.Text:IsShown() then
       castBar.Text:Show()
     end
-
-    skinCastbar(frame)
 
     updateNameplateTargetText(frame, unitInfo.id)
 

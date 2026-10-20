@@ -93,7 +93,7 @@ function layout:Initialize(frame)
   -- some reused variables
   local healthBar = frame.HealthBar
   local powerBar = frame.PowerBar
-  local f = frame.ClassIcon
+  local f = frame.ClassIcon.Texture
 
   -- text adjustments
   local healthText = frame.HealthText
@@ -113,13 +113,18 @@ function layout:Initialize(frame)
   playerName:SetHeight(12)
 
   -- portrait icon
-  frame.ClassIconCooldown:SetSwipeTexture("Interface\\CharacterFrame\\TempPortraitAlphaMask")
-  frame.ClassIconCooldown:SetUseCircularEdge(true)
-  f:SetSize(60, 60)
-  f:Show()
-  f:AddMaskTexture(frame.ClassIconMask)
-  frame.ClassIconMask:SetAllPoints(f)
-  frame.ClassIconMask:SetSize(60, 60)
+  frame.ClassIcon.Cooldown:SetSwipeTexture("Interface\\CharacterFrame\\TempPortraitAlphaMask")
+  frame.ClassIcon.Cooldown:SetEdgeTexture("Interface\\Cooldown\\edge")
+  frame.ClassIcon.Cooldown:SetUseCircularEdge(true)
+  frame.ClassIcon:SetSize(55, 55)
+  frame.ClassIcon:Show()
+  frame.ClassIcon:SetFrameStrata("LOW")
+  frame.ClassIcon:SetFrameLevel(7)
+  frame.ClassIcon.Texture:SetTexCoord(0.05, 0.95, 0.1, 0.9)
+  frame.ClassIcon.Texture:AddMaskTexture(frame.ClassIcon.Mask)
+  frame.ClassIcon.Mask:ClearAllPoints()
+  frame.ClassIcon.Mask:SetPoint("CENTER", frame.ClassIcon, 0, 1)
+  frame.ClassIcon.Mask:SetSize(60, 57)
 
   local unit = frame.unit
 
