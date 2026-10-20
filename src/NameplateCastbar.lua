@@ -39,6 +39,7 @@ local interruptSpellsByClass = {
 }
 
 local interruptIcons = {}
+local knownInterruptSpells = {}
 local interruptReady = nil
 
 local UnitCastingInfo = UnitCastingInfo
@@ -51,7 +52,10 @@ end
 local function getKnownInterruptSpells()
   local classID = select(3, UnitClass("player"))
   local interruptSpells = interruptSpellsByClass[classID]
-  local knownInterruptSpells = {}
+
+  for i in ipairs(knownInterruptSpells) do
+    table.remove(knownInterruptSpells, i)
+  end
 
   if interruptSpells then
     for _, spellID in ipairs(interruptSpells) do
@@ -77,6 +81,15 @@ local function getKnownInterruptSpells()
   return knownInterruptSpells
 end
 
+OnEvents({
+  "PLAYER_LOGIN",
+  "PLAYER_SPECIALIZATION_CHANGED",
+  "TRAIT_CONFIG_UPDATED"
+},
+function()
+  getKnownInterruptSpells()
+end)
+
 local function updateInterruptTracking(castBar, unit)
   local castBarTexture = castBar:GetStatusBarTexture()
   if not EUIDB.nameplateCastbarColorInterrupt then
@@ -93,7 +106,7 @@ local function updateInterruptTracking(castBar, unit)
   end
 
   if UnitIsEnemy("player", unit) then
-    local knownInterruptSpellIDs = getKnownInterruptSpells()
+    local knownInterruptSpellIDs = knownInterruptSpells
 
     for _, interruptSpellID in ipairs(knownInterruptSpellIDs) do
       local cooldownInfo = C_Spell.GetSpellCooldownDuration(interruptSpellID)
