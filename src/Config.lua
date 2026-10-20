@@ -724,7 +724,7 @@ local function setupEuiOptions()
   nameplateAbbrevNames:SetPoint("TOPLEFT", nameplateWidthSlider, "BOTTOMLEFT", 0, -24)
 
   local nameplateHideServerNames = newCheckbox(
-    "Hide Server Names (Must rezone to see change).",
+    "Hide Server Names",
     "Hide server names for players from different servers to reduce clutter.",
     "nameplateHideServerNames",
     nameplateAbbrevNames,
