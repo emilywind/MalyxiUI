@@ -10,9 +10,9 @@ local function updateHealth(frame)
 
   local hPercFrame = frame.healthPercentage
   if not hPercFrame then
-    hPercFrame = frame.healthBar:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    hPercFrame = healthBar:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     hPercFrame:SetTextColor(1, 1, 1)
-    hPercFrame:SetPoint("CENTER", frame.healthBar, "CENTER", 0, 0)
+    hPercFrame:SetPoint("CENTER", healthBar, "CENTER", 0, 0)
     frame.healthPercentage = hPercFrame
     ModifyFont(hPercFrame, EUIDB.nameplateFont)
   end
@@ -267,5 +267,6 @@ function RefreshNameplates()
     updateNameplate(frame)
     updateHealth(frame)
     updateClickableArea(nameplate)
+    HookCastbarOnEvent(frame)
   end)
 end

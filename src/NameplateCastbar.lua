@@ -38,11 +38,17 @@ local interruptSpellsByClass = {
   [13] = { 351338 }, -- Evoker (Quell)
 }
 
+local interruptIcons = {}
+local interruptReady = nil
+
+local UnitCastingInfo = UnitCastingInfo
+local UnitChannelInfo = UnitChannelInfo
+
 local isSpellKnown = function(spellID, isPet)
   return C_SpellBook.IsSpellInSpellBook(spellID, isPet and 1 or 0, true)
 end
 
-local function GetKnownInterruptSpells()
+local function getKnownInterruptSpells()
   local classID = select(3, UnitClass("player"))
   local interruptSpells = interruptSpellsByClass[classID]
   local knownInterruptSpells = {}
@@ -51,6 +57,15 @@ local function GetKnownInterruptSpells()
     for _, spellID in ipairs(interruptSpells) do
       if isSpellKnown(spellID, false) or (UnitExists("pet") and isSpellKnown(spellID, true)) then
         table.insert(knownInterruptSpells, spellID)
+        if not interruptIcons[spellID] then
+          interruptIcons[spellID] = CreateFrame('Frame')
+          interruptIcons[spellID].cooldown = CreateFrame("Cooldown", nil, interruptIcons[spellID], "CooldownFrameTemplate")
+          interruptIcons[spellID].cooldown:SetMinimumCountdownDuration(0)
+          interruptIcons[spellID].cooldown:HookScript("OnCooldownDone", function()
+            interruptReady = true
+            UpdateCastbarInterruptStatus()
+          end)
+        end
       end
     end
   end
@@ -58,99 +73,52 @@ local function GetKnownInterruptSpells()
   return knownInterruptSpells
 end
 
-local function colorCastbarByInterrupt(castBar, unit)
-  local spellName, spellID, notInterruptible, endTime, channeling, castStart, empoweredCast
-
-  if UnitCastingInfo(unit) then
-    spellName, _, _, castStart, endTime, _, _, notInterruptible, spellID = UnitCastingInfo(unit)
-  elseif UnitChannelInfo(unit) then
-    spellName, _, _, castStart, endTime, _, notInterruptible, spellID, empoweredCast = UnitChannelInfo(unit)
-    if empoweredCast then
-      channeling = false
-    else
-      channeling = true
-    end
-  end
-
-  if notInterruptible or (not spellName and not spellID) then return end
-
-  if not UnitIsEnemy("player", unit) then return end
-
-  local knownInterruptSpellIDs = GetKnownInterruptSpells()
-
-  local cooldownRemaining = nil
-  for _, interruptSpellID in ipairs(knownInterruptSpellIDs) do
-    local spellCD = C_Spell.GetSpellCooldown(interruptSpellID)
-    local cooldown = spellCD.startTime + spellCD.duration - GetTime()
-
-    if not cooldownRemaining then
-      cooldownRemaining = cooldown
-    elseif cooldown < cooldownRemaining then
-      cooldownRemaining = cooldown
-    end
-  end
-  if not cooldownRemaining then return end
-
-  local castRemaining = (endTime / 1000) - GetTime()
-  local totalCastTime = (endTime / 1000) - (castStart / 1000)
-
-  local castSpark = castBar.spark
-  if not castSpark then
-    castSpark = castBar:CreateTexture(nil, "OVERLAY")
-    castSpark:SetColorTexture(0, 1, 0, 1)
-    castSpark:SetSize(2, castBar:GetHeight())
-    castBar.spark = castSpark
-  end
-
-  if castSpark:IsShown() then
-    castSpark:Hide()
-  end
-
+local function updateInterruptTracking(castBar, unit)
   local castBarTexture = castBar:GetStatusBarTexture()
-
-  if cooldownRemaining > 0 and cooldownRemaining > castRemaining then
-    castBarTexture:SetDesaturated(true)
-    SetStatusBarColor(castBar, COLOR_CASTBAR_NO_INTERRUPT)
-  elseif cooldownRemaining > 0 and cooldownRemaining <= castRemaining then
-    castBarTexture:SetDesaturated(true)
-    SetStatusBarColor(castBar, COLOR_CASTBAR_DELAYED_INTERRUPT)
-
-    if cooldownRemaining < castRemaining then
-      local interruptPercent = (totalCastTime - castRemaining + cooldownRemaining) / totalCastTime
-
-      -- Adjust the spark position based on the percentage, reverse if channeling
-      local sparkPosition
-      if channeling then
-        -- Channeling: reverse the direction, starting from the right
-        sparkPosition = (1 - interruptPercent) * castBar:GetWidth()
-      else
-        -- Casting: normal direction, from left to right
-        sparkPosition = interruptPercent * castBar:GetWidth()
-        if empoweredCast then
-          sparkPosition = sparkPosition *
-          0.7                                 -- ? idk why but on empowered casts it needs to be roughly 30% to the left compared to cast/channel
-        end
-      end
-
-      castSpark:SetPoint("CENTER", castBar, "LEFT", sparkPosition, 0)
-      castSpark:Show()
-
-      -- Schedule the color update for when the interrupt will be ready
-      C_Timer.After(cooldownRemaining, function()
-        if castBar then
-          castBarTexture:SetDesaturated(false)
-          SetStatusBarColor(castBar, COLOR_WHITE)
-          castSpark:Hide()
-        end
-      end)
-    else
-      castSpark:Hide()
-    end
-  else
+  if not EUIDB.nameplateCastbarColorInterrupt then
     castBarTexture:SetDesaturated(false)
     SetStatusBarColor(castBar, COLOR_WHITE)
-    castSpark:Hide()
+    return
   end
+  local notInterruptible
+
+  if castBar.casting then
+    _, _, _, _, _, _, _, notInterruptible = UnitCastingInfo(unit)
+  elseif castBar.channeling then
+    _, _, _, _, _, _, notInterruptible = UnitChannelInfo(unit)
+  end
+
+  if UnitIsEnemy("player", unit) then
+    local knownInterruptSpellIDs = getKnownInterruptSpells()
+
+    for _, interruptSpellID in ipairs(knownInterruptSpellIDs) do
+      local cooldownInfo = C_Spell.GetSpellCooldownDuration(interruptSpellID)
+      if cooldownInfo then
+        interruptIcons[interruptSpellID].cooldown:SetCooldownFromDurationObject(cooldownInfo)
+        interruptReady = not interruptIcons[interruptSpellID].cooldown:IsShown()
+        if interruptReady then break end
+      end
+    end
+
+    if notInterruptible ~= nil and interruptReady ~= nil and not interruptReady then
+      castBarTexture:SetVertexColorFromBoolean(
+        notInterruptible,
+        COLOR_CASTBAR_NOT_INTERRUPTIBLE,
+        COLOR_CASTBAR_NO_INTERRUPT
+      )
+    else
+      castBarTexture:SetDesaturated(false)
+      SetStatusBarColor(castBar, COLOR_WHITE)
+    end
+  end
+end
+
+function UpdateCastbarInterruptStatus()
+  DoToNameplates(function(frame)
+    if frame.castBar then
+      updateInterruptTracking(frame.castBar, frame.unit)
+    end
+  end)
 end
 
 ---@param frame Frame
@@ -158,8 +126,6 @@ local function skinCastbar(frame)
   local castBar = frame.castBar
   if not castBar then return end
   if castBar:IsForbidden() then return end
-
-  local unit = GetNameplateUnit(frame)
 
   ApplyEuiBackdrop(castBar.Icon, castBar)
   local timer = castBar.timer
@@ -170,32 +136,24 @@ local function skinCastbar(frame)
   end
   ModifyFont(castBar.Text, EUIDB.nameplateFont)
   ModifyFont(timer, EUIDB.nameplateFont, 11, "THINOUTLINE", COLOR_WHITE)
-
-  if EUIDB.nameplateCastbarColorInterrupt then
-    colorCastbarByInterrupt(castBar, unit)
-  end
 end
 
 local function updateCastTimer(frame, castBar, unit)
-  local name, _, _, startTime, endTime = UnitCastingInfo(unit)
-  if not name then
-    name, _, _, startTime, endTime = UnitChannelInfo(unit)
+  local duration = UnitCastingDuration(unit)
+  if not duration then
+    duration = UnitChannelDuration(unit)
   end
 
-  if name and endTime and startTime and frame then
-    local timer = castBar.timer
-    timer.endTime = endTime / 1000
-    local timeLeft = timer.endTime - GetTime()
-    if timeLeft > 0 then
-      castBar.timer:SetText(format("%.1f", max(timeLeft, 0)))
-      C_Timer.After(0.1, function()
-        updateCastTimer(frame, castBar, unit)
-      end)
-    else
-      castBar.timer:SetText("")
-    end
+  local timerFrame = castBar.timer
+  if duration and frame then
+    timerFrame:SetAlpha(1)
+    timerFrame:SetText(format("%.1f", duration:GetRemainingDuration()))
+    C_Timer.After(0.1, function()
+      updateCastTimer(frame, castBar, unit)
+      updateInterruptTracking(castBar, unit)
+    end)
   else
-    castBar.timer:SetText("")
+    timerFrame:SetAlpha(0)
   end
 end
 
@@ -242,8 +200,10 @@ local function updateNameplateTargetText(frame, unit)
 end
 
 function HookCastbarOnEvent(frame)
-  if not frame or not frame.castBar then return end
-  if frame.hookedCastbarOnEvent then return end
+  if not frame or frame.hookedCastbarOnEvent then return end
+  if not frame.castBar then
+    frame.castBar = frame.CastBarsContainer.castBar
+  end
   frame.castBar:HookScript("OnEvent", function(castBar, event)
     if not EUIDB.skinNameplates then return end
 
@@ -262,9 +222,9 @@ function HookCastbarOnEvent(frame)
 
     skinCastbar(frame)
 
-    updateCastTimer(frame, castBar, unitInfo.id)
-
     updateNameplateTargetText(frame, unitInfo.id)
+
+    updateCastTimer(frame, castBar, unitInfo.id)
   end)
   frame.hookedCastbarOnEvent = true
 end

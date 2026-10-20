@@ -11,7 +11,7 @@ COLOR_RED = CreateColorFromHexString('ffff0000')
 COLOR_GREY = CreateColorFromHexString('ff808080')
 COLOR_BORDER = CreateColorFromHexString('ff1a1a1a')
 COLOR_CASTBAR_NO_INTERRUPT = CreateColorFromHexString('ffff0004')
-COLOR_CASTBAR_DELAYED_INTERRUPT = CreateColorFromHexString('ffff7aa5')
+COLOR_CASTBAR_NOT_INTERRUPTIBLE = CreateColor(0.4, 0.4, 0.4)
 
 AddonDir = [[Interface\AddOns\MalyxiUI]]
 MediaDir = AddonDir .. [[\media]]
