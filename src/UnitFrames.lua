@@ -196,11 +196,11 @@ local function UpdateUnitDebuffCasterFilter(frame)
 
   local unit = frame.unit or debuffContainer:GetUnit()
   local showAllCasters = unit and (UnitIsUnit(unit, "player") or UnitIsFriend("player", unit)) == true
-  if debuffContainer.SUIShowAllCasters == showAllCasters then
+  if debuffContainer.MUIShowAllCasters == showAllCasters then
     return
   end
 
-  debuffContainer.SUIShowAllCasters = showAllCasters
+  debuffContainer.MUIShowAllCasters = showAllCasters
   debuffContainer:SetAuraGroupCandidateFilters("Debuffs", {
     isFromPlayerOrPlayerPet = not showAllCasters or nil
   })
