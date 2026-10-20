@@ -61,6 +61,10 @@ EUIDBDefaults = {
   nameplateHideFriendlyCastbars = true,
   nameplateFriendlyClickthrough = true,
   nameplateCastbarColorInterrupt = true,
+  nameplateCastbarHeight = 18,
+  nameplateCastbarTextScale = 1,
+  nameplateWidth = 200,
+  nameplateHeight = 20,
   nameplateShowTargetText = true,
   nameplatePetIndicator = true,
   nameplateFadeSecondaryPets = true,
@@ -278,7 +282,7 @@ local function setupEuiOptions()
     slider:SetValue(EUIDB[configVar])
     slider:SetValueStep(valueStep)
     slider:SetObeyStepOnDrag(true)
-    slider:SetWidth(110)
+    slider:SetWidth(120)
     slider:SetScript("OnValueChanged", onValueChanged)
     slider.Low:SetText(min)
     slider.High:SetText(max)
@@ -656,7 +660,7 @@ local function setupEuiOptions()
     FONT_SIZE.." "..FONT_SIZE_TEMPLATE,
     "nameplateNameFontSize",
     6,
-    24,
+    32,
     1,
     "Font size for Nameplate Names",
     nameplateFontDropdown,
@@ -666,21 +670,66 @@ local function setupEuiOptions()
   nameplateFontSlider:ClearAllPoints()
   nameplateFontSlider:SetPoint("LEFT", nameplateFontDropdown, "RIGHT", 220, 0)
 
+  --- Sizing ---
+  local nameplateSizingText = Nameplate_Content:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+  nameplateSizingText:SetText("Sizing")
+  nameplateSizingText:SetPoint("TOPLEFT", nameplateFontDropdown, "BOTTOMLEFT", 0, -12)
+
+  local nameplateWidthSlider = newSlider(
+    "Width: %.1f",
+    "nameplateWidth",
+    100,
+    300,
+    1,
+    "Width for nameplates",
+    nameplateSizingText,
+    Nameplate_Content,
+    RefreshNameplates
+  )
+
+  local nameplateHeightSlider = newSlider(
+    "Height: %.1f",
+    "nameplateHeight",
+    10,
+    50,
+    1,
+    "Height for nameplates",
+    nameplateWidthSlider,
+    Nameplate_Content,
+    RefreshNameplates
+  )
+  nameplateHeightSlider:SetPoint("TOPLEFT", nameplateWidthSlider, "TOPLEFT", 220, 0)
+
+  local nameplateCastbarHeightSlider = newSlider(
+    "Castbar Height: %.1f (Default"..EUIDBDefaults.nameplateCastbarHeight..")",
+    "nameplateCastbarHeight",
+    10,
+    36,
+    1,
+    "Height for nameplate castbars",
+    nameplateHeightSlider,
+    Nameplate_Content,
+    RefreshNameplates
+  )
+  nameplateCastbarHeightSlider:SetPoint("TOPLEFT", nameplateHeightSlider, "TOPLEFT", 220, 0)
+
   local nameplateAbbrevNames = newCheckbox(
     "Abbreviate Unit Names",
     "Abbreviate long NPC names on nameplates.",
     "nameplateAbbrevNames",
-    nameplateFont,
-    Nameplate_Content
+    nameplateWidthSlider,
+    Nameplate_Content,
+    RefreshNameplates
   )
-  nameplateAbbrevNames:SetPoint("TOPLEFT", nameplateFont, "BOTTOMLEFT", 0, -50)
+  nameplateAbbrevNames:SetPoint("TOPLEFT", nameplateWidthSlider, "BOTTOMLEFT", 0, -24)
 
   local nameplateHideServerNames = newCheckbox(
     "Hide Server Names (Must rezone to see change).",
     "Hide server names for players from different servers to reduce clutter.",
     "nameplateHideServerNames",
     nameplateAbbrevNames,
-    Nameplate_Content
+    Nameplate_Content,
+    RefreshNameplates
   )
 
   local nameplateFriendlyNamesClassColor = newCheckbox(
@@ -784,9 +833,7 @@ local function setupEuiOptions()
     RefreshNameplates
   )
 
-  --------------------
   --- Party Markers --
-  --------------------
   local partyMarkerText = Nameplate_Content:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
   partyMarkerText:SetText("Party Markers")
   partyMarkerText:SetPoint("TOPLEFT", nameplateShowTargetText, "BOTTOMLEFT", 0, -12)
@@ -857,6 +904,9 @@ local function setupEuiOptions()
   function DisableNameplateSettings()
     nameplateFontDropdown:Disable()
     nameplateFontSlider:Disable()
+    nameplateWidthSlider:Disable()
+    nameplateHeightSlider:Disable()
+    nameplateCastbarHeightSlider:Disable()
     nameplateAbbrevNames:Disable()
     nameplateHideServerNames:Disable()
     nameplateFriendlyNamesClassColor:Disable()
@@ -881,6 +931,9 @@ local function setupEuiOptions()
   function EnableNameplateSettings()
     nameplateFontDropdown:Enable()
     nameplateFontSlider:Enable()
+    nameplateWidthSlider:Enable()
+    nameplateHeightSlider:Enable()
+    nameplateCastbarHeightSlider:Enable()
     nameplateAbbrevNames:Enable()
     nameplateHideServerNames:Enable()
     nameplateFriendlyNamesClassColor:Enable()

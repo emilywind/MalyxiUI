@@ -93,6 +93,30 @@ function MUI.RepositionName(frame)
 end
 
 ---@param frame Frame
+local function setNameplateBarSizes(frame)
+  frame.CastBarsContainer.castBar:SetHeight(EUIDB.nameplateCastbarHeight)
+  frame.CastBarsContainer.castBar:ClearAllPoints()
+  frame.CastBarsContainer.castBar:SetPoint("BOTTOMLEFT", frame.CastBarsContainer, "BOTTOMLEFT", 0, 0)
+  frame.CastBarsContainer.castBar:SetPoint("BOTTOMRIGHT", frame.CastBarsContainer, "BOTTOMRIGHT", 0, 0)
+  frame.CastBarsContainer:SetHeight(EUIDB.nameplateCastbarHeight)
+  frame.healthBar:ClearPoint("TOPLEFT")
+  frame.healthBar:ClearPoint("BOTTOMRIGHT")
+  frame.healthBar:SetPoint("TOPLEFT", frame.HealthBarsContainer, "TOPLEFT", 0, 0)
+  frame.healthBar:SetPoint("BOTTOMRIGHT", frame.HealthBarsContainer, "BOTTOMRIGHT", 0, 0)
+  local widthToUse = ((EUIDB.nameplateWidth or 172.5) / 2) or ((EUIDB.nameplateWidth or 172.5) / 2)
+  local hpBotPos = EUIDB.nameplateCastbarHeight + 2
+  frame.CastBarsContainer:ClearPoint("BOTTOMRIGHT")
+  frame.CastBarsContainer:ClearPoint("BOTTOMLEFT")
+  frame.CastBarsContainer:SetPoint("BOTTOMLEFT", frame, "BOTTOM", (-widthToUse + 8), 0)
+  frame.CastBarsContainer:SetPoint("BOTTOMRIGHT", frame, "BOTTOM", (widthToUse + -8), 0)
+  frame.HealthBarsContainer:ClearPoint("BOTTOMLEFT")
+  frame.HealthBarsContainer:ClearPoint("BOTTOMRIGHT")
+  frame.HealthBarsContainer:SetPoint("BOTTOMLEFT", frame, "BOTTOM", (-widthToUse + 8), hpBotPos)
+  frame.HealthBarsContainer:SetPoint("BOTTOMRIGHT", frame, "BOTTOM", (widthToUse - 8), hpBotPos)
+  frame.HealthBarsContainer:SetHeight(EUIDB.nameplateHeight)
+end
+
+---@param frame Frame
 local function modifyNamePlate(frame)
   if frame:IsForbidden() or not frame.isNameplate then return end
 
@@ -100,8 +124,9 @@ local function modifyNamePlate(frame)
   -- healthBar:SetStatusBarTexture(EUIDB.statusBarTex)
   -- healthBar.myHealPrediction:SetTexture(EUIDB.statusBarTex)
 
+  setNameplateBarSizes(frame)
   MUI.RepositionName(frame)
-  ModifyFont(frame.name, EUIDB.nameplateFont, EUIDB.nameplateNameFontSize)
+  ModifyFont(frame.name, EUIDB.nameplateFont, EUIDB.nameplateNameFontSize, "THICKOUTLINE")
 
   if frame.ClassificationFrame then
     frame.ClassificationFrame:SetPoint('CENTER', frame.healthBar, 'LEFT', 0, 0)
